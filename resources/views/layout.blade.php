@@ -89,7 +89,7 @@
             </div>
 
             <!-- Search Bar (Desktop) -->
-            <div class="hidden md:flex flex-1 justify-center px-4">
+            <div class="hidden md:flex flex-1 justify-center px-5">
                 <div class="relative w-full max-w-xl">
                     <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                         <i class="fa fa-search text-green-500 text-lg"></i>
