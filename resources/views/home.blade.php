@@ -11,14 +11,52 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
 <style>
+    /* Custom styles for the new Top Banner Swiper */
+    .topBannerSwiper .swiper-slide {
+        position: relative;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .topBannerSwiper .swiper-slide img {
+        display: block;
+        width: 100%;
+        height: 400px; /* Increased height for better visual impact */
+        object-fit: cover;
+    }
+
+    .topBannerSwiper .slide-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 12px;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+    
+    .topBannerSwiper .slide-content h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+    }
+
+    .topBannerSwiper .slide-content p {
+        font-size: 1.25rem;
+    }
+
     /* Custom styles for Swiper navigation and pagination */
     .swiper-button-next,
     .swiper-button-prev {
         color: #22c55e; /* Green color for arrows */
         background-color: rgba(255, 255, 255, 0.8);
         border-radius: 50%;
-        width: 40px;
-        height: 40px;
+        width: 44px; /* Slightly larger for main banner */
+        height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -36,7 +74,7 @@
 
     .swiper-button-next::after,
     .swiper-button-prev::after {
-        font-size: 18px !important; /* Adjust arrow size */
+        font-size: 20px !important; /* Adjust arrow size */
         font-weight: bold;
     }
 
@@ -44,6 +82,8 @@
         background-color: #a1ffce !important; /* Light green for inactive dots */
         opacity: 1 !important;
         transition: all 0.3s ease-in-out;
+        width: 10px !important;
+        height: 10px !important;
     }
 
     .swiper-pagination-bullet-active {
@@ -61,30 +101,29 @@
 </style>
 
 <div class="container mx-auto px-4 py-10">
-    <!-- Bootstrap Carousel (Top Banner) -->
-    <div id="topBannerCarousel" class="carousel slide mb-10 rounded-2xl overflow-hidden shadow-xl" data-bs-ride="carousel" data-aos="fade-up">
-        <div class="carousel-inner">
+    <!-- SwiperJS Carousel (Top Banner) -->
+    <div class="swiper topBannerSwiper mb-10 rounded-2xl overflow-hidden shadow-xl" data-aos="fade-up">
+        <div class="swiper-wrapper">
             @php
             $banners = [
-                'https://via.placeholder.com/1200x300/A1FFCE/166534?text=Fresh+Groceries+Delivered',
-                'https://via.placeholder.com/1200x300/FBBF24/166534?text=Daily+Deals+and+Offers',
-                'https://via.placeholder.com/1200x300/FAFFD1/166534?text=Quality+You+Can+Trust',
+                ['img' => 'https://storage.googleapis.com/gemini-generative-ai-api/f43701b2d634e963/fresh_groceries_banner.jpg', 'title' => 'Fresh Groceries Delivered', 'subtitle' => 'The best quality produce, right to your doorstep.'],
+                ['img' => 'https://storage.googleapis.com/gemini-generative-ai-api/f43701b2d634e963/daily_deals_banner.jpg', 'title' => 'Daily Deals and Offers', 'subtitle' => 'Unbeatable prices on your favorite items, every single day.'],
+                ['img' => 'https://storage.googleapis.com/gemini-generative-ai-api/a06180344211e533/image.jpg', 'title' => 'Quality You Can Trust', 'subtitle' => 'Sourced from the best farms to ensure premium quality.'],
             ];
             @endphp
-            @foreach($banners as $index => $banner)
-            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                <img src="{{ $banner }}" class="d-block w-100 object-cover" style="height: 300px;" alt="Banner {{ $index + 1 }}">
+            @foreach($banners as $banner)
+            <div class="swiper-slide">
+                <img src="{{ $banner['img'] }}" alt="{{ $banner['title'] }}" onerror="this.onerror=null;this.src='https://placehold.co/1200x400/E0E0E0/666666?text=Image+Not+Available';">
+                <div class="slide-content">
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight">{{ $banner['title'] }}</h2>
+                    <p class="text-lg md:text-xl font-light">{{ $banner['subtitle'] }}</p>
+                </div>
             </div>
             @endforeach
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#topBannerCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#topBannerCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
     </div>
 
     <!-- Milk & Eggs Section -->
@@ -106,10 +145,10 @@
             @endphp
             @foreach($milk_eggs_products as $product)
            <div class="swiper-slide">
-                   
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group">
+                    
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
                         <!-- Image -->
-                        <a href="{{ route('personal-products') }}" class="block group">   
+                        <a href="{{ route('personal-products') }}" class="block group">  
                         <div class="relative">
                             <img src="{{ $product['img'] }}" alt="{{ $product['title'] }}" class="w-full h-32 object-contain mb-3 transition-transform duration-200 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
                             <!-- Delivery badge -->
@@ -135,7 +174,7 @@
                         </div>
                     </div>
                
-            </div>
+           </div>
             @endforeach
         </div>
         <div class="swiper-button-next"></div>
@@ -161,10 +200,10 @@
             @endphp
             @foreach($vegetables_products as $product)
             <div class="swiper-slide">
-                   
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group">
+                    
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
                         <!-- Image -->
-                        <a href="{{ route('personal-products') }}" class="block group">   
+                        <a href="{{ route('personal-products') }}" class="block group">  
                         <div class="relative">
                             <img src="{{ $product['img'] }}" alt="{{ $product['title'] }}" class="w-full h-32 object-contain mb-3 transition-transform duration-200 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
                             <!-- Delivery badge -->
@@ -190,7 +229,7 @@
                         </div>
                     </div>
                
-            </div>
+           </div>
             @endforeach
         </div>
         <div class="swiper-button-next"></div>
@@ -216,10 +255,10 @@
             @endphp
             @foreach($fruits_products as $product)
             <div class="swiper-slide">
-                   
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group">
+                    
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
                         <!-- Image -->
-                        <a href="{{ route('personal-products') }}" class="block group">   
+                        <a href="{{ route('personal-products') }}" class="block group">  
                         <div class="relative">
                             <img src="{{ $product['img'] }}" alt="{{ $product['title'] }}" class="w-full h-32 object-contain mb-3 transition-transform duration-200 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
                             <!-- Delivery badge -->
@@ -245,7 +284,7 @@
                         </div>
                     </div>
                
-            </div>
+           </div>
             @endforeach
         </div>
         <div class="swiper-button-next"></div>
@@ -271,10 +310,10 @@
             @endphp
             @foreach($electronics_products as $product)
             <div class="swiper-slide">
-                   
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group">
+                    
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
                         <!-- Image -->
-                        <a href="{{ route('personal-products') }}" class="block group">   
+                        <a href="{{ route('personal-products') }}" class="block group">  
                         <div class="relative">
                             <img src="{{ $product['img'] }}" alt="{{ $product['title'] }}" class="w-full h-32 object-contain mb-3 transition-transform duration-200 group-hover:scale-105" onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
                             <!-- Delivery badge -->
@@ -300,7 +339,7 @@
                         </div>
                     </div>
                
-            </div>
+           </div>
             @endforeach
         </div>
         <div class="swiper-button-next"></div>
@@ -400,7 +439,28 @@
 <script>
     // Initialize multiple Swiper instances
     document.addEventListener('DOMContentLoaded', function() {
-        // Common Swiper configuration
+        // Initialize Top Banner Swiper
+        new Swiper('.topBannerSwiper', {
+            loop: true,
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.topBannerSwiper .swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.topBannerSwiper .swiper-button-next',
+                prevEl: '.topBannerSwiper .swiper-button-prev',
+            },
+        });
+
+        // Common Swiper configuration for products
         const swiperConfig = {
             slidesPerView: 1.2,
             spaceBetween: 20,
@@ -420,7 +480,7 @@
                     slidesPerView: 3.5,
                 },
                 1024: {
-                    slidesPerView: 4,
+                    slidesPerView: 5, // Show 5 products on larger screens
                 },
             },
         };
@@ -428,7 +488,19 @@
         // Initialize Swiper for each productSwiper instance
         const productSwipers = document.querySelectorAll('.productSwiper');
         productSwipers.forEach((swiperElement) => {
-            new Swiper(swiperElement, swiperConfig);
+            // Get unique navigation and pagination elements for each swiper
+            const config = {
+                ...swiperConfig,
+                navigation: {
+                    nextEl: swiperElement.querySelector('.swiper-button-next'),
+                    prevEl: swiperElement.querySelector('.swiper-button-prev'),
+                },
+                pagination: {
+                    el: swiperElement.querySelector('.swiper-pagination'),
+                    clickable: true,
+                }
+            };
+            new Swiper(swiperElement, config);
         });
 
         // Initialize AOS
