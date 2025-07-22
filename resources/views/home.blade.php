@@ -192,10 +192,10 @@
             @php
                 $vegetables_products = [
                     ['title' => 'Onion', 'size' => '1 kg', 'price' => '₹30', 'img' => '/images/onion.webp'],
-                    ['title' => 'Potato', 'size' => '1 kg', 'price' => '₹25', 'img' => 'images/potato.webp'],
-                    ['title' => 'Tomato (Hybrid)', 'size' => '500 g', 'price' => '₹20', 'img' => 'https://www.bigbasket.com/media/uploads/p/l/10000203_16-fresho-tomato-hybrid.jpg'],
-                    ['title' => 'Carrot (Orange)', 'size' => '500 g', 'price' => '₹40', 'img' => 'https://www.bigbasket.com/media/uploads/p/l/10000073_16-fresho-carrot-orange.jpg'],
-                    ['title' => 'Capsicum (Green)', 'size' => '250 g', 'price' => '₹35', 'img' => 'https://www.bigbasket.com/media/uploads/p/l/10000067_17-fresho-capsicum-green.jpg'],
+                    ['title' => 'Potato', 'size' => '1 kg', 'price' => '₹25', 'img' => '/images/potato.webp'],
+                    ['title' => 'Tomato (Hybrid)', 'size' => '500 g', 'price' => '₹20', 'img' => '/images/Tomato.webp'],
+                    ['title' => 'Carrot (Orange)', 'size' => '500 g', 'price' => '₹40', 'img' => '/images/Carrot (Orange).jpeg'],
+                    ['title' => 'Capsicum (Green)', 'size' => '250 g', 'price' => '₹35', 'img' => '/images/Capsicum (Green).jpeg'],
                 ];
             @endphp
             @foreach($vegetables_products as $product)
