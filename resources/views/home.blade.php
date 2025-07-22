@@ -89,7 +89,7 @@
 
     <!-- Milk & Eggs Section -->
     <div class="flex items-center justify-between mb-4" data-aos="fade-up">
-        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Milk & Eggs</h2>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Milk Eggs</h2>
         <a href="{{ route('milk') }}" class="text-green-600 font-semibold hover:underline text-lg">See All <i class="fas fa-arrow-right ml-1"></i></a>
     </div>
     <div class="swiper productSwiper mb-10 p-2" data-aos="fade-up" data-aos-delay="100">
