@@ -90,7 +90,7 @@
                         <span class="text-black">bling</span><span class="text-green-600">it</span>
                     </span>
                     <span class="text-sm font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full shadow-sm hidden sm:inline-flex animate-pulse group-hover:animate-none">
-                        🚴 Delivery in 10 minutes
+                        🚴 Delivery in 8 minutes
                     </span>
                 </a>
             </div>
