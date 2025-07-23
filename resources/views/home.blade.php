@@ -378,7 +378,7 @@
         <div class="swiper productSwiper mb-10 p-2" data-aos="fade-up" data-aos-delay="100">
             <div class="swiper-wrapper">
             `;
-                products.forEach(product => {
+                products.map(product => {
                 html += `
             <div class="swiper-slide">
                 <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
