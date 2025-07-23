@@ -152,277 +152,220 @@
         </script>
 
         <!-- Milk & Eggs Section -->
-        <!-- Milk & Eggs Section -->
-        <div id="milk-eggs-section"></div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-            const milkEggsProducts = [
-                { title: 'Amul Gold Full Cream Milk', size: '500 ml', price: '₹34', img: '/images/amulgold.avif' },
-                { title: 'Amul Taaza Toned Milk', size: '1 L', price: '₹54', img: '/images/amultazaatonedmilk.png' },
-                { title: 'Country Fresh Eggs', size: '12 pcs', price: '₹89', img: '/images/contryfresheggs.webp' },
-                { title: 'Nestle Milkmaid', size: '400g Tin', price: '₹135', img: '/images/nestlemilkmaid.jpg' },
-                { title: 'Mother Dairy Curd', size: '400 g', price: '₹30', img: '/images/Mother Dairy Curd.webp' },
-                { title: 'Amul Butter', size: '500 g', price: '₹265', img: '/images/Amul Butter.avif' },
+        @php
+            $milkEggsProducts = [
+                [ 'title' => 'Amul Gold Full Cream Milk', 'size' => '500 ml', 'price' => '₹34', 'img' => '/images/amulgold.avif' ],
+                [ 'title' => 'Amul Taaza Toned Milk', 'size' => '1 L', 'price' => '₹54', 'img' => '/images/amultazaatonedmilk.png' ],
+                [ 'title' => 'Country Fresh Eggs', 'size' => '12 pcs', 'price' => '₹89', 'img' => '/images/contryfresheggs.webp' ],
+                [ 'title' => 'Nestle Milkmaid', 'size' => '400g Tin', 'price' => '₹135', 'img' => '/images/nestlemilkmaid.jpg' ],
+                [ 'title' => 'Mother Dairy Curd', 'size' => '400 g', 'price' => '₹30', 'img' => '/images/Mother Dairy Curd.webp' ],
+                [ 'title' => 'Amul Butter', 'size' => '500 g', 'price' => '₹265', 'img' => '/images/Amul Butter.avif' ],
             ];
+        @endphp
 
-            function renderMilkEggsSection(products) {
-                let html = `
         <div class="flex items-center justify-between mb-4" data-aos="fade-up">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Dairy & Eggs</h2>
             <a href="{{ route('milk') }}" class="text-green-600 font-semibold hover:underline text-lg">See All <i class="fas fa-arrow-right ml-1"></i></a>
         </div>
         <div class="swiper productSwiper mb-10 p-2" data-aos="fade-up" data-aos-delay="100">
             <div class="swiper-wrapper">
-                `;
-                products.forEach(product => {
-                html += `
-            <div class="swiper-slide">
-                <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
-                <a href="{{ route('personal-products') }}" class="block group">
-                    <div class="relative">
-                    <img src="${product.img}" alt="${product.title}"
-                        class="w-full h-32 object-contain mb-3 transition-transform duration-200 group-hover:scale-105"
-                        onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
-                    <div class="absolute top-0 left-0 bg-green-100 text-green-600 text-xs font-semibold px-2 py-0.5 rounded-br-md flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" />
-                        </svg>
-                        8 MINS
+                @foreach($milkEggsProducts as $product)
+                    <div class="swiper-slide">
+                        <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
+                            <a href="{{ route('personal-products') }}" class="block group">
+                                <div class="relative">
+                                    <img src="{{ $product['img'] }}" alt="{{ $product['title'] }}"
+                                        class="w-full h-32 object-contain mb-3 transition-transform duration-200 group-hover:scale-105"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
+                                    <div class="absolute top-0 left-0 bg-green-100 text-green-600 text-xs font-semibold px-2 py-0.5 rounded-br-md flex items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" />
+                                        </svg>
+                                        8 MINS
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="flex-1 flex flex-col justify-between text-center">
+                                <h3 class="text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">{{ $product['title'] }}</h3>
+                                <p class="text-sm text-gray-500 mb-2">{{ $product['size'] }}</p>
+                            </div>
+                            <div class="flex items-center justify-between mt-3">
+                                <span class="text-xl font-extrabold text-green-700">{{ $product['price'] }}</span>
+                                <button onclick="event.stopPropagation(); window.location.href='{{ url('/cart') }}';"
+                                    class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
+                                    ADD
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                </a>
-                <div class="flex-1 flex flex-col justify-between text-center">
-                    <h3 class="text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">${product.title}</h3>
-                    <p class="text-sm text-gray-500 mb-2">${product.size}</p>
-                </div>
-                <div class="flex items-center justify-between mt-3">
-                    <span class="text-xl font-extrabold text-green-700">${product.price}</span>
-                    <button onclick="event.stopPropagation(); window.location.href='{{ url('/cart') }}';"
-                    class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
-                    ADD
-                    </button>
-                </div>
-                </div>
-            </div>
-                `;
-                });
-                html += `
+                @endforeach
             </div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
             <div class="swiper-pagination mt-4"></div>
         </div>
-                `;
-                document.getElementById('milk-eggs-section').innerHTML = html;
-            }
-
-            renderMilkEggsSection(milkEggsProducts);
-            });
-        </script>
 
         <!-- Vegetables Section -->
-        <div id="vegetables-section"></div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-            const vegetablesProducts = [
-                { title: 'Onion', size: '1 kg', price: '₹30', img: '/images/onion.webp' },
-                { title: 'Potato', size: '1 kg', price: '₹25', img: '/images/potato.webp' },
-                { title: 'Tomato (Hybrid)', size: '500 g', price: '₹20', img: '/images/Tomato.webp' },
-                { title: 'Carrot (Orange)', size: '500 g', price: '₹40', img: '/images/Carrot (Orange).jpeg' },
-                { title: 'Capsicum (Green)', size: '250 g', price: '₹35', img: '/images/Capsicum (Green).jpeg' },
-                { title: 'Chili', size: '250 g', price: '₹30', img: '/images/chilli.jpeg' },
+        @php
+            $vegetablesProducts = [
+                [ 'title' => 'Onion', 'size' => '1 kg', 'price' => '₹30', 'img' => '/images/onion.webp' ],
+                [ 'title' => 'Potato', 'size' => '1 kg', 'price' => '₹25', 'img' => '/images/potato.webp' ],
+                [ 'title' => 'Tomato (Hybrid)', 'size' => '500 g', 'price' => '₹20', 'img' => '/images/Tomato.webp' ],
+                [ 'title' => 'Carrot (Orange)', 'size' => '500 g', 'price' => '₹40', 'img' => '/images/Carrot (Orange).jpeg' ],
+                [ 'title' => 'Capsicum (Green)', 'size' => '250 g', 'price' => '₹35', 'img' => '/images/Capsicum (Green).jpeg' ],
+                [ 'title' => 'Chili', 'size' => '250 g', 'price' => '₹30', 'img' => '/images/chilli.jpeg' ],
             ];
+        @endphp
 
-            function renderVegetablesSection(products) {
-                let html = `
         <div class="flex items-center justify-between mb-4" data-aos="fade-up">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Fresh Vegetables</h2>
             <a href="{{ route('vegetables') }}" class="text-green-600 font-semibold hover:underline text-lg">See All <i class="fas fa-arrow-right ml-1"></i></a>
         </div>
         <div class="swiper productSwiper mb-10 p-2" data-aos="fade-up" data-aos-delay="100">
             <div class="swiper-wrapper">
-                `;
-                products.forEach(product => {
-                html += `
-            <div class="swiper-slide">
-                <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
-                <a href="{{ route('personal-products') }}" class="block group">
-                    <div class="relative">
-                    <img src="${product.img}" alt="${product.title}"
-                        class="w-full h-32 object-contain mb-3 transition-transform duration-200 group-hover:scale-105"
-                        onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
-                    <div class="absolute top-0 left-0 bg-green-100 text-green-600 text-xs font-semibold px-2 py-0.5 rounded-br-md flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" />
-                        </svg>
-                        8 MINS
+                @foreach($vegetablesProducts as $product)
+                    <div class="swiper-slide">
+                        <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
+                            <a href="{{ route('personal-products') }}" class="block group">
+                                <div class="relative">
+                                    <img src="{{ $product['img'] }}" alt="{{ $product['title'] }}"
+                                        class="w-full h-32 object-contain mb-3 transition-transform duration-200 group-hover:scale-105"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
+                                    <div class="absolute top-0 left-0 bg-green-100 text-green-600 text-xs font-semibold px-2 py-0.5 rounded-br-md flex items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" />
+                                        </svg>
+                                        8 MINS
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="flex-1 flex flex-col justify-between text-center">
+                                <h3 class="text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">{{ $product['title'] }}</h3>
+                                <p class="text-sm text-gray-500 mb-2">{{ $product['size'] }}</p>
+                            </div>
+                            <div class="flex items-center justify-between mt-3">
+                                <span class="text-xl font-extrabold text-green-700">{{ $product['price'] }}</span>
+                                <button onclick="event.stopPropagation(); window.location.href='{{ url('/cart') }}';"
+                                    class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
+                                    ADD
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                </a>
-                <div class="flex-1 flex flex-col justify-between text-center">
-                    <h3 class="text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">${product.title}</h3>
-                    <p class="text-sm text-gray-500 mb-2">${product.size}</p>
-                </div>
-                <div class="flex items-center justify-between mt-3">
-                    <span class="text-xl font-extrabold text-green-700">${product.price}</span>
-                    <button onclick="event.stopPropagation(); window.location.href='{{ url('/cart') }}';"
-                    class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
-                    ADD
-                    </button>
-                </div>
-                </div>
-            </div>
-                `;
-                });
-                html += `
+                @endforeach
             </div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
             <div class="swiper-pagination mt-4"></div>
         </div>
-                `;
-                document.getElementById('vegetables-section').innerHTML = html;
-            }
-
-            renderVegetablesSection(vegetablesProducts);
-            });
-        </script>
 
         <!-- Fruits Section -->
-        <div id="fruits-section"></div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-            const fruitsProducts = [
-                { title: 'Bananas (Robusta)', size: '1 dozen', price: '₹48', img: '/images/banana.jpeg' },
-                { title: 'Apples (Fuji)', size: '4 pcs (approx 500 g)', price: '₹110', img: '/images/Apples (Fuji).jpg' },
-                { title: 'Oranges', size: '1 kg', price: '₹85', img: '/images/Oranges.jpeg' },
-                { title: 'Grapes (Green)', size: '500 g', price: '₹55', img: '/images/Grapes (Green).jpeg' },
-                { title: 'Pomegranate', size: '4 pcs (approx 700 g)', price: '₹135', img: '/images/Pomegranate.jpg' },
-                { title: 'pineapple', size: '4 pcs (approx 700 g)', price: '₹135', img: '/images/pineapple.webp' },
+        @php
+            $fruitsProducts = [
+            [ 'title' => 'Bananas (Robusta)', 'size' => '1 dozen', 'price' => '₹48', 'img' => '/images/banana.jpeg' ],
+            [ 'title' => 'Apples (Fuji)', 'size' => '4 pcs (approx 500 g)', 'price' => '₹110', 'img' => '/images/Apples (Fuji).jpg' ],
+            [ 'title' => 'Oranges', 'size' => '1 kg', 'price' => '₹85', 'img' => '/images/Oranges.jpeg' ],
+            [ 'title' => 'Grapes (Green)', 'size' => '500 g', 'price' => '₹55', 'img' => '/images/Grapes (Green).jpeg' ],
+            [ 'title' => 'Pomegranate', 'size' => '4 pcs (approx 700 g)', 'price' => '₹135', 'img' => '/images/Pomegranate.jpg' ],
+            [ 'title' => 'pineapple', 'size' => '4 pcs (approx 700 g)', 'price' => '₹135', 'img' => '/images/pineapple.webp' ],
             ];
+        @endphp
 
-            function renderFruitsSection(products) {
-                let html = `
         <div class="flex items-center justify-between mb-4" data-aos="fade-up">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Fresh Fruits</h2>
             <a href="{{ route('fruits') }}" class="text-green-600 font-semibold hover:underline text-lg">See All <i class="fas fa-arrow-right ml-1"></i></a>
         </div>
         <div class="swiper productSwiper mb-10 p-2" data-aos="fade-up" data-aos-delay="100">
             <div class="swiper-wrapper">
-                `;
-                products.forEach(product => {
-                html += `
-            <div class="swiper-slide">
+            @foreach($fruitsProducts as $product)
+                <div class="swiper-slide">
                 <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
-                <a href="{{ route('personal-products') }}" class="block group">
+                    <a href="{{ route('personal-products') }}" class="block group">
                     <div class="relative">
-                    <img src="${product.img}" alt="${product.title}"
+                        <img src="{{ $product['img'] }}" alt="{{ $product['title'] }}"
                         class="w-full h-32 object-contain mb-3 transition-transform duration-200 group-hover:scale-105"
                         onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
-                    <div class="absolute top-0 left-0 bg-green-100 text-green-600 text-xs font-semibold px-2 py-0.5 rounded-br-md flex items-center gap-1">
+                        <div class="absolute top-0 left-0 bg-green-100 text-green-600 text-xs font-semibold px-2 py-0.5 rounded-br-md flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" />
                         </svg>
                         8 MINS
+                        </div>
                     </div>
+                    </a>
+                    <div class="flex-1 flex flex-col justify-between text-center">
+                    <h3 class="text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">{{ $product['title'] }}</h3>
+                    <p class="text-sm text-gray-500 mb-2">{{ $product['size'] }}</p>
                     </div>
-                </a>
-                <div class="flex-1 flex flex-col justify-between text-center">
-                    <h3 class="text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">${product.title}</h3>
-                    <p class="text-sm text-gray-500 mb-2">${product.size}</p>
-                </div>
-                <div class="flex items-center justify-between mt-3">
-                    <span class="text-xl font-extrabold text-green-700">${product.price}</span>
+                    <div class="flex items-center justify-between mt-3">
+                    <span class="text-xl font-extrabold text-green-700">{{ $product['price'] }}</span>
                     <button onclick="event.stopPropagation(); window.location.href='{{ url('/cart') }}';"
-                    class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
-                    ADD
+                        class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
+                        ADD
                     </button>
+                    </div>
                 </div>
                 </div>
-            </div>
-                `;
-                });
-                html += `
+            @endforeach
             </div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
             <div class="swiper-pagination mt-4"></div>
         </div>
-                `;
-                document.getElementById('fruits-section').innerHTML = html;
-            }
-
-            renderFruitsSection(fruitsProducts);
-            });
-        </script>
 
         <!-- Electronics Section -->
-        <div id="electronics-section"></div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-            const electronicsProducts = [
-                { title: 'Smartphone (Brand X)', size: '6.1" Display, 128GB', price: '₹15,999', img: '/images/Smartphone (Brand X).jpg' },
-                { title: 'Wireless Headphones', size: 'Noise Cancelling', price: '₹4,499', img: '/images/Wireless Headphones.png' },
-                { title: 'Smartwatch (Fitness Tracker)', size: 'Heart Rate Monitor', price: '₹2,999', img: '/images/Smartwatch (Fitness Tracker).jpg' },
-                { title: 'Portable Bluetooth Speaker', size: 'Waterproof, 10W', price: '₹1,899', img: '/images/Portable Bluetooth Speaker.jpg' },
-                { title: 'Power Bank (10000 mAh)', size: 'Fast Charging', price: '₹999', img: '/images/Power Bank (10000 mAh).jpeg' },
-                { title: 'Apple Airpods Pro', size: 'Better Music', price: '₹999', img: '/images/apple airpodspro.jpeg' },
+        @php
+            $electronicsProducts = [
+            [ 'title' => 'Smartphone (Brand X)', 'size' => '6.1" Display, 128GB', 'price' => '₹15,999', 'img' => '/images/Smartphone (Brand X).jpg' ],
+            [ 'title' => 'Wireless Headphones', 'size' => 'Noise Cancelling', 'price' => '₹4,499', 'img' => '/images/Wireless Headphones.png' ],
+            [ 'title' => 'Smartwatch (Fitness Tracker)', 'size' => 'Heart Rate Monitor', 'price' => '₹2,999', 'img' => '/images/Smartwatch (Fitness Tracker).jpg' ],
+            [ 'title' => 'Portable Bluetooth Speaker', 'size' => 'Waterproof, 10W', 'price' => '₹1,899', 'img' => '/images/Portable Bluetooth Speaker.jpg' ],
+            [ 'title' => 'Power Bank (10000 mAh)', 'size' => 'Fast Charging', 'price' => '₹999', 'img' => '/images/Power Bank (10000 mAh).jpeg' ],
+            [ 'title' => 'Apple Airpods Pro', 'size' => 'Better Music', 'price' => '₹999', 'img' => '/images/apple airpodspro.jpeg' ],
             ];
+        @endphp
 
-            function renderElectronicsSection(products) {
-                let html = `
         <div class="flex items-center justify-between mb-4" data-aos="fade-up">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Electronics</h2>
             <a href="{{ route('electronics') }}" class="text-green-600 font-semibold hover:underline text-lg">See All <i class="fas fa-arrow-right ml-1"></i></a>
         </div>
         <div class="swiper productSwiper mb-10 p-2" data-aos="fade-up" data-aos-delay="100">
             <div class="swiper-wrapper">
-            `;
-                products.map(product => {
-                html += `
-            <div class="swiper-slide">
+            @foreach($electronicsProducts as $product)
+                <div class="swiper-slide">
                 <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
-                <a href="{{ route('personal-products') }}" class="block group">
+                    <a href="{{ route('personal-products') }}" class="block group">
                     <div class="relative">
-                    <img src="${product.img}" alt="${product.title}"
+                        <img src="{{ $product['img'] }}" alt="{{ $product['title'] }}"
                         class="w-full h-32 object-contain mb-3 transition-transform duration-200 group-hover:scale-105"
                         onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
-                    <div class="absolute top-0 left-0 bg-green-100 text-green-600 text-xs font-semibold px-2 py-0.5 rounded-br-md flex items-center gap-1">
+                        <div class="absolute top-0 left-0 bg-green-100 text-green-600 text-xs font-semibold px-2 py-0.5 rounded-br-md flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" />
                         </svg>
                         8 MINS
+                        </div>
                     </div>
+                    </a>
+                    <div class="flex-1 flex flex-col justify-between text-center">
+                    <h3 class="text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">{{ $product['title'] }}</h3>
+                    <p class="text-sm text-gray-500 mb-2">{{ $product['size'] }}</p>
                     </div>
-                </a>
-                <div class="flex-1 flex flex-col justify-between text-center">
-                    <h3 class="text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">${product.title}</h3>
-                    <p class="text-sm text-gray-500 mb-2">${product.size}</p>
-                </div>
-                <div class="flex items-center justify-between mt-3">
-                    <span class="text-xl font-extrabold text-green-700">${product.price}</span>
+                    <div class="flex items-center justify-between mt-3">
+                    <span class="text-xl font-extrabold text-green-700">{{ $product['price'] }}</span>
                     <button onclick="event.stopPropagation(); window.location.href='{{ url('/cart') }}';"
-                    class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
-                    ADD
+                        class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
+                        ADD
                     </button>
+                    </div>
                 </div>
                 </div>
-            </div>
-                `;
-                });
-                html += `
+            @endforeach
             </div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
             <div class="swiper-pagination mt-4"></div>
         </div>
-                `;
-                document.getElementById('electronics-section').innerHTML = html;
-            }
-
-            renderElectronicsSection(electronicsProducts);
-            });
-        </script>
 
         <!-- How Blingit Works Section -->
         <div class="bg-gray-50 p-8 rounded-2xl my-12" data-aos="fade-up">

@@ -13,9 +13,8 @@
                 Discover the latest gadgets and everyday electronics at unbeatable prices — delivered to your door.
             </p>
         </div>
-
-        <!-- Product Grid -->
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            
             @php
                 $electronics_products = [
                     ['title' => 'boAt Rockerz 450 Headphones', 'size' => '1 Unit', 'price' => '₹1499', 'img' => '/images/electronics/boat_headphones.jpg'],

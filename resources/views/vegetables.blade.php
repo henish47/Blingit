@@ -15,27 +15,27 @@
         </div>
 
         <!-- Product Grid -->
-        <div id="vegetable-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
-        <script>
-            const vegetables = [
-                { title: 'Onion', size: '1 kg', price: '₹30', img: '/images/onion.webp' },
-                { title: 'Potato', size: '1 kg', price: '₹25', img: '/images/potato.webp' },
-                { title: 'Tomato (Hybrid)', size: '500 g', price: '₹20', img: '/images/Tomato.webp' },
-                { title: 'Carrot (Orange)', size: '500 g', price: '₹40', img: '/images/Carrot (Orange).jpeg' },
-                { title: 'Capsicum (Green)', size: '250 g', price: '₹35', img: '/images/Capsicum (Green).jpeg' },
-                { title: 'Red Chili', size: '250 g', price: '₹30', img: '/images/chilli.jpeg' },
-                { title: 'Green Chilli', size: '100 g', price: '₹10', img: '/images/Green Chilli.png' },
-                { title: 'Coriander Leaves', size: '1 bunch', price: '₹8', img: '/images/Coriander Leaves.png' },
-                { title: 'Garlic', size: '250 g', price: '₹25', img: '/images/Garlic.png' },
-                { title: 'Ginger', size: '250 g', price: '₹22', img: '/images/Ginger.png' },
+        @php
+            $vegetables = [
+                [ 'title' => 'Onion', 'size' => '1 kg', 'price' => '₹30', 'img' => '/images/onion.webp' ],
+                [ 'title' => 'Potato', 'size' => '1 kg', 'price' => '₹25', 'img' => '/images/potato.webp' ],
+                [ 'title' => 'Tomato (Hybrid)', 'size' => '500 g', 'price' => '₹20', 'img' => '/images/Tomato.webp' ],
+                [ 'title' => 'Carrot (Orange)', 'size' => '500 g', 'price' => '₹40', 'img' => '/images/Carrot (Orange).jpeg' ],
+                [ 'title' => 'Capsicum (Green)', 'size' => '250 g', 'price' => '₹35', 'img' => '/images/Capsicum (Green).jpeg' ],
+                [ 'title' => 'Red Chili', 'size' => '250 g', 'price' => '₹30', 'img' => '/images/chilli.jpeg' ],
+                [ 'title' => 'Green Chilli', 'size' => '100 g', 'price' => '₹10', 'img' => '/images/Green Chilli.png' ],
+                [ 'title' => 'Coriander Leaves', 'size' => '1 bunch', 'price' => '₹8', 'img' => '/images/Coriander Leaves.png' ],
+                [ 'title' => 'Garlic', 'size' => '250 g', 'price' => '₹25', 'img' => '/images/Garlic.png' ],
+                [ 'title' => 'Ginger', 'size' => '250 g', 'price' => '₹22', 'img' => '/images/Ginger.png' ],
             ];
+        @endphp
 
-            function createVegetableCard(product) {
-                return `
+        <div id="vegetable-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            @foreach($vegetables as $product)
                 <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all p-3 sm:p-4 flex flex-col justify-between group h-full">
                     <a href="/personal-products" class="block group">
                         <div class="relative">
-                            <img src="${product.img}" alt="${product.title}" class="w-full h-28 sm:h-32 object-contain mb-2 sm:mb-3 transition-transform duration-200 group-hover:scale-105"
+                            <img src="{{ $product['img'] }}" alt="{{ $product['title'] }}" class="w-full h-28 sm:h-32 object-contain mb-2 sm:mb-3 transition-transform duration-200 group-hover:scale-105"
                                 onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
                             <div class="absolute top-0 left-0 bg-green-100 text-green-600 text-xs font-semibold px-2 py-0.5 rounded-br-md flex items-center gap-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,21 +46,18 @@
                         </div>
                     </a>
                     <div class="flex-1 flex flex-col justify-between text-center">
-                        <h3 class="text-sm sm:text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">${product.title}</h3>
-                        <p class="text-xs sm:text-sm text-gray-500 mb-2">${product.size}</p>
+                        <h3 class="text-sm sm:text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">{{ $product['title'] }}</h3>
+                        <p class="text-xs sm:text-sm text-gray-500 mb-2">{{ $product['size'] }}</p>
                     </div>
                     <div class="flex items-center justify-between mt-2 sm:mt-3">
-                        <span class="text-lg sm:text-xl font-extrabold text-green-700">${product.price}</span>
+                        <span class="text-lg sm:text-xl font-extrabold text-green-700">{{ $product['price'] }}</span>
                         <button onclick="event.stopPropagation(); window.location.href='/cart';" class="px-3 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
                             ADD
                         </button>
                     </div>
                 </div>
-                `;
-            }
-
-            document.getElementById('vegetable-grid').innerHTML = vegetables.map(createVegetableCard).join('');
-        </script>
+            @endforeach
+        </div>
     </div>
 </div>
 
