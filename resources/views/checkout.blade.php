@@ -18,7 +18,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
             
             <!-- Left Column: Shipping & Payment Form -->
-            <form id="checkout-form" class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-200 p-6 sm:p-8">
+            <form id="checkout-form" class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-200 p-6 sm:p-8" novalidate>
                 
                 <!-- Contact Information Section -->
                 <section>
@@ -29,13 +29,13 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
                             <label for="full_name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                            <input type="text" id="full_name" name="full_name" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="John Doe">
-                            <p id="full_name_error" class="text-red-600 text-sm mt-1 hidden">Full name is required.</p>
+                            <input type="text" id="full_name" name="full_name" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="Your Name">
+                            <p id="full_name_error" class="text-red-600 text-xs mt-1 h-4"></p>
                         </div>
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                             <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="you@example.com">
-                            <p id="email_error" class="text-red-600 text-sm mt-1 hidden">Please enter a valid email address.</p>
+                            <p id="email_error" class="text-red-600 text-xs mt-1 h-4"></p>
                         </div>
                     </div>
                 </section>
@@ -52,23 +52,23 @@
                         <div>
                             <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
                             <input type="text" id="address" name="address" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="123 Main St, Anytown">
-                            <p id="address_error" class="text-red-600 text-sm mt-1 hidden">Address is required.</p>
+                            <p id="address_error" class="text-red-600 text-xs mt-1 h-4"></p>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                             <div>
                                 <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
                                 <input type="text" id="city" name="city" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="Rajkot">
-                                <p id="city_error" class="text-red-600 text-sm mt-1 hidden">City is required.</p>
+                                <p id="city_error" class="text-red-600 text-xs mt-1 h-4"></p>
                             </div>
                             <div>
                                 <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State</label>
                                 <input type="text" id="state" name="state" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="Gujarat">
-                                <p id="state_error" class="text-red-600 text-sm mt-1 hidden">State is required.</p>
+                                <p id="state_error" class="text-red-600 text-xs mt-1 h-4"></p>
                             </div>
                             <div>
                                 <label for="zip" class="block text-sm font-medium text-gray-700 mb-1">ZIP / Postal Code</label>
                                 <input type="text" id="zip" name="zip" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="360001">
-                                <p id="zip_error" class="text-red-600 text-sm mt-1 hidden">Please enter a valid 6-digit PIN code.</p>
+                                <p id="zip_error" class="text-red-600 text-xs mt-1 h-4"></p>
                             </div>
                         </div>
                     </div>
@@ -85,20 +85,22 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 payment-options">
                         <label class="relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-gray-300 hover:border-green-500 transition cursor-pointer shadow-sm bg-white has-[:checked]:bg-green-50 has-[:checked]:border-green-600">
                             <input type="radio" name="payment_method" value="cod" class="absolute opacity-0 w-full h-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                             <span class="font-semibold text-gray-800 text-center">Cash on Delivery</span>
                         </label>
                         <label class="relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-gray-300 hover:border-green-500 transition cursor-pointer shadow-sm bg-white has-[:checked]:bg-green-50 has-[:checked]:border-green-600">
-                            <input type="radio" name="payment_method" value="razorpay" class="absolute opacity-0 w-full h-full" checked>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                            <input type="radio" name="payment_method" value="razorpay" class="absolute opacity-0 w-full h-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            </svg>
                             <span class="font-semibold text-gray-800 text-center">Card, UPI & More</span>
                         </label>
                     </div>
-                     <p id="payment_method_error" class="text-red-600 text-sm mt-2 text-center hidden">Please select a payment method.</p>
+                     <p id="payment_method_error" class="text-red-600 text-sm mt-2 text-center h-4"></p>
                 </section>
                 
                 <div class="mt-10">
-                    <button id="placeOrderBtn" type="button" class="w-full bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-green-500/40 transition-all duration-300 ease-in-out transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <button id="placeOrderBtn" type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-green-500/40 transition-all duration-300 ease-in-out transform hover:-translate-y-1 flex items-center justify-center gap-2">
                         <span>Place Order Securely</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </button>
@@ -171,104 +173,132 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('checkout-form');
-    const placeOrderBtn = document.getElementById('placeOrderBtn');
+    
+    // Map of input IDs to their validation functions
+    const validators = {
+        'full_name': validateTextOnly,
+        'email': validateEmail,
+        'address': validateAddress,
+        'city': validateTextOnly,
+        'state': validateTextOnly,
+        'zip': validateZip,
+    };
 
-    // Helper function to show an error
+    // --- Helper Functions ---
     const showError = (input, message) => {
         const errorElement = document.getElementById(input.id + '_error');
         input.classList.add('border-red-500');
         input.classList.remove('border-gray-300');
         errorElement.textContent = message;
-        errorElement.classList.remove('hidden');
     };
 
-    // Helper function to clear an error
     const clearError = (input) => {
         const errorElement = document.getElementById(input.id + '_error');
         input.classList.remove('border-red-500');
         input.classList.add('border-gray-300');
         if (errorElement) {
-            errorElement.classList.add('hidden');
+            errorElement.textContent = '';
         }
     };
-    
-    // Helper function to clear payment method error
-    const clearPaymentError = () => {
-        const paymentError = document.getElementById('payment_method_error');
-        paymentError.classList.add('hidden');
+
+    // --- Individual Validation Functions ---
+    function validateRequired(input) {
+        if (input.value.trim() === '') {
+            showError(input, `${input.labels[0].textContent} is required.`);
+            return false;
+        }
+        clearError(input);
+        return true;
     }
 
-    const validateForm = () => {
-        let isValid = true;
-        
-        // Clear all previous errors
-        const inputs = form.querySelectorAll('input[name]');
-        inputs.forEach(clearError);
-        clearPaymentError();
-
-        // --- Field Validations ---
-
-        // Full Name
-        const fullName = document.getElementById('full_name');
-        if (fullName.value.trim() === '') {
-            showError(fullName, 'Full name is required.');
-            isValid = false;
+    function validateTextOnly(input) {
+        if (!validateRequired(input)) return false;
+        const nameRegex = /^[a-zA-Z\s.'-]+$/;
+        if (!nameRegex.test(input.value)) {
+            showError(input, 'This field cannot contain numbers or invalid special characters.');
+            return false;
         }
+        clearError(input);
+        return true;
+    }
 
-        // Email
-        const email = document.getElementById('email');
+    function validateEmail(input) {
+        if (!validateRequired(input)) return false;
         const emailRegex = /^\S+@\S+\.\S+$/;
-        if (email.value.trim() === '' || !emailRegex.test(email.value)) {
-            showError(email, 'Please enter a valid email address.');
-            isValid = false;
+        if (!emailRegex.test(input.value)) {
+            showError(input, 'Please enter a valid email address.');
+            return false;
         }
-
-        // Address
-        const address = document.getElementById('address');
-        if (address.value.trim() === '') {
-            showError(address, 'Shipping address is required.');
-            isValid = false;
+        clearError(input);
+        return true;
+    }
+    
+    function validateAddress(input) {
+        if (!validateRequired(input)) return false;
+        if (input.value.trim().length < 10) {
+            showError(input, 'Please enter a more detailed address (at least 10 characters).');
+            return false;
         }
+        clearError(input);
+        return true;
+    }
 
-        // City
-        const city = document.getElementById('city');
-        if (city.value.trim() === '') {
-            showError(city, 'City is required.');
-            isValid = false;
-        }
-
-        // State
-        const state = document.getElementById('state');
-        if (state.value.trim() === '') {
-            showError(state, 'State is required.');
-            isValid = false;
-        }
-
-        // ZIP Code
-        const zip = document.getElementById('zip');
+    function validateZip(input) {
+        if (!validateRequired(input)) return false;
         const zipRegex = /^\d{6}$/;
-        if (!zipRegex.test(zip.value.trim())) {
-            showError(zip, 'Please enter a valid 6-digit Indian PIN code.');
-            isValid = false;
+        if (!zipRegex.test(input.value.trim())) {
+            showError(input, 'Please enter a valid 6-digit PIN code.');
+            return false;
+        }
+        clearError(input);
+        return true;
+    }
+    
+    function validatePaymentMethod() {
+        const paymentMethod = form.querySelector('input[name="payment_method"]:checked');
+        const paymentError = document.getElementById('payment_method_error');
+        const paymentOptionsLabels = form.querySelectorAll('.payment-options label');
+
+        if (!paymentMethod) {
+            paymentError.textContent = 'Please select a payment method.';
+            paymentOptionsLabels.forEach(label => {
+                label.classList.add('border-red-500');
+                label.classList.remove('border-gray-300');
+            });
+            return false;
         }
         
-        // Payment Method
-        const paymentMethod = form.querySelector('input[name="payment_method"]:checked');
-        if (!paymentMethod) {
-            const paymentError = document.getElementById('payment_method_error');
-            paymentError.classList.remove('hidden');
-            isValid = false;
+        paymentError.textContent = '';
+        paymentOptionsLabels.forEach(label => {
+            label.classList.remove('border-red-500');
+            // Let the :checked pseudo-class handle the green border, otherwise set to gray
+            if (!label.querySelector('input').checked) {
+                 label.classList.add('border-gray-300');
+            }
+        });
+        return true;
+    }
+
+    // --- Main Form Validation Trigger ---
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        let isFormValid = true;
+        
+        // Validate all text/email inputs
+        Object.keys(validators).forEach(id => {
+            const input = document.getElementById(id);
+            if (!validators[id](input)) {
+                isFormValid = false;
+            }
+        });
+
+        // Validate payment method
+        if (!validatePaymentMethod()) {
+            isFormValid = false;
         }
 
-        return isValid;
-    };
-
-    placeOrderBtn.addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent default button action
-        if (validateForm()) {
+        if (isFormValid) {
             console.log('Form is valid. Submitting...');
-            // In a real application, you would submit the form via AJAX or standard form submission.
-            // For this demo, we'll redirect as requested.
             window.location.href = '/place-order'; 
         } else {
             console.log('Form is invalid. Please correct the errors.');
@@ -279,19 +309,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Add real-time validation feedback as user types
-    form.querySelectorAll('input[name]').forEach(input => {
-        input.addEventListener('input', () => {
-            // A simple way to re-validate on input if it previously had an error
-            if(input.classList.contains('border-red-500')){
-                 clearError(input);
-            }
-        });
+    // --- Real-time Validation ---
+    Object.keys(validators).forEach(id => {
+        const input = document.getElementById(id);
+        input.addEventListener('input', () => validators[id](input));
     });
     
-    // Clear payment error when a choice is made
     form.querySelectorAll('input[name="payment_method"]').forEach(radio => {
-        radio.addEventListener('change', clearPaymentError);
+        radio.addEventListener('change', validatePaymentMethod);
     });
 });
 </script>

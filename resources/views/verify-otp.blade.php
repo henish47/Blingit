@@ -17,17 +17,14 @@
         body {
             font-family: 'Poppins', sans-serif;
         }
+        /* Style for the disabled resend link */
+        .disabled-link {
+            color: #9ca3af; /* gray-400 */
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
-    {{-- 
-      This Blade template provides a modern, responsive "Verify OTP" page.
-      - It's styled entirely with Tailwind CSS.
-      - Features a two-column layout consistent with the login/register pages.
-      - Informs the user that an OTP has been sent to their phone.
-      - Provides a form to enter the OTP and redirects to the reset password page on submission.
-      - All icons are inline SVGs for optimal performance.
-    --}}
     <div class="min-h-screen bg-gray-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div class="relative w-full max-w-6xl bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden grid grid-cols-1 lg:grid-cols-2">
             
@@ -45,7 +42,7 @@
                             One last step to secure your account.
                         </h2>
                         <p class="mt-4 text-gray-600 text-lg">
-                           We've sent a One-Time Password (OTP) to your mobile number to ensure it's you.
+                            We've sent a One-Time Password (OTP) to your email address to ensure it's you.
                         </p>
                     </div>
                     <div class="mt-10 space-y-6">
@@ -55,16 +52,16 @@
                             </div>
                             <div>
                                 <h3 class="font-bold text-gray-800">Account Security</h3>
-                                <p class="text-gray-600">Verifying your number keeps your account safe.</p>
+                                <p class="text-gray-600">Verifying your identity keeps your account safe.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
                             <div class="bg-green-100 p-3 rounded-full">
-                               <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                               <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                             </div>
                             <div>
                                 <h3 class="font-bold text-gray-800">Seamless Communication</h3>
-                                <p class="text-gray-600">Receive order updates via SMS.</p>
+                                <p class="text-gray-600">Receive important account updates via email.</p>
                             </div>
                         </div>
                     </div>
@@ -82,17 +79,11 @@
                         </a>
                         <h1 class="text-3xl font-extrabold text-gray-900">Verify Your OTP</h1>
                         <p class="text-gray-500 mt-2">
-                            Please enter the 6-digit code we sent to your phone.
+                            Please enter the 6-digit code we sent to your email.
                         </p>
                     </div>
 
-                    @if (session('status'))
-                        <div class="mb-6 font-medium text-sm text-green-600 bg-green-50 p-4 rounded-lg border border-green-200">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <form id="otp-form" class="space-y-6">
+                    <form id="otp-form" class="space-y-4" novalidate>
                         @csrf
                         <div>
                             <label for="otp-1" class="block text-sm font-medium text-gray-700 mb-2 text-center">Enter 6-Digit OTP</label>
@@ -103,12 +94,13 @@
                                            maxlength="1"
                                            pattern="[0-9]*"
                                            inputmode="numeric"
-                                           class="w-12 h-14 text-center text-2xl font-bold border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                                           class="otp-input w-12 h-14 text-center text-2xl font-bold border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                                            required
                                            autocomplete="off"
                                            id="otp-{{ $i }}">
                                 @endfor
                             </div>
+                            <span id="otp-error" class="text-red-600 text-xs mt-2 text-center block h-4"></span>
                         </div>
                         
                         <div>
@@ -120,7 +112,8 @@
                     
                     <div class="mt-6 text-center text-sm">
                         <p class="text-gray-600">Didn't receive the code? 
-                            <a href="#" class="font-semibold text-green-600 hover:underline">Resend OTP</a>
+                            <a href="#" id="resend-otp-link" class="font-semibold text-green-600 hover:underline">Resend OTP</a>
+                            <span id="resend-timer" class="text-gray-500"></span>
                         </p>
                     </div>
                 </div>
@@ -130,38 +123,100 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const otpInputs = document.querySelectorAll('input[name="otp[]"]');
             const otpForm = document.getElementById('otp-form');
+            const otpInputs = document.querySelectorAll('.otp-input');
+            const otpError = document.getElementById('otp-error');
+            const resendLink = document.getElementById('resend-otp-link');
+            const resendTimerSpan = document.getElementById('resend-timer');
+            let timer;
 
-            otpInputs.forEach((el, idx, arr) => {
-                el.addEventListener('input', function() {
-                    if (this.value.length === 1 && idx < arr.length - 1) {
-                        arr[idx + 1].focus();
+            // --- OTP Input Handling (Auto-focus and Backspace) ---
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    // Only allow numbers
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                    
+                    if (input.value.length === 1 && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
                     }
+                    validateOtp(); // Validate on each input
                 });
-                el.addEventListener('keydown', function(e) {
-                    if (e.key === 'Backspace' && !this.value && idx > 0) {
-                        arr[idx - 1].focus();
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {
+                        otpInputs[index - 1].focus();
                     }
                 });
             });
 
+            // --- Form Submission ---
             otpForm.addEventListener('submit', function(e) {
-                e.preventDefault(); // Stop the form from submitting normally
-
-                let otpValue = '';
-                otpInputs.forEach(input => {
-                    otpValue += input.value;
-                });
-
-                if (otpValue.length === 6) {
+                e.preventDefault();
+                if (validateOtp()) {
+                    let otpValue = Array.from(otpInputs).map(input => input.value).join('');
                     console.log('OTP Verified:', otpValue);
-                    // Redirect to the reset password page
+                    // On a real server, you would now verify this OTP.
+                    // For this demo, we'll redirect.
                     window.location.href = '/reset-password';
-                } else {
-                    alert('Please enter the complete 6-digit OTP.');
                 }
             });
+
+            // --- Resend OTP Logic ---
+            resendLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                startResendTimer();
+                // Add your logic here to actually resend the OTP via an API call
+                console.log('Resending OTP...');
+            });
+
+            function startResendTimer() {
+                let seconds = 30;
+                resendLink.classList.add('disabled-link');
+                
+                timer = setInterval(() => {
+                    resendTimerSpan.textContent = `(wait ${seconds}s)`;
+                    seconds--;
+                    if (seconds < 0) {
+                        clearInterval(timer);
+                        resendLink.classList.remove('disabled-link');
+                        resendTimerSpan.textContent = '';
+                    }
+                }, 1000);
+            }
+
+            // --- Validation Functions ---
+            function validateOtp() {
+                const otpValue = Array.from(otpInputs).map(input => input.value).join('');
+                if (otpValue.length !== 6) {
+                    showError('Please enter the complete 6-digit OTP.');
+                    return false;
+                }
+                if (!/^\d{6}$/.test(otpValue)) {
+                    showError('OTP must contain only numbers.');
+                    return false;
+                }
+                hideError();
+                return true;
+            }
+
+            function showError(message) {
+                otpError.textContent = message;
+                otpInputs.forEach(input => {
+                    input.classList.add('border-red-500');
+                    input.classList.remove('border-gray-300');
+                });
+            }
+
+            function hideError() {
+                otpError.textContent = '';
+                otpInputs.forEach(input => {
+                    input.classList.remove('border-red-500');
+                    input.classList.add('border-gray-300');
+                });
+            }
+            
+            // Start the timer on page load for the first time
+            startResendTimer();
         });
     </script>
 </body>

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PlaceOrderController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\RegisterController;
 
 
 // Public grocery eCommerce pages
@@ -27,7 +28,8 @@ Route::view('/contact', 'contact');
 Route::view('/about', 'about');
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-Route::view('/register', 'register')->name('register');
+Route::get('/register', [RegisterController::class, 'create'])->name('register');
+Route::post('/register', [RegisterController::class, 'store']);
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('password.request');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
 Route::view('/otp-verify', 'verify-otp')->name('otp.verify');
@@ -35,10 +37,10 @@ Route::post('/reset-password', [ResetPasswordController::class, 'update'])->name
 Route::get('/reset-password', function () {
     return view('reset-password');
 })->name('password.reset');
-Route::get('/logout', function () {
-    session()->flush();
-    return redirect('/login');
-})->name('logout');
+// Route::get('/logout', function () {
+//     session()->flush();
+//     return redirect('/login');
+// })->name('logout');
 
 
 

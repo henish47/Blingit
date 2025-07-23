@@ -24,8 +24,6 @@
                 <p class="mt-4 text-lg font-bold text-gray-500">Order ID: <span class="text-green-600">#BLINGIT-12345</span></p>
             </div>
 
-          
-            
             <!-- Grid Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
                 
@@ -39,8 +37,27 @@
                         @php
                             // Mock data for order summary
                             $orderItems = [
-                                ['img' => 'https://www.bigbasket.com/media/uploads/p/l/10000159_27-fresho-potato.jpg', 'name' => 'Fresh Potato', 'qty' => 2, 'price' => 60],
-                                ['img' => 'https://www.bigbasket.com/media/uploads/p/l/10000068_22-fresho-carrot-ooty.jpg', 'name' => 'Ooty Carrots', 'qty' => 1, 'price' => 40],
+                                [
+                                    'img' => '\images\amulgold.avif',
+                                    'name' => 'Amul Gold Milk',
+                                    'price' => 34,
+                                    'qty' => 2,
+                                    'total' => 68
+                                ],
+                                [
+                                    'img' => '\images\banana.jpeg',
+                                    'name' => 'Banana (1 dozen)',
+                                    'price' => 60,
+                                    'qty' => 1,
+                                    'total' => 60
+                                ],
+                                [
+                                    'img' => '\images\onion.webp',
+                                    'name' => 'Fresh Onion',
+                                    'price' => 40,
+                                    'qty' => 3,
+                                    'total' => 120
+                                ]
                             ];
                             $totalPrice = array_sum(array_column($orderItems, 'price'));
                         @endphp
@@ -111,17 +128,19 @@
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 mb-2 text-center">How was your experience?</h2>
                     <p class="text-gray-500 text-center mb-6">Your feedback helps us improve our service.</p>
-                    <div class="bg-gray-50 rounded-2xl p-6 space-y-4 shadow-sm border border-gray-200 max-w-2xl mx-auto">
-                         <div class="flex justify-center gap-2 text-gray-300 text-4xl">
-                             <svg data-value="1" class="w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                             <svg data-value="2" class="w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                             <svg data-value="3" class="w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                             <svg data-value="4" class="w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                             <svg data-value="5" class="w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <form id="review-form" class="bg-gray-50 rounded-2xl p-6 space-y-4 shadow-sm border border-gray-200 max-w-2xl mx-auto" novalidate>
+                         <div id="star-rating" class="flex justify-center gap-2 text-gray-300 text-4xl">
+                             <svg data-value="1" class="star w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                             <svg data-value="2" class="star w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                             <svg data-value="3" class="star w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                             <svg data-value="4" class="star w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                             <svg data-value="5" class="star w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                          </div>
-                         <textarea rows="3" placeholder="Tell us more..." class="w-full rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition"></textarea>
+                         <p id="star-rating-error" class="text-red-600 text-xs text-center h-4"></p>
+                         <textarea id="review-textarea" rows="3" placeholder="Tell us more..." class="w-full rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition"></textarea>
+                         <p id="review-textarea-error" class="text-red-600 text-xs h-4"></p>
                          <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-semibold shadow-sm transition-transform hover:-translate-y-0.5 text-base">Submit Feedback</button>
-                    </div>
+                    </form>
                 </div>
             </div>
 
@@ -129,3 +148,95 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const reviewForm = document.getElementById('review-form');
+    const starsContainer = document.getElementById('star-rating');
+    const stars = starsContainer.querySelectorAll('.star');
+    const starError = document.getElementById('star-rating-error');
+    const textarea = document.getElementById('review-textarea');
+    const textareaError = document.getElementById('review-textarea-error');
+    let currentRating = 0;
+
+    // --- Star Rating Interaction ---
+    stars.forEach(star => {
+        star.addEventListener('mouseenter', () => {
+            if (currentRating === 0) { // Only show hover effect if no rating is selected
+                highlightStars(star.dataset.value);
+            }
+        });
+
+        star.addEventListener('mouseleave', () => {
+            if (currentRating === 0) { // Return to default state if no rating is selected
+                highlightStars(0);
+            } else {
+                highlightStars(currentRating); // Keep selected rating highlighted
+            }
+        });
+
+        star.addEventListener('click', () => {
+            currentRating = star.dataset.value;
+            highlightStars(currentRating);
+            validateStars(); // Validate as soon as a star is clicked
+        });
+    });
+
+    function highlightStars(rating) {
+        stars.forEach(star => {
+            if (star.dataset.value <= rating) {
+                star.classList.remove('text-gray-300');
+                star.classList.add('text-yellow-400');
+            } else {
+                star.classList.remove('text-yellow-400');
+                star.classList.add('text-gray-300');
+            }
+        });
+    }
+
+    // --- Validation Logic ---
+    function validateStars() {
+        if (currentRating === 0) {
+            starError.textContent = 'Please select a rating.';
+            return false;
+        }
+        starError.textContent = '';
+        return true;
+    }
+
+    function validateTextarea() {
+        if (textarea.value.trim() === '') {
+            textareaError.textContent = 'Please share your feedback in the text box.';
+            textarea.classList.add('border-red-500');
+            return false;
+        }
+        textareaError.textContent = '';
+        textarea.classList.remove('border-red-500');
+        return true;
+    }
+
+    // Real-time validation for textarea
+    textarea.addEventListener('input', validateTextarea);
+
+    // --- Form Submission ---
+    reviewForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const isStarsValid = validateStars();
+        const isTextareaValid = validateTextarea();
+
+        if (isStarsValid && isTextareaValid) {
+            console.log('Review Submitted:', { rating: currentRating, feedback: textarea.value });
+            // Here you would typically send the data to your server
+            alert('Thank you for your feedback!');
+            reviewForm.reset();
+            currentRating = 0;
+            highlightStars(0);
+        } else {
+            console.log('Review form is invalid.');
+        }
+    });
+});
+</script>
+@endpush
