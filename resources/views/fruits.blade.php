@@ -18,16 +18,21 @@
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             @php
                 $fruits = [
-                    ['title' => 'Banana', 'size' => '1 dozen', 'price' => '₹40', 'img' => '/images/banana.webp'],
-                    ['title' => 'Apple (Shimla)', 'size' => '1 kg', 'price' => '₹110', 'img' => '/images/apple.webp'],
-                    ['title' => 'Orange', 'size' => '1 kg', 'price' => '₹80', 'img' => '/images/orange.webp'],
-                    ['title' => 'Pomegranate', 'size' => '500 g', 'price' => '₹90', 'img' => '/images/pomegranate.webp'],
-                    ['title' => 'Papaya', 'size' => '1 pc (medium)', 'price' => '₹45', 'img' => '/images/papaya.webp'],
-                    ['title' => 'Watermelon', 'size' => '1 pc (medium)', 'price' => '₹65', 'img' => '/images/watermelon.webp'],
-                    ['title' => 'Mango (Alphonso)', 'size' => '500 g', 'price' => '₹150', 'img' => '/images/mango.webp'],
-                    ['title' => 'Kiwi', 'size' => '3 pcs', 'price' => '₹90', 'img' => '/images/kiwi.webp'],
-                    ['title' => 'Grapes (Green)', 'size' => '500 g', 'price' => '₹60', 'img' => '/images/grapes.webp'],
-                    ['title' => 'Strawberries', 'size' => '250 g', 'price' => '₹75', 'img' => '/images/strawberries.webp'],
+                    ['title' => 'Bananas (Robusta)', 'size' => '1 dozen', 'price' => '₹48', 'img' => '\images\banana.jpeg'],
+
+                        ['title' => 'Apples (Fuji)', 'size' => '4 pcs (approx 500 g)', 'price' => '₹110', 'img' => '\images\Apples (Fuji).jpg'],
+
+                        ['title' => 'Oranges', 'size' => '1 kg', 'price' => '₹85', 'img' => '\images\Oranges.jpeg'],
+
+                        ['title' => 'Grapes (Green)', 'size' => '500 g', 'price' => '₹55', 'img' => '\images\Grapes (Green).jpeg'],
+                        
+                        ['title' => 'Pomegranate', 'size' => '4 pcs (approx 700 g)', 'price' => '₹135', 'img' => '\images\Pomegranate.jpg'],
+
+                        ['title' => 'pineapple', 'size' => '4 pcs (approx 700 g)', 'price' => '₹135', 'img' => '\images\pineapple.webp'],
+                    ['title' => 'Mango (Alphonso)', 'size' => '500 g', 'price' => '₹150', 'img' => '\images\Mango (Alphonso).png'],
+                    ['title' => 'Kiwi', 'size' => '3 pcs', 'price' => '₹90', 'img' => '\images\Kiwi.png'],
+                    ['title' => 'Watermalon', 'size' => '1 kg', 'price' => '₹60', 'img' => '\images\Watermalon.png'],
+                    ['title' => 'Strawberries', 'size' => '250 g', 'price' => '₹75', 'img' => '\images\Strawberries.png'],
                 ];
             @endphp
 

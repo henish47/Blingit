@@ -18,16 +18,21 @@
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             @php
                 $vegetables = [
-                    ['title' => 'Tomato', 'size' => '1 kg', 'price' => '₹28', 'img' => '/images/tomato.webp'],
-                    ['title' => 'Potato', 'size' => '1 kg', 'price' => '₹22', 'img' => '/images/potato.webp'],
-                    ['title' => 'Onion', 'size' => '1 kg', 'price' => '₹30', 'img' => '/images/onion.webp'],
-                    ['title' => 'Cabbage', 'size' => '1 pc', 'price' => '₹18', 'img' => '/images/cabbage.webp'],
-                    ['title' => 'Cauliflower', 'size' => '1 pc', 'price' => '₹24', 'img' => '/images/cauliflower.webp'],
-                    ['title' => 'Carrot', 'size' => '500 g', 'price' => '₹20', 'img' => '/images/carrot.webp'],
-                    ['title' => 'Green Chilli', 'size' => '100 g', 'price' => '₹10', 'img' => '/images/greenchilli.webp'],
-                    ['title' => 'Coriander Leaves', 'size' => '1 bunch', 'price' => '₹8', 'img' => '/images/coriander.webp'],
-                    ['title' => 'Garlic', 'size' => '250 g', 'price' => '₹25', 'img' => '/images/garlic.webp'],
-                    ['title' => 'Ginger', 'size' => '250 g', 'price' => '₹22', 'img' => '/images/ginger.webp'],
+                     ['title' => 'Onion', 'size' => '1 kg', 'price' => '₹30', 'img' => '/images/onion.webp'],
+
+                        ['title' => 'Potato', 'size' => '1 kg', 'price' => '₹25', 'img' => '/images/potato.webp'],
+
+                        ['title' => 'Tomato (Hybrid)', 'size' => '500 g', 'price' => '₹20', 'img' => '/images/Tomato.webp'],
+
+                        ['title' => 'Carrot (Orange)', 'size' => '500 g', 'price' => '₹40', 'img' => '/images/Carrot (Orange).jpeg'],
+
+                        ['title' => 'Capsicum (Green)', 'size' => '250 g', 'price' => '₹35', 'img' => '/images/Capsicum (Green).jpeg'],
+
+                         ['title' => 'Red Chili', 'size' => '250 g', 'price' => '₹30', 'img' => '\images\chilli.jpeg'],
+                    ['title' => 'Green Chilli', 'size' => '100 g', 'price' => '₹10', 'img' => '\images\Green Chilli.png'],
+                    ['title' => 'Coriander Leaves', 'size' => '1 bunch', 'price' => '₹8', 'img' => '\images\Coriander Leaves.png'],
+                    ['title' => 'Garlic', 'size' => '250 g', 'price' => '₹25', 'img' => '\images\Garlic.png'],
+                    ['title' => 'Ginger', 'size' => '250 g', 'price' => '₹22', 'img' => '\images\Ginger.png'],
                 ];
             @endphp
 
