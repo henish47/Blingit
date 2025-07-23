@@ -34,9 +34,10 @@
                 <div class="relative z-10 flex flex-col justify-between h-full">
                     <div>
                         <a href="/" class="flex items-center gap-2 group mb-8">
-                            <span class="text-3xl font-extrabold text-gray-900">
-                                bling<span class="text-green-600">it</span>
-                            </span>
+                            <span class="text-3xl font-extrabold px-3 py-1 rounded-lg shadow-lg blingit-logo-text"
+                        style="background-color: #FFFF00;">
+                        <span class="text-black">bling</span><span class="text-green-600">it</span>
+                    </span>
                         </a>
                         <h2 class="text-4xl font-extrabold text-gray-800 leading-tight">
                             One last step to secure your account.
