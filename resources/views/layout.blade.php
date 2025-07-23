@@ -83,13 +83,13 @@
                         <span class="text-black">bling</span><span class="text-green-600">it</span>
                     </span>
                     <span class="text-sm font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full shadow-sm hidden sm:inline-flex animate-pulse group-hover:animate-none">
-                        🚴 Delivery in 8 minutes
+                        🚴 Delivery in 10 minutes
                     </span>
                 </a>
             </div>
 
             <!-- Search Bar (Desktop) -->
-            <div class="hidden md:flex flex-1 justify-center px-4">
+            <div class="hidden md:flex flex-1 justify-center px-5">
                 <div class="relative w-full max-w-xl">
                     <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                         <i class="fa fa-search text-green-500 text-lg"></i>
