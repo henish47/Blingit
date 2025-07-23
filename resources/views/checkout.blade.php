@@ -3,14 +3,7 @@
 @section('title', 'Checkout | Blingit Grocery')
 
 @section('content')
-{{-- 
-  This Blade template provides a modern, responsive checkout page.
-  - It's styled entirely with Tailwind CSS and includes robust client-side validation.
-  - Features a two-column layout with a sticky order summary.
-  - Form inputs are enhanced with icons and improved focus states.
-  - Invalid fields are highlighted with error messages to guide the user.
-  - All icons are inline SVGs for optimal performance.
---}}
+
 <div class="bg-gray-50 min-h-screen font-sans">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
@@ -122,9 +115,9 @@
                         @php
                             // Mock data for summary. In a real app, this would come from the cart session.
                             $summaryItems = [
-                                ['img' => 'https://www.bigbasket.com/media/uploads/p/l/1203470_2-amul-gold-homogenised-standardised-milk.jpg', 'name' => 'Amul Gold Milk', 'qty' => 2, 'price' => 68],
-                                ['img' => 'https://www.bigbasket.com/media/uploads/p/l/40075561_2-fresho-banana-robusta.jpg', 'name' => 'Banana Robusta', 'qty' => 1, 'price' => 45],
-                                ['img' => 'https://www.bigbasket.com/media/uploads/p/l/10000150_19-fresho-onion.jpg', 'name' => 'Fresh Onion', 'qty' => 3, 'price' => 90],
+                                ['img' => '\images\amulgold.avif', 'name' => 'Amul Gold Milk', 'qty' => 2, 'price' => 68],
+                                ['img' => '\images\banana.jpeg', 'name' => 'Banana (1 dozen)', 'qty' => 1, 'price' => 60],
+                                ['img' => '\images\onion.webp', 'name' => 'Fresh Onion', 'qty' => 3, 'price' => 120],
                             ];
                             $subtotal = array_sum(array_column($summaryItems, 'price'));
                             $deliveryFee = 40.00;

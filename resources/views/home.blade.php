@@ -151,6 +151,7 @@
             });
         </script>
 
+        <div class="filter"></div>
         <!-- Milk & Eggs Section -->
         @php
             $milkEggsProducts = [
@@ -324,7 +325,7 @@
             [ 'title' => 'Apple Airpods Pro', 'size' => 'Better Music', 'price' => '₹999', 'img' => '/images/apple airpodspro.jpeg' ],
             ];
         @endphp
-
+        
         <div class="flex items-center justify-between mb-4" data-aos="fade-up">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Electronics</h2>
             <a href="{{ route('electronics') }}" class="text-green-600 font-semibold hover:underline text-lg">See All <i class="fas fa-arrow-right ml-1"></i></a>

@@ -24,36 +24,36 @@
             // Mock data for cart items. In a real application, this would come from the session or database.
             $cartItems = [
                 [
-                    'img' => 'https://www.bigbasket.com/media/uploads/p/l/1203470_2-amul-gold-homogenised-standardised-milk.jpg',
-                    'name' => 'Amul Gold Full Cream Milk',
+                    'img' => '\images\amulgold.avif',
+                    'name' => 'Amul Gold Milk',
                     'price' => 34,
                     'qty' => 2,
                     'total' => 68
                 ],
                 [
-                    'img' => 'https://www.bigbasket.com/media/uploads/p/l/40075561_2-fresho-banana-robusta.jpg',
-                    'name' => 'Banana Robusta',
-                    'price' => 45,
+                    'img' => '\images\banana.jpeg',
+                    'name' => 'Banana (1 dozen)',
+                    'price' => 60,
                     'qty' => 1,
-                    'total' => 45
+                    'total' => 60
                 ],
                 [
-                    'img' => 'https://www.bigbasket.com/media/uploads/p/l/10000150_19-fresho-onion.jpg',
+                    'img' => '\images\onion.webp',
                     'name' => 'Fresh Onion',
-                    'price' => 30,
+                    'price' => 40,
                     'qty' => 3,
-                    'total' => 90
+                    'total' => 120
                 ]
             ];
             $subtotal = array_sum(array_column($cartItems, 'total'));
 
             // Mock data for recommended products.
             $recommendedProducts = [
-                ['title' => 'Fresh Tomato', 'size' => '500 g', 'price' => '20', 'img' => 'https://www.bigbasket.com/media/uploads/p/l/10000203_16-fresho-tomato-hybrid.jpg'],
-                ['title' => 'Brown Bread', 'size' => '400 g', 'price' => '40', 'img' => 'https://www.bigbasket.com/media/uploads/p/l/40003027_11-harvest-gold-brown-bread.jpg'],
-                ['title' => 'Refined Sugar', 'size' => '1 kg', 'price' => '45', 'img' => 'https://www.bigbasket.com/media/uploads/p/l/10000185_12-bb-royal-sugar-refined.jpg'],
-                ['title' => 'Tea Powder', 'size' => '250 g', 'price' => '120', 'img' => 'https://www.bigbasket.com/media/uploads/p/l/10000492_15-taj-mahal-tea.jpg'],
-                ['title' => 'Dishwash Liquid', 'size' => '500 ml', 'price' => '80', 'img' => 'https://www.bigbasket.com/media/uploads/p/l/10000279_11-vim-dishwash-liquid.jpg'],
+                ['title' => 'Fresh Tomato', 'size' => '500 g', 'price' => '20', 'img' => '\images\Tomato.webp'],
+                 [ 'title' => 'Amul Butter', 'size' => '500 g', 'price' => '₹265', 'img' => '/images/Amul Butter.avif' ],
+                ['title' => 'Oranges', 'size' => '1 kg', 'price' => '₹85', 'img' => '/images/Oranges.jpeg'],
+                ['title' => 'Grapes (Green)', 'size' => '500 g', 'price' => '₹55', 'img' => '/images/Grapes (Green).jpeg'],
+                 [ 'title' => 'Country Eggs (Brown)', 'size' => '6 pcs', 'price' => '₹68', 'img' => '/images/Country Eggs (Brown).jpeg' ],
             ];
         @endphp
 

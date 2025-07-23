@@ -17,16 +17,16 @@
             
             @php
                 $electronics_products = [
-                    ['title' => 'boAt Rockerz 450 Headphones', 'size' => '1 Unit', 'price' => '₹1499', 'img' => '/images/electronics/boat_headphones.jpg'],
-                    ['title' => 'MI 10000mAh Power Bank', 'size' => '1 Unit', 'price' => '₹999', 'img' => '/images/electronics/mi_powerbank.jpg'],
-                    ['title' => 'JBL GO 3 Bluetooth Speaker', 'size' => '1 Unit', 'price' => '₹1799', 'img' => '/images/electronics/jbl_speaker.jpg'],
-                    ['title' => 'Logitech Wireless Mouse M235', 'size' => '1 Unit', 'price' => '₹699', 'img' => '/images/electronics/logitech_mouse.jpg'],
-                    ['title' => 'Samsung EVO Plus 64GB MicroSD', 'size' => '1 Unit', 'price' => '₹549', 'img' => '/images/electronics/sd_card.jpg'],
-                    ['title' => 'Philips 9W Smart LED Bulb', 'size' => 'Pack of 2', 'price' => '₹299', 'img' => '/images/electronics/philips_bulb.jpg'],
-                    ['title' => 'Zebronics USB Keyboard', 'size' => '1 Unit', 'price' => '₹499', 'img' => '/images/electronics/keyboard.jpg'],
-                    ['title' => 'Sony Wired Earphones MDR-EX150AP', 'size' => '1 Unit', 'price' => '₹849', 'img' => '/images/electronics/sony_earphones.jpg'],
-                    ['title' => 'Smart WiFi Plug (16A)', 'size' => '1 Unit', 'price' => '₹1199', 'img' => '/images/electronics/smart_plug.jpg'],
-                    ['title' => 'Syska 4 Socket Extension Board', 'size' => '1 Unit', 'price' => '₹399', 'img' => '/images/electronics/extension_board.jpg'],
+                    [ 'title' => 'Smartphone (Brand X)', 'size' => '6.1" Display, 128GB', 'price' => '₹15,999', 'img' => '/images/Smartphone (Brand X).jpg' ],
+            [ 'title' => 'Wireless Headphones', 'size' => 'Noise Cancelling', 'price' => '₹4,499', 'img' => '/images/Wireless Headphones.png' ],
+            [ 'title' => 'Smartwatch (Fitness Tracker)', 'size' => 'Heart Rate Monitor', 'price' => '₹2,999', 'img' => '/images/Smartwatch (Fitness Tracker).jpg' ],
+            [ 'title' => 'Portable Bluetooth Speaker', 'size' => 'Waterproof, 10W', 'price' => '₹1,899', 'img' => '/images/Portable Bluetooth Speaker.jpg' ],
+            [ 'title' => 'Power Bank (10000 mAh)', 'size' => 'Fast Charging', 'price' => '₹999', 'img' => '/images/Power Bank (10000 mAh).jpeg' ],
+            [ 'title' => 'Apple Airpods Pro', 'size' => 'Better Music', 'price' => '₹999', 'img' => '/images/apple airpodspro.jpeg' ],
+                    ['title' => 'Zebronics USB Keyboard', 'size' => '1 Unit', 'price' => '₹499', 'img' => '\images\Zebronics USB Keyboard.webp'],
+                    ['title' => 'Sony Wired Earphones MDR-EX150AP', 'size' => '1 Unit', 'price' => '₹849', 'img' => '\images\Sony Wired Earphones.jpeg'],
+                    ['title' => 'Smart WiFi Plug (16A)', 'size' => '1 Unit', 'price' => '₹1199', 'img' => '\images\Smart WiFi Plug.webp'],
+                    ['title' => 'Syska 4 Socket Extension Board', 'size' => '1 Unit', 'price' => '₹399', 'img' => '\images\Syska 4 Socket Extension Board.jpg'],
                 ];
             @endphp
 
