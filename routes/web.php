@@ -10,6 +10,9 @@ use App\Http\Controllers\PlaceOrderController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\RegisterController;
 
+// Demo form 
+use App\Http\Controllers\DemoController;
+
 
 // Public grocery eCommerce pages
 Route::view('/', 'home');
@@ -36,7 +39,6 @@ Route::post('/reset-password', [ResetPasswordController::class, 'update'])->name
 Route::get('/reset-password', function () {
     return view('reset-password');
 })->name('password.reset');
-
 
 
 // Admin Dashboard Routes
