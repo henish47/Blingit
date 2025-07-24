@@ -81,7 +81,7 @@
             <input type="hidden" id="categoryId" name="id">
             <div class="mb-4">
                 <label for="categoryName" class="block font-semibold text-gray-700 mb-1">Category Name</label>
-                <input type="text" id="categoryName" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., Fruits" required>
+                <input type="text" id="categoryName" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., Fruits">
             </div>
             <div class="flex justify-end gap-4 mt-8">
                 <button type="button" id="cancelCategoryModal" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold px-5 py-2.5 rounded-lg transition">Cancel</button>
@@ -91,7 +91,7 @@
     </div>
 </div>
 
-<script>
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('categoryModal');
     const modalContent = modal.querySelector('div');
@@ -170,5 +170,112 @@ document.addEventListener('DOMContentLoaded', function() {
         closeModal();
     });
 });
+</script> -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('categoryModal');
+    const modalContent = modal.querySelector('div');
+    const addBtn = document.getElementById('addCategoryBtn');
+    const closeBtn = document.getElementById('closeCategoryModal');
+    const cancelBtn = document.getElementById('cancelCategoryModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const categoryForm = document.getElementById('categoryForm');
+    const categoryNameInput = document.getElementById('categoryName');
+    const categoryIdInput = document.getElementById('categoryId');
+    const saveBtn = document.getElementById('saveCategoryBtn');
+    const editBtns = document.querySelectorAll('.editCategoryBtn');
+
+    function openModal() {
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+        }, 10);
+    }
+
+    function closeModal() {
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 200);
+    }
+
+    function setupAddModal() {
+        categoryForm.reset();
+        categoryIdInput.value = '';
+        modalTitle.textContent = 'Add New Category';
+        saveBtn.textContent = 'Save Category';
+        categoryForm.action = '/admin/categories';
+        openModal();
+    }
+
+    function setupEditModal(id, name) {
+        categoryForm.reset();
+        categoryIdInput.value = id;
+        categoryNameInput.value = name;
+        modalTitle.textContent = 'Edit Category';
+        saveBtn.textContent = 'Update Category';
+        categoryForm.action = `/admin/categories/${id}`;
+        openModal();
+    }
+
+    addBtn.addEventListener('click', setupAddModal);
+
+    editBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const name = this.dataset.name;
+            setupEditModal(id, name);
+        });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeModal();
+        }
+    });
+
+    // ✅ Strong JS Validation (only letters allowed)
+    categoryForm.addEventListener('submit', function(e) {
+        const name = categoryNameInput.value.trim();
+        const namePattern = /^[A-Za-z\s]+$/; // Only letters and spaces
+
+        // Remove old error
+        const oldError = categoryNameInput.parentNode.querySelector('.category-error');
+        if (oldError) oldError.remove();
+
+        let isValid = true;
+
+        if (!name) {
+            showError('Category name is required.');
+            isValid = false;
+        } else if (name.length < 3) {
+            showError('Category name must be at least 3 characters.');
+            isValid = false;
+        } else if (name.length > 50) {
+            showError('Category name must not exceed 50 characters.');
+            isValid = false;
+        } else if (!namePattern.test(name)) {
+            showError('Only letters and spaces are not allowed in category name.');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            return;
+        }
+
+        function showError(msg) {
+            const errorEl = document.createElement('p');
+            errorEl.className = 'category-error text-sm text-red-500 mt-1';
+            errorEl.textContent = msg;
+            categoryNameInput.parentNode.appendChild(errorEl);
+        }
+    });
+});
 </script>
+
+
 @endsection

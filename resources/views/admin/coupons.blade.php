@@ -93,7 +93,7 @@
             <div class="space-y-4">
                 <div>
                     <label for="couponCode" class="block font-semibold text-gray-700 mb-1">Coupon Code</label>
-                    <input type="text" id="couponCode" name="code" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., WELCOME10" required>
+                    <input type="text" id="couponCode" name="code" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., WELCOME10" >
                 </div>
                 <div>
                     <label for="couponType" class="block font-semibold text-gray-700 mb-1">Type</label>
@@ -104,15 +104,15 @@
                 </div>
                 <div>
                     <label for="couponDiscount" class="block font-semibold text-gray-700 mb-1">Discount Value</label>
-                    <input type="number" id="couponDiscount" name="discount" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., 10 or 50" required>
+                    <input type="number" id="couponDiscount" name="discount" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., 10 or 50">
                 </div>
                 <div>
                     <label for="couponExpiry" class="block font-semibold text-gray-700 mb-1">Expiry Date</label>
-                    <input type="date" id="couponExpiry" name="expiry" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    <input type="date" id="couponExpiry" name="expiry" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" >
                 </div>
                  <div>
                     <label for="couponStatus" class="block font-semibold text-gray-700 mb-1">Status</label>
-                    <select id="couponStatus" name="status" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    <select id="couponStatus" name="status" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" >
                         <option value="active">Active</option>
                         <option value="expired">Expired</option>
                     </select>
@@ -126,7 +126,7 @@
     </div>
 </div>
 
-<script>
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('couponModal');
     const modalContent = modal.querySelector('div');
@@ -217,5 +217,164 @@ document.addEventListener('DOMContentLoaded', function() {
         closeModal();
     });
 });
+</script> -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('couponModal');
+    const modalContent = modal.querySelector('div');
+    const addBtn = document.getElementById('addCouponBtn');
+    const closeBtn = document.getElementById('closeCouponModal');
+    const cancelBtn = document.getElementById('cancelCouponModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const couponForm = document.getElementById('couponForm');
+    const couponIdInput = document.getElementById('couponId');
+    const couponCodeInput = document.getElementById('couponCode');
+    const couponTypeInput = document.getElementById('couponType');
+    const couponDiscountInput = document.getElementById('couponDiscount');
+    const couponExpiryInput = document.getElementById('couponExpiry');
+    const couponStatusInput = document.getElementById('couponStatus');
+    const saveBtn = document.getElementById('saveCouponBtn');
+    const editBtns = document.querySelectorAll('.editCouponBtn');
+
+    function openModal() {
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+        }, 10);
+    }
+
+    function closeModal() {
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 200);
+    }
+
+    function setupAddModal() {
+        clearErrors();
+        couponForm.reset();
+        couponIdInput.value = '';
+        modalTitle.textContent = 'Add New Coupon';
+        saveBtn.textContent = 'Save Coupon';
+        couponForm.action = '/admin/coupons';
+        openModal();
+    }
+
+    function setupEditModal(data) {
+        clearErrors();
+        couponForm.reset();
+        couponIdInput.value = data.id;
+        couponCodeInput.value = data.code;
+        couponTypeInput.value = data.type;
+        couponDiscountInput.value = data.discount;
+        couponExpiryInput.value = data.expiry;
+        couponStatusInput.value = data.status;
+        modalTitle.textContent = 'Edit Coupon';
+        saveBtn.textContent = 'Update Coupon';
+        couponForm.action = `/admin/coupons/${data.id}`;
+        openModal();
+    }
+
+    addBtn.addEventListener('click', setupAddModal);
+
+    editBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const data = {
+                id: this.dataset.id,
+                code: this.dataset.code,
+                type: this.dataset.type,
+                discount: this.dataset.discount,
+                expiry: this.dataset.expiry,
+                status: this.dataset.status,
+            };
+            setupEditModal(data);
+        });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeModal();
+        }
+    });
+
+    // ✅ STRONG VALIDATION
+    couponForm.addEventListener('submit', function(e) {
+        clearErrors();
+        let valid = true;
+
+        // Coupon Code
+        const codePattern = /^[A-Za-z0-9]{4,20}$/;
+        const code = couponCodeInput.value.trim();
+        if (!code) {
+            showError(couponCodeInput, 'Coupon Code is required.');
+            valid = false;
+        } else if (!codePattern.test(code)) {
+            showError(couponCodeInput, 'Coupon Code must be 4–20 alphanumeric characters.');
+            valid = false;
+        }
+
+        // Coupon Type
+        if (!couponTypeInput.value.trim()) {
+            showError(couponTypeInput, 'Please select a valid Coupon Type.');
+            valid = false;
+        }
+
+        // Discount
+        const discount = couponDiscountInput.value.trim();
+        if (!discount) {
+            showError(couponDiscountInput, 'Discount is required.');
+            valid = false;
+        } else if (isNaN(discount) || discount < 1 || discount > 100) {
+            showError(couponDiscountInput, 'Discount must be a number between 1 and 100.');
+            valid = false;
+        }
+
+        // Expiry Date
+        const expiry = couponExpiryInput.value.trim();
+        const today = new Date().toISOString().split('T')[0];
+        if (!expiry) {
+            showError(couponExpiryInput, 'Expiry Date is required.');
+            valid = false;
+        } else if (expiry < today) {
+            showError(couponExpiryInput, 'Expiry Date must be today or in the future.');
+            valid = false;
+        }
+
+        // Status
+        if (!couponStatusInput.value.trim()) {
+            showError(couponStatusInput, 'Please select a valid status.');
+            valid = false;
+        }
+
+        if (!valid) {
+            e.preventDefault();
+            return;
+        }
+
+        // Optional: remove this if using actual form submission
+        const formData = new FormData(this);
+        console.log('Form submitted to:', this.action);
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+        closeModal();
+    });
+
+    function showError(input, message) {
+        const error = document.createElement('p');
+        error.className = 'text-sm text-red-500 mt-1';
+        error.textContent = message;
+        input.parentNode.appendChild(error);
+    }
+
+    function clearErrors() {
+        document.querySelectorAll('.text-red-500').forEach(el => el.remove());
+    }
+});
 </script>
+
 @endsection

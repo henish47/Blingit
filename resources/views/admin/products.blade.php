@@ -109,12 +109,12 @@
             <div class="space-y-4">
                 <div>
                     <label for="productName" class="block font-semibold text-gray-700 mb-1">Product Name</label>
-                    <input type="text" id="productName" name="name" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., Fresh Apples" required>
+                    <input type="text" id="productName" name="name" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., Fresh Apples" >
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label for="productSku" class="block font-semibold text-gray-700 mb-1">SKU</label>
-                        <input type="text" id="productSku" name="sku" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., FRU-APL-001" required>
+                        <input type="text" id="productSku" name="sku" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., FRU-APL-001" >
                     </div>
                     <div>
                         <label for="productCategory" class="block font-semibold text-gray-700 mb-1">Category</label>
@@ -126,11 +126,11 @@
                     </div>
                     <div>
                         <label for="productPrice" class="block font-semibold text-gray-700 mb-1">Price (₹)</label>
-                        <input type="number" id="productPrice" name="price" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., 150.00" required>
+                        <input type="number" id="productPrice" name="price" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., 150.00" >
                     </div>
                     <div>
                         <label for="productStock" class="block font-semibold text-gray-700 mb-1">Stock Quantity</label>
-                        <input type="number" id="productStock" name="stock" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., 50" required>
+                        <input type="number" id="productStock" name="stock" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., 50">
                     </div>
                 </div>
                 <div>
@@ -146,7 +146,7 @@
     </div>
 </div>
 
-<script>
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('productModal');
     const modalContent = modal.querySelector('div');
@@ -240,5 +240,170 @@ document.addEventListener('DOMContentLoaded', function() {
         closeModal();
     });
 });
+</script> -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('productModal');
+    const modalContent = modal.querySelector('div');
+    const addBtn = document.getElementById('addProductBtn');
+    const closeBtn = document.getElementById('closeProductModal');
+    const cancelBtn = document.getElementById('cancelProductModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const productForm = document.getElementById('productForm');
+    const productIdInput = document.getElementById('productId');
+    const productNameInput = document.getElementById('productName');
+    const productSkuInput = document.getElementById('productSku');
+    const productCategoryInput = document.getElementById('productCategory');
+    const productPriceInput = document.getElementById('productPrice');
+    const productStockInput = document.getElementById('productStock');
+    const productDescriptionInput = document.getElementById('productDescription');
+    const saveBtn = document.getElementById('saveProductBtn');
+    const editBtns = document.querySelectorAll('.editProductBtn');
+
+    function openModal() {
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+        }, 10);
+    }
+
+    function closeModal() {
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 200);
+    }
+
+    function setupAddModal() {
+        clearErrors();
+        productForm.reset();
+        productIdInput.value = '';
+        modalTitle.textContent = 'Add New Product';
+        saveBtn.textContent = 'Save Product';
+        productForm.action = '/admin/products';
+        openModal();
+    }
+
+    function setupEditModal(data) {
+        clearErrors();
+        productForm.reset();
+        productIdInput.value = data.id;
+        productNameInput.value = data.name;
+        productSkuInput.value = data.sku;
+        productCategoryInput.value = data.category;
+        productPriceInput.value = data.price;
+        productStockInput.value = data.stock;
+        productDescriptionInput.value = data.description;
+        modalTitle.textContent = 'Edit Product';
+        saveBtn.textContent = 'Update Product';
+        productForm.action = `/admin/products/${data.id}`;
+        openModal();
+    }
+
+    addBtn.addEventListener('click', setupAddModal);
+
+    editBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const data = {
+                id: this.dataset.id,
+                name: this.dataset.name,
+                sku: this.dataset.sku,
+                category: this.dataset.category,
+                price: this.dataset.price,
+                stock: this.dataset.stock,
+                description: this.dataset.description,
+            };
+            setupEditModal(data);
+        });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeModal();
+        }
+    });
+
+    productForm.addEventListener('submit', function(e) {
+        clearErrors();
+        let valid = true;
+
+        // 1. Required check first
+        const requiredFields = [
+            { input: productNameInput, name: 'Product Name' },
+            { input: productSkuInput, name: 'SKU' },
+            { input: productCategoryInput, name: 'Category' },
+            { input: productPriceInput, name: 'Price' },
+            { input: productStockInput, name: 'Stock' },
+            { input: productDescriptionInput, name: 'Description' },
+        ];
+
+        requiredFields.forEach(field => {
+            if (!field.input.value.trim()) {
+                showError(field.input, `${field.name} is required.`);
+                valid = false;
+            }
+        });
+
+        if (!valid) {
+            e.preventDefault();
+            return;
+        }
+
+        // 2. Further strong validations only if required fields are filled
+
+        const name = productNameInput.value.trim();
+        if (name.length < 3 || !/^[A-Za-z0-9\s]+$/.test(name)) {
+            showError(productNameInput, 'Product Name must be at least 3 letters and can only contain letters, numbers and spaces.');
+            valid = false;
+        }
+
+        const sku = productSkuInput.value.trim();
+        if (sku.length < 5 || !/^[A-Za-z0-9-_]+$/.test(sku)) {
+            showError(productSkuInput, 'SKU must be alphanumeric and at least 5 characters (letters, numbers, - and _ only).');
+            valid = false;
+        }
+
+        const price = parseFloat(productPriceInput.value.trim());
+        if (isNaN(price) || price <= 0 || price > 99999.99) {
+            showError(productPriceInput, 'Price must be a positive number not exceeding ₹99,999.99.');
+            valid = false;
+        }
+
+        const stock = productStockInput.value.trim();
+        if (!/^\d+$/.test(stock) || parseInt(stock) > 9999) {
+            showError(productStockInput, 'Stock must be a whole number between 0 and 9999.');
+            valid = false;
+        }
+
+        const desc = productDescriptionInput.value.trim();
+        if (desc.length < 10) {
+            showError(productDescriptionInput, 'Description must be at least 10 characters long.');
+            valid = false;
+        }
+
+        if (!valid) {
+            e.preventDefault();
+            return;
+        }
+
+        closeModal();
+    });
+
+    function showError(input, message) {
+        const error = document.createElement('p');
+        error.className = 'text-sm text-red-500 mt-1';
+        error.textContent = message;
+        input.parentNode.appendChild(error);
+    }
+
+    function clearErrors() {
+        document.querySelectorAll('.text-red-500').forEach(el => el.remove());
+    }
+});
 </script>
+
+
 @endsection

@@ -11,10 +11,7 @@
             <h1 class="text-3xl font-extrabold text-gray-800">Orders Management</h1>
             <p class="text-gray-500 mt-1">View, track, and manage all customer orders.</p>
         </div>
-        <button class="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-2.5 rounded-lg shadow-lg hover:shadow-green-500/30 transition-all duration-300 transform hover:-translate-y-0.5 mt-4 sm:mt-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-            Add New Order
-        </button>
+        
     </div>
 
     <!-- Filters -->

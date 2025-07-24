@@ -96,11 +96,11 @@
         <form id="userForm" class="space-y-4">
             <div>
                 <label for="userName" class="block font-semibold text-gray-700 mb-1">Full Name</label>
-                <input type="text" id="userName" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., John Doe" required>
+                <input type="text" id="userName" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., John Doe">
             </div>
             <div>
                 <label for="userEmail" class="block font-semibold text-gray-700 mb-1">Email Address</label>
-                <input type="email" id="userEmail" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., john@example.com" required>
+                <input type="email" id="userEmail" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., john@example.com">
             </div>
             <div>
                 <label for="userRole" class="block font-semibold text-gray-700 mb-1">Role</label>
@@ -117,7 +117,7 @@
     </div>
 </div>
 
-<script>
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('userModal');
     const modalContent = modal.querySelector('div');
@@ -166,5 +166,115 @@ document.addEventListener('DOMContentLoaded', function() {
         closeModal();
     });
 });
+</script> -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('userModal');
+    const modalContent = modal.querySelector('div');
+    const addBtn = document.getElementById('addUserBtn');
+    const closeBtn = document.getElementById('closeUserModal');
+    const cancelBtn = document.getElementById('cancelUserModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const userForm = document.getElementById('userForm');
+    const saveBtn = document.getElementById('saveUserBtn');
+
+    const userName = document.getElementById('userName');
+    const userEmail = document.getElementById('userEmail');
+    const userRole = document.getElementById('userRole');
+
+    function openModal() {
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+        }, 10);
+    }
+
+    function closeModal() {
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 200);
+    }
+
+    function setupAddModal() {
+        userForm.reset();
+        removeErrors();
+        modalTitle.textContent = 'Add New User';
+        saveBtn.textContent = 'Save User';
+        openModal();
+    }
+
+    function showError(input, message) {
+        removeError(input);
+        const error = document.createElement('p');
+        error.className = 'text-red-500 text-sm mt-1';
+        error.textContent = message;
+        input.classList.add('border-red-500');
+        input.parentNode.appendChild(error);
+    }
+
+    function removeError(input) {
+        input.classList.remove('border-red-500');
+        const error = input.parentNode.querySelector('.text-red-500');
+        if (error) error.remove();
+    }
+
+    function removeErrors() {
+        const errors = document.querySelectorAll('.text-red-500');
+        errors.forEach(e => e.remove());
+        [userName, userEmail, userRole].forEach(i => i.classList.remove('border-red-500'));
+    }
+
+    function validateForm() {
+        let isValid = true;
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const namePattern = /^[a-zA-Z\s]+$/;
+
+        removeErrors();
+
+        if (!userName.value.trim()) {
+            showError(userName, 'Full Name is required.');
+            isValid = false;
+        } else if (!namePattern.test(userName.value.trim())) {
+            showError(userName, 'Name can only contain letters and spaces.');
+            isValid = false;
+        }
+
+        if (!userEmail.value.trim()) {
+            showError(userEmail, 'Email address is required.');
+            isValid = false;
+        } else if (!emailPattern.test(userEmail.value.trim())) {
+            showError(userEmail, 'Invalid email format.');
+            isValid = false;
+        }
+
+        if (!userRole.value.trim()) {
+            showError(userRole, 'Role selection is required.');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    addBtn.addEventListener('click', setupAddModal);
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeModal();
+        }
+    });
+
+    userForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (validateForm()) {
+            console.log('User form submitted.');
+            closeModal();
+        }
+    });
+});
 </script>
+
+
 @endsection
