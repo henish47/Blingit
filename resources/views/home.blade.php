@@ -4,9 +4,6 @@
 
 @section('content')
 
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
     <!-- SwiperJS CDN for Carousel -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
@@ -108,7 +105,7 @@
 
     <div class="container mx-auto px-4 py-10">
         <!-- SwiperJS Carousel (Top Banner) -->
-        <div class="swiper topBannerSwiper mb-10 rounded-2xl overflow-hidden shadow-xl" data-aos="fade-up">
+        <div class="swiper topBannerSwiper mb-10 rounded-2xl overflow-hidden shadow-xl">
             <div class="swiper-wrapper" id="top-banner-swiper-wrapper"></div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
@@ -118,19 +115,13 @@
             document.addEventListener('DOMContentLoaded', function () {
             const banners = [
                 {
-                img: 'https://storage.googleapis.com/gemini-generative-ai-api/f43701b2d634e963/fresh_groceries_banner.jpg',
-                title: 'Fresh Groceries Delivered',
-                subtitle: 'The best quality produce, right to your doorstep.'
+                img: '/images/Frame 2.png'
                 },
                 {
-                img: 'https://storage.googleapis.com/gemini-generative-ai-api/f43701b2d634e963/daily_deals_banner.jpg',
-                title: 'Daily Deals and Offers',
-                subtitle: 'Unbeatable prices on your favorite items, every single day.'
+                img: '/images/Frame 3.png',
                 },
                 {
-                img: 'https://storage.googleapis.com/gemini-generative-ai-api/a06180344211e533/image.jpg',
-                title: 'Quality You Can Trust',
-                subtitle: 'Sourced from the best farms to ensure premium quality.'
+                img: '/images/Frame 4.png',
                 }
             ];
 
@@ -140,10 +131,7 @@
                 <div class="swiper-slide">
                     <img src="${banner.img}" alt="${banner.title}"
                     onerror="this.onerror=null;this.src='https://placehold.co/1200x400/E0E0E0/666666?text=Image+Not+Available';">
-                    <div class="slide-content">
-                    <h2 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight">${banner.title}</h2>
-                    <p class="text-lg md:text-xl font-light">${banner.subtitle}</p>
-                    </div>
+                    
                 </div>
                 `;
             });
@@ -164,11 +152,11 @@
             ];
         @endphp
 
-        <div class="flex items-center justify-between mb-4" data-aos="fade-up">
+        <div class="flex items-center justify-between mb-4">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Dairy & Eggs</h2>
             <a href="{{ route('milk') }}" class="text-green-600 font-semibold hover:underline text-lg">See All <i class="fas fa-arrow-right ml-1"></i></a>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-10" data-aos="fade-up" data-aos-delay="100">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-10">
             @foreach($milkEggsProducts as $product)
                 <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
                     <a href="{{ route('personal-products') }}" class="block group">
@@ -211,11 +199,11 @@
             ];
         @endphp
 
-        <div class="flex items-center justify-between mb-4" data-aos="fade-up">
+        <div class="flex items-center justify-between mb-4">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Fresh Vegetables</h2>
             <a href="{{ route('vegetables') }}" class="text-green-600 font-semibold hover:underline text-lg">See All <i class="fas fa-arrow-right ml-1"></i></a>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-10" data-aos="fade-up" data-aos-delay="100">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-10">
             @foreach($vegetablesProducts as $product)
                 <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
                     <a href="{{ route('personal-products') }}" class="block group">
@@ -254,15 +242,15 @@
             [ 'title' => 'Oranges', 'size' => '1 kg', 'price' => '₹85', 'img' => '/images/Oranges.jpeg' ],
             [ 'title' => 'Grapes (Green)', 'size' => '500 g', 'price' => '₹55', 'img' => '/images/Grapes (Green).jpeg' ],
             [ 'title' => 'Pomegranate', 'size' => '4 pcs (approx 700 g)', 'price' => '₹135', 'img' => '/images/Pomegranate.jpg' ],
-           
+            
             ];
         @endphp
 
-        <div class="flex items-center justify-between mb-4" data-aos="fade-up">
+        <div class="flex items-center justify-between mb-4">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Fresh Fruits</h2>
             <a href="{{ route('fruits') }}" class="text-green-600 font-semibold hover:underline text-lg">See All <i class="fas fa-arrow-right ml-1"></i></a>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-10" data-aos="fade-up" data-aos-delay="100">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-10">
             @foreach($fruitsProducts as $product)
                 <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
                     <a href="{{ route('personal-products') }}" class="block group">
@@ -305,11 +293,11 @@
             ];
         @endphp
         
-        <div class="flex items-center justify-between mb-4" data-aos="fade-up">
+        <div class="flex items-center justify-between mb-4">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">Electronics</h2>
             <a href="{{ route('electronics') }}" class="text-green-600 font-semibold hover:underline text-lg">See All <i class="fas fa-arrow-right ml-1"></i></a>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-10" data-aos="fade-up" data-aos-delay="100">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-10">
             @foreach($electronicsProducts as $product)
                 <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
                     <a href="{{ route('personal-products') }}" class="block group">
@@ -341,10 +329,10 @@
         </div>
 
         <!-- How Blingit Works Section -->
-        <div class="bg-gray-50 p-8 rounded-2xl my-12" data-aos="fade-up">
-            <h2 class="text-2xl font-bold mb-8 text-center text-gray-800" data-aos="fade-up">How Blingit Works</h2>
+        <div class="bg-gray-50 p-8 rounded-2xl my-12">
+            <h2 class="text-2xl font-bold mb-8 text-center text-gray-800">How Blingit Works</h2>
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center" data-aos="fade-up" data-aos-delay="100">
+                <div class="text-center">
                     <div
                         class="bg-white p-6 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 shadow-md">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-600" fill="none"
@@ -356,7 +344,7 @@
                     <h3 class="font-bold text-lg mb-2">1. Add Products</h3>
                     <p class="text-gray-600">Browse our fresh selection and add items to your cart</p>
                 </div>
-                <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+                <div class="text-center">
                     <div
                         class="bg-white p-6 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 shadow-md">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-600" fill="none"
@@ -368,7 +356,7 @@
                     <h3 class="font-bold text-lg mb-2">2. Checkout Securely</h3>
                     <p class="text-gray-600">Complete your order with our safe payment options</p>
                 </div>
-                <div class="text-center" data-aos="fade-up" data-aos-delay="300">
+                <div class="text-center">
                     <div
                         class="bg-white p-6 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 shadow-md">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-600" fill="none"
@@ -384,10 +372,10 @@
         </div>
 
         <!-- Why Choose Us Section -->
-        <div class="bg-green-50 p-8 rounded-2xl my-12" data-aos="fade-up">
-            <h2 class="text-2xl font-bold mb-8 text-center text-gray-800" data-aos="fade-up">Why Choose Blingit</h2>
+        <div class="bg-green-50 p-8 rounded-2xl my-12">
+            <h2 class="text-2xl font-bold mb-8 text-center text-gray-800">Why Choose Blingit</h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white p-6 rounded-xl shadow-sm flex items-start" data-aos="fade-up" data-aos-delay="100">
+                <div class="bg-white p-6 rounded-xl shadow-sm flex items-start">
                     <div class="bg-green-100 p-3 rounded-full mr-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
@@ -400,7 +388,7 @@
                         <p class="text-gray-600 text-sm">Get your order delivered in under 2 hours</p>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm flex items-start" data-aos="fade-up" data-aos-delay="200">
+                <div class="bg-white p-6 rounded-xl shadow-sm flex items-start">
                     <div class="bg-green-100 p-3 rounded-full mr-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
@@ -413,7 +401,7 @@
                         <p class="text-gray-600 text-sm">100% fresh and high quality products</p>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm flex items-start" data-aos="fade-up" data-aos-delay="300">
+                <div class="bg-white p-6 rounded-xl shadow-sm flex items-start">
                     <div class="bg-green-100 p-3 rounded-full mr-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
@@ -426,7 +414,7 @@
                         <p class="text-gray-600 text-sm">Multiple safe payment options</p>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm flex items-start" data-aos="fade-up" data-aos-delay="400">
+                <div class="bg-white p-6 rounded-xl shadow-sm flex items-start">
                     <div class="bg-green-100 p-3 rounded-full mr-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
@@ -445,7 +433,6 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // Initialize scripts
         document.addEventListener('DOMContentLoaded', function () {
@@ -468,15 +455,6 @@
                     nextEl: '.topBannerSwiper .swiper-button-next',
                     prevEl: '.topBannerSwiper .swiper-button-prev',
                 },
-            });
-
-            // Initialize AOS
-            AOS.init({
-                duration: 600,
-                easing: 'ease-in-out',
-                once: true,
-                offset: 120,
-                delay: 100
             });
         });
     </script>
