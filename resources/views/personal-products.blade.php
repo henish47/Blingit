@@ -11,12 +11,11 @@
                 'title' => 'Amul Gold Full Cream Milk',
                 'size' => '500 ml',
                 'price' => '₹34',
-                'img' => 'https://www.bigbasket.com/media/uploads/p/l/10000074_19-fresho-cauliflower.jpg',
+                'img' => '/images/amulgold.avif',
                 'description' => 'Amul Gold Full Cream Milk is a rich and creamy milk, homogenized and standardized for consistent quality. It is packed with essential nutrients and is perfect for daily consumption, making tea, coffee, or preparing delicious desserts. This milk is sourced from the finest dairies, ensuring freshness and purity with every drop. Enjoy it chilled or use it in your favorite recipes.',
                 'brand' => 'Amul',
                 'availability' => 'In Stock',
                 'delivery_time' => '8 MINS',
-                'rating' => 4.5,
                 'reviews_count' => 125
             ];
         @endphp
@@ -34,17 +33,6 @@
             <!-- Price -->
             <p class="text-4xl font-extrabold text-green-700">{{ $product['price']}}</p>
             
-            <!-- Rating and Reviews -->
-            <div class="flex items-center gap-2 text-yellow-500">
-                @for ($i = 0; $i < floor($product['rating']); $i++)
-                    <i class="fa fa-star"></i>
-                @endfor
-                @if ($product['rating'] - floor($product['rating']) > 0)
-                    <i class="fa fa-star-half-alt"></i>
-                @endif
-                <span class="text-gray-600 ml-1 text-base font-semibold">{{ $product['rating']}} ({{ $product['reviews_count']}} Reviews)</span>
-            </div>
-
             <!-- Additional Info -->
             <div class="flex items-center gap-2 text-base text-gray-700">
                 <span class="font-semibold">Brand:</span> {{ $product['brand']}}

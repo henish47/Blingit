@@ -22,7 +22,6 @@ Route::view('/product', 'product'); // For demo, static product page
 Route::view('/cart', 'cart');
 Route::view('/checkout', 'checkout');
 Route::get('/place-order', [PlaceOrderController::class, 'show'])->name('place-order');
-
 Route::get('/orders', [OrderController::class, 'userOrders'])->name('orders');
 Route::view('/contact', 'contact');
 Route::view('/about', 'about');
@@ -37,10 +36,6 @@ Route::post('/reset-password', [ResetPasswordController::class, 'update'])->name
 Route::get('/reset-password', function () {
     return view('reset-password');
 })->name('password.reset');
-// Route::get('/logout', function () {
-//     session()->flush();
-//     return redirect('/login');
-// })->name('logout');
 
 
 
