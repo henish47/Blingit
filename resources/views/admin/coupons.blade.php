@@ -3,13 +3,6 @@
 @section('title', 'Coupons Management')
 
 @section('content')
-{{-- 
-  This Blade template provides a modern, responsive "Coupons Management" page.
-  - It's styled entirely with Tailwind CSS, matching the "Blingit Grocery" theme.
-  - Features a clean header, an improved table layout, and a redesigned modal for adding/editing coupons.
-  - The page is fully responsive and includes interactive modals for a better user experience.
-  - All icons are replaced with high-quality inline SVGs.
---}}
 
 <div>
     <!-- Header -->

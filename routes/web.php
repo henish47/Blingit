@@ -17,6 +17,7 @@ use App\Http\Controllers\DemoController;
 // Public grocery eCommerce pages
 Route::view('/', 'home');
 Route::view('/milk', 'milk')->name('milk');
+Route::view('/edit_profile', 'edit_profile')->name('edit_profile');
 Route::view('/vegetables', 'vegetables')->name('vegetables');
 Route::view('/fruits', 'fruits')->name('fruits');
 Route::view('/elctronics', 'electronics')->name('electronics');

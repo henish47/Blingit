@@ -3,13 +3,6 @@
 @section('title', 'Orders Management')
 
 @section('content')
-{{-- 
-  This Blade template provides a modern, responsive "Orders Management" page.
-  - It's styled entirely with Tailwind CSS, matching the "Blingit Grocery" theme.
-  - Features a clean header, improved filtering options, and an enhanced table layout.
-  - The page is fully responsive for a seamless experience on all devices.
-  - All icons are replaced with high-quality inline SVGs for optimal performance.
---}}
 
 <div>
     <!-- Header -->

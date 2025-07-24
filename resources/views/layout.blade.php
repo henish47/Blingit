@@ -63,7 +63,7 @@
         .blingit-logo-text {
             font-family: 'Montserrat', 'Poppins', sans-serif;
         }
-        /* Ensure Bootstrap modals don't conflict with Tailwind's preflight */
+       
         .modal {
             --tw-translate-x: 0;
             --tw-translate-y: 0;
@@ -179,7 +179,7 @@
 
         <!-- Company Links -->
         <div>
-            <h4 class="text-lg font-semibold text-gray-800 mb-4 border-b-2 border-green-300 pb-2 inline-block">Company</h4>
+            <h4 class="text-lg font-semibold text-gray-800 mb-4 border-b-2 border-green-300 pb-2 inline-block">Links</h4>
             <ul class="space-y-3 text-green-700">
                 <li><a href="/" class="bling-link font-medium">Home</a></li>
                 <li><a href="/about" class="bling-link font-medium">About Us</a></li>
@@ -195,7 +195,6 @@
             <ul class="space-y-3 text-green-700">
                 <li><a href="#" class="bling-link font-medium" data-bs-toggle="modal" data-bs-target="#faqModal">Help Center & FAQs</a></li>
                 <li><a href="#" class="bling-link font-medium" data-bs-toggle="modal" data-bs-target="#shippingModal">Shipping & Delivery Info</a></li>
-             
                 <li><a href="#" class="bling-link font-medium" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a></li>
                 <li><a href="#" class="bling-link font-medium" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a></li>
             </ul>
