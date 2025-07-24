@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password | Blingit Grocery</title>
-
+  @vite('resources/css/app.css')
     <!-- Tailwind CSS v3 -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
     <script src="{{ asset('js/forgot_password.js') }}"></script>
    
     <!-- Google Fonts: Poppins -->
