@@ -3,13 +3,6 @@
 @section('title', 'Contact Us | Blingit Grocery')
 
 @section('content')
-{{-- 
-  This Blade template provides a modern, responsive "Contact Us" page.
-  - It's styled entirely with Tailwind CSS.
-  - Features a clean header, an improved contact form, and a detailed information panel with an interactive map.
-  - The page is fully responsive for a seamless experience on all devices.
-  - All icons are replaced with high-quality inline SVGs for optimal performance.
---}}
 
 <div class="bg-gray-50 font-sans">
     <!-- Header Section -->
@@ -28,7 +21,7 @@
             <!-- Left Column: Contact Form -->
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Send us a Message</h2>
-                <form class="space-y-6">
+                <form id="contactForm" class="space-y-6" novalidate>
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                         <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="John Doe" required>
@@ -37,7 +30,7 @@
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                         <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="you@example.com" required>
                     </div>
-                     <div>
+                    <div>
                         <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
                         <input type="text" id="subject" name="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., Question about a product" required>
                     </div>
@@ -81,7 +74,7 @@
                 </div>
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
                     <h3 class="text-xl font-bold text-gray-800 mb-4">Our Office</h3>
-                     <div class="space-y-4">
+                    <div class="space-y-4">
                         <div class="flex items-start gap-4">
                             <div class="bg-green-100 p-3 rounded-full mt-1">
                                 <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -99,5 +92,67 @@
             </div>
         </div>
     </div>
+
 </div>
+
+<!-- ✅ JavaScript Validation Script -->
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent default submit
+
+        let form = e.target;
+        let name = form.name.value.trim();
+        let email = form.email.value.trim();
+        let subject = form.subject.value.trim();
+        let message = form.message.value.trim();
+        let isValid = true;
+
+        // Clear previous errors
+        document.querySelectorAll('.error-message').forEach(el => el.remove());
+
+        const showError = (input, message) => {
+            const error = document.createElement('p');
+            error.className = 'text-red-600 text-sm mt-1 error-message';
+            error.innerText = message;
+            input.insertAdjacentElement('afterend', error);
+        };
+
+        // Full Name validation
+       
+if (name.length < 3) {
+        isValid = false;
+        showError(form.name, 'Full name must be at least 3 characters.');
+    } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+    isValid = false;
+    showError(form.name, 'Full name should not contain numbers or special characters.');
+    }
+
+        // Email validation
+        const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+        if (!emailPattern.test(email)) {
+            isValid = false;
+            showError(form.email, 'Enter a valid email address.');
+        }
+
+        // Subject validation
+        if (subject.length < 5) {
+            isValid = false;
+            showError(form.subject, 'Subject must be at least 5 characters.');
+        } else if (!/^[a-zA-Z\s]+$/.test(subject)) {
+            isValid = false;
+            showError(form.subject, 'Subject should contain only letters and spaces.');
+        }
+
+        // Message validation
+        if (message.length < 10) {
+            isValid = false;
+            showError(form.message, 'Message must be at least 10 characters.');
+        }
+
+        if (isValid) {
+            form.submit(); // Submit the form if everything is valid
+        }
+    });
+</script>
+
 @endsection
