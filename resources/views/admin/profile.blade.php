@@ -117,15 +117,19 @@
             } else if (fullName.value.trim().length < 3) {
                 showError(fullName, "Full name must be at least 3 characters.");
             }
+// Strong email validation
+const emailValue = email.value.trim();
+const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-            // Strong email validation
-            const emailPattern = /^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!email.value.trim()) {
-                showError(email, "Email address is required.");
-            } else if (!emailPattern.test(email.value.trim())) {
-                showError(email, "Invalid email format. Please include '@' and a valid domain.");
-            }
-
+if (!emailValue) {
+    showError(email, "Email address is required.");
+    valid = false;
+} else if (!emailPattern.test(emailValue)) {
+    showError(email, "Invalid email format. Please enter a valid email (e.g., user@example.com).");
+    valid = false;
+} else {
+    clearError(email); // Make sure this function exists to clear any existing error message
+}
 
             // Current password validation
             if (!currentPassword.value.trim()) {
