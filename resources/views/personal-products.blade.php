@@ -47,7 +47,7 @@
             <p class="text-gray-700 leading-relaxed mt-4 text-base">{{ $product['description']}}</p>
 
             <!-- Add to Cart Button -->
-            <button class="w-full md:w-auto px-10 py-4 mt-6 text-xl font-bold rounded-lg bling-btn shadow-xl hover:shadow-2xl transition duration-300 ease-in-out flex items-center justify-center gap-3">
+            <button onclick="event.stopPropagation(); window.location.href='{{ url('/cart') }}';" class="w-full md:w-auto px-10 py-4 mt-6 text-xl font-bold rounded-lg bling-btn shadow-xl hover:shadow-2xl transition duration-300 ease-in-out flex items-center justify-center gap-3">
                 <i class="fa fa-shopping-cart text-2xl"></i> Add to Cart
             </button>
         </div>
