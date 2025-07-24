@@ -41,8 +41,7 @@ Route::get('/reset-password', function () {
 })->name('password.reset');
 
 
-// Admin Dashboard Routes
-Route::prefix('admin')->middleware('admin.auth')->group(function () {
+Route::prefix('admin')->group(function () {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Route::view('/categories', 'admin.categories')->name('admin.categories');
     Route::view('/coupons', 'admin.coupons')->name('admin.coupons');

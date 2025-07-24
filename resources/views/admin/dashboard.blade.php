@@ -3,14 +3,6 @@
 @section('title', 'Dashboard')
 
 @section('content')
-{{-- 
-  This Blade template provides a modern, responsive, and data-rich admin dashboard.
-  - It's styled entirely with Tailwind CSS, matching the "Blingit Grocery" theme.
-  - Features redesigned statistics cards for key metrics.
-  - Integrates Chart.js for dynamic and interactive bar and doughnut charts with enhanced UI.
-  - The "Recent Orders" table is enhanced for better readability and responsiveness.
-  - All icons are replaced with high-quality inline SVGs.
---}}
 
 <!-- Chart.js CDN for interactive charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
