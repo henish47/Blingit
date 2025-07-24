@@ -19,8 +19,8 @@ class LoginController extends Controller
         ]);
 
         $credentials = [
-            ['email' => 'admin.guest@gmail.com', 'password' => 'admin123', 'role' => 'admin'],
-            ['email' => 'guest.user@gmail.com', 'password' => 'guest123', 'role' => 'guest'],
+            ['email' => 'admin@gmail.com', 'password' => 'admin@123', 'role' => 'admin'],
+            ['email' => 'guest@gmail.com', 'password' => 'guest@123', 'role' => 'guest'],
         ];
 
         foreach ($credentials as $user) {
