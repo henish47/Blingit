@@ -63,7 +63,7 @@
         .blingit-logo-text {
             font-family: 'Montserrat', 'Poppins', sans-serif;
         }
-        /* Ensure Bootstrap modals don't conflict with Tailwind's preflight */
+       
         .modal {
             --tw-translate-x: 0;
             --tw-translate-y: 0;

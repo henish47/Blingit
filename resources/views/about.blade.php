@@ -3,13 +3,6 @@
 @section('title', 'About Us | Blingit Grocery')
 
 @section('content')
-{{-- 
-  This Blade template provides a modern, responsive "About Us" page.
-  - It's styled entirely with Tailwind CSS.
-  - Features a clean header, detailed sections for the company's story, mission, and values, and a "Meet the Team" section.
-  - The page is fully responsive for a seamless experience on all devices.
-  - All icons are replaced with high-quality inline SVGs for optimal performance.
---}}
 
 <div class="bg-gray-50 font-sans">
     <!-- Header Section -->
@@ -84,7 +77,7 @@
     </div>
     
     <!-- Meet the Team Section -->
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    {{-- <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div class="text-center mb-12">
             <h2 class="text-3xl font-bold text-gray-800">Meet the Team</h2>
             <p class="mt-2 text-gray-600">The people behind your fresh groceries.</p>
@@ -111,6 +104,6 @@
                 <p class="text-gray-500">Head of Customer Happiness</p>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 @endsection
