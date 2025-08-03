@@ -10,11 +10,7 @@ use App\Http\Controllers\PlaceOrderController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\RegisterController;
 
-// Demo form 
-use App\Http\Controllers\DemoController;
 
-
-// Public grocery eCommerce pages
 Route::view('/', 'home');
 Route::view('/milk', 'milk')->name('milk');
 Route::view('/edit_profile', 'edit_profile')->name('edit_profile');
@@ -22,7 +18,7 @@ Route::view('/vegetables', 'vegetables')->name('vegetables');
 Route::view('/fruits', 'fruits')->name('fruits');
 Route::view('/elctronics', 'electronics')->name('electronics');
 Route::view('/personal-products', 'personal-products')->name('personal-products');
-Route::view('/product', 'product'); // For demo, static product page
+Route::view('/product', 'product');
 Route::view('/cart', 'cart');
 Route::view('/checkout', 'checkout');
 Route::get('/place-order', [PlaceOrderController::class, 'show'])->name('place-order');
@@ -40,6 +36,11 @@ Route::post('/reset-password', [ResetPasswordController::class, 'update'])->name
 Route::get('/reset-password', function () {
     return view('reset-password');
 })->name('password.reset');
+
+Route::get('/logout', function () {
+    session()->flush();
+    return redirect('/login');
+})->name('logout');
 
 
 Route::prefix('admin')->group(function () {

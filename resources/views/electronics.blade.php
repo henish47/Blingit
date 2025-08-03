@@ -63,7 +63,7 @@
     </div>
 </div>
 
-<!-- Optional: Clamp CSS -->
+
 <style>
     .line-clamp-2 {
         display: -webkit-box;

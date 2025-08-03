@@ -57,9 +57,9 @@
                 <tbody class="divide-y divide-gray-200">
                     @php
                         $products = [
-                            ['id' => 1, 'name' => 'Fresh Apples', 'sku' => 'FRU-APL-001', 'category' => 'Fruits', 'price' => '150.00', 'stock' => 50, 'img' => 'https://www.bigbasket.com/media/uploads/p/l/1203432_2-fresho-apple-fuji.jpg', 'description' => 'Crisp and juicy Fuji apples, perfect for a healthy snack.'],
-                            ['id' => 2, 'name' => 'Organic Carrots', 'sku' => 'VEG-CAR-001', 'category' => 'Vegetables', 'price' => '80.00', 'stock' => 120, 'img' => 'https://www.bigbasket.com/media/uploads/p/l/10000073_16-fresho-carrot-orange.jpg', 'description' => 'Fresh organic carrots, great for salads, soups, and roasting.'],
-                            ['id' => 3, 'name' => 'Amul Gold Milk', 'sku' => 'DAI-MLK-001', 'category' => 'Dairy & Eggs', 'price' => '34.00', 'stock' => 75, 'img' => 'https://www.bigbasket.com/media/uploads/p/l/1203470_2-amul-gold-homogenised-standardised-milk.jpg', 'description' => 'Full cream homogenized milk, rich in nutrients.'],
+                            ['id' => 1, 'name' => 'Fresh Apples', 'sku' => 'FRU-APL-001', 'category' => 'Fruits', 'price' => '150.00', 'stock' => 50, 'img' => '/images/apple airpodspro.jpeg', 'description' => 'Crisp and juicy Fuji apples, perfect for a healthy snack.'],
+                            ['id' => 2, 'name' => 'Organic Carrots', 'sku' => 'VEG-CAR-001', 'category' => 'Vegetables', 'price' => '80.00', 'stock' => 120, 'img' => '/images/Carrot (Orange).jpeg', 'description' => 'Fresh organic carrots, great for salads, soups, and roasting.'],
+                            ['id' => 3, 'name' => 'Amul Gold Milk', 'sku' => 'DAI-MLK-001', 'category' => 'Dairy & Eggs', 'price' => '34.00', 'stock' => 75, 'img' => '/images/amulgold.avif', 'description' => 'Full cream homogenized milk, rich in nutrients.'],
                         ];
                     @endphp
                     @foreach($products as $product)

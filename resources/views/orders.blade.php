@@ -3,15 +3,7 @@
 @section('title', 'My Orders | Blingit Grocery')
 
 @section('content')
-{{-- 
-  This Blade template provides a modern, responsive "My Orders" page.
-  - It's styled entirely with Tailwind CSS.
-  - Replaces the traditional table with a more intuitive and mobile-friendly card-based layout.
-  - Each order card includes key details like order ID, date, total, product previews, and a visual status tracker.
-  - The design handles multiple order statuses with distinct visual cues.
-  - Includes an engaging "empty state" for new customers.
-  - All icons are inline SVGs for optimal performance.
---}}
+
 <div class="bg-gray-50 min-h-screen font-sans">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
@@ -21,7 +13,7 @@
                 <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                 </svg>
-                My Orders
+                Order History
             </h1>
             <div class="flex items-center gap-2 bg-white p-2 rounded-full shadow-sm border border-gray-200">
                 <button class="px-4 py-1.5 text-sm font-semibold text-white bg-green-600 rounded-full">Active</button>
@@ -53,8 +45,8 @@
                     'address' => '456, Moonlit Towers, Rajkot',
                     'payment_method' => 'Razorpay',
                     'products' => [
-                        ['img' => 'https://www.bigbasket.com/media/uploads/p/l/1203470_2-amul-gold-homogenised-standardised-milk.jpg'],
-                        ['img' => 'https://www.bigbasket.com/media/uploads/p/l/40003027_11-harvest-gold-brown-bread.jpg'],
+                        ['img' => 'https://www.bigbasket.com/media/uploads/p/l/10000203_16-fresho-tomato-hybrid.jpg'],
+                        ['img' => 'https://www.bigbasket.com/media/uploads/p/l/10000203_16-fresho-tomato-hybrid.jpg'],
                         ['img' => 'https://www.bigbasket.com/media/uploads/p/l/10000203_16-fresho-tomato-hybrid.jpg'],
                     ]
                 ],

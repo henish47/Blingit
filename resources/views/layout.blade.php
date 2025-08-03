@@ -11,10 +11,7 @@
     <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    @vite('resources/css/app.css')
-    <!-- Tailwind CSS CDN -->
-    {{-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> --}}
-    
+    @vite('resources/css/app.css')  
     <!-- Font Awesome for Icons -->
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -113,13 +110,14 @@
                 <a href="/cart" class="relative group text-green-700 hover:text-green-900 transition-colors duration-200">
                     <i class="fa fa-shopping-cart text-2xl"></i>
                     <span class="bling-badge absolute -top-1 -right-2 text-xs px-2 py-0.5 rounded-full">
-                        2
+                        3
                     </span>
                 </a>
                 <a href="/login"
                     class="hidden md:inline-block px-5 py-2 rounded-full bling-btn shadow-md">
                     Login
                 </a>
+                
                 <button class="md:hidden p-2 bg-green-100 rounded-full border border-green-200 shadow-sm hover:bg-green-200 transition" id="mobileMenuBtn">
                     <i class="fa fa-bars text-green-600 text-xl"></i>
                 </button>
@@ -181,7 +179,7 @@
 
         <!-- Company Links -->
         <div>
-            <h4 class="text-lg font-semibold text-gray-800 mb-4 border-b-2 border-green-300 pb-2 inline-block">Links</h4>
+            <h4 class="text-lg font-semibold text-gray-800 mb-4 border-b-2 border-green-300 pb-2 inline-block ">Links</h4>
             <ul class="space-y-3 text-green-700">
                 <li><a href="/" class="bling-link font-medium">Home</a></li>
                 <li><a href="/about" class="bling-link font-medium">About Us</a></li>
@@ -206,7 +204,7 @@
         <div>
             <h4 class="text-lg font-semibold text-gray-800 mb-4 border-b-2 border-green-300 pb-2 inline-block">Connect With Us</h4>
             <ul class="space-y-3 text-green-800 text-sm">
-                <li class="flex items-center gap-3"><i class="fa-solid fa-location-dot text-green-600 text-xl"></i> 123, Fresh Market Street, Green City, Mumbai, India</li>
+                <li class="flex items-center gap-3"><i class="fa-solid fa-location-dot text-green-600 text-xl"></i> 123, Fresh Market Street, Marketing yard, Rajkot, India</li>
                 <li class="flex items-center gap-3"><i class="fa-solid fa-phone text-green-600 text-xl"></i> +91 98765 43210 (24/7 Support)</li>
                 <li class="flex items-center gap-3"><i class="fa-solid fa-envelope text-green-600 text-xl"></i> support@blingit.com</li>
             </ul>

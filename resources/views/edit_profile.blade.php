@@ -112,8 +112,8 @@
                         </label>
                         <input type="file" id="profile-pic-upload" class="hidden" accept="image/*" onchange="previewImage(this)">
                     </div>
-                    <h2 id="profile-name" class="text-2xl font-bold text-gray-800 mt-2">Henish Savaliya</h2>
-                    <p id="profile-email" class="text-gray-500 mb-2">henishpatel47@gmail.com</p>
+                    <h2 id="profile-name" class="text-2xl font-bold text-gray-800 mt-2">User</h2>
+                    <p id="profile-email" class="text-gray-500 mb-2">User@gmail.com</p>
                     <p class="text-sm text-gray-400">Joined on: July 24, 2025</p>
                 </div>
             </div>

@@ -3,12 +3,8 @@
 @section('title', 'Home | Blingit Grocery')
 
 @section('content')
-
-    <!-- SwiperJS CDN for Carousel -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-
     <style>
-        /* Custom styles for the new Top Banner Swiper */
         .topBannerSwiper .swiper-slide {
             position: relative;
             text-align: center;
@@ -21,7 +17,6 @@
             display: block;
             width: 100%;
             height: 400px;
-            /* Increased height for better visual impact */
             object-fit: cover;
         }
 
@@ -46,16 +41,12 @@
         .topBannerSwiper .slide-content p {
             font-size: 1.25rem;
         }
-
-        /* Custom styles for Swiper navigation and pagination */
         .swiper-button-next,
         .swiper-button-prev {
             color: #22c55e;
-            /* Green color for arrows */
             background-color: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
             width: 44px;
-            /* Slightly larger for main banner */
             height: 44px;
             display: flex;
             align-items: center;
@@ -75,13 +66,11 @@
         .swiper-button-next::after,
         .swiper-button-prev::after {
             font-size: 20px !important;
-            /* Adjust arrow size */
             font-weight: bold;
         }
 
         .swiper-pagination-bullet {
             background-color: #a1ffce !important;
-            /* Light green for inactive dots */
             opacity: 1 !important;
             transition: all 0.3s ease-in-out;
             width: 10px !important;
@@ -90,11 +79,8 @@
 
         .swiper-pagination-bullet-active {
             background-color: #22c55e !important;
-            /* Darker green for active dot */
             transform: scale(1.2);
         }
-
-        /* Line clamping for product titles */
         .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -104,7 +90,7 @@
     </style>
 
     <div class="container mx-auto px-4 py-10">
-        <!-- SwiperJS Carousel (Top Banner) -->
+       
         <div class="swiper topBannerSwiper mb-10 rounded-2xl overflow-hidden shadow-xl">
             <div class="swiper-wrapper" id="top-banner-swiper-wrapper"></div>
             <div class="swiper-button-next"></div>
@@ -289,7 +275,6 @@
             [ 'title' => 'Smartwatch (Fitness Tracker)', 'size' => 'Heart Rate Monitor', 'price' => '₹2,999', 'img' => '/images/Smartwatch (Fitness Tracker).jpg' ],
             [ 'title' => 'Portable Bluetooth Speaker', 'size' => 'Waterproof, 10W', 'price' => '₹1,899', 'img' => '/images/Portable Bluetooth Speaker.jpg' ],
             [ 'title' => 'Power Bank (10000 mAh)', 'size' => 'Fast Charging', 'price' => '₹999', 'img' => '/images/Power Bank (10000 mAh).jpeg' ],
-            
             ];
         @endphp
         
@@ -434,9 +419,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
-        // Initialize scripts
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize Top Banner Swiper
             new Swiper('.topBannerSwiper', {
                 loop: true,
                 effect: 'fade',
