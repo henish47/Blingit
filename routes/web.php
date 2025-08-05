@@ -13,19 +13,8 @@ use App\Http\Controllers\PlaceOrderController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\UserController; // Import the UserController
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ProfileController; 
 
 // ✅ Public Routes
 Route::view('/', 'home')->name('home');
@@ -86,13 +75,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Route::view('/coupons', 'admin.coupons')->name('admin.coupons');
-    Route::view('/profile', 'admin.profile')->name('admin.profile');
     Route::view('/contact', 'admin.contact')->name('admin.contact');
     
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.orders');
 
+    // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+
     // Resource routes for Products, Categories, and Users
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('users', UserController::class); // This replaces the static view route
+    Route::resource('users', UserController::class);
 });
