@@ -6,8 +6,7 @@
     <title>@yield('title', 'Admin Dashboard')</title>
 
     <!-- Tailwind CSS v3 -->
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
-      @vite('resources/css/app.css')
+    @vite('resources/css/app.css')
     <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -114,12 +113,13 @@
                 </div>
 
                 <!-- User Dropdown -->
+                @auth
                 <div class="relative">
                     <button id="userDropdownBtn" class="flex items-center gap-3 focus:outline-none p-2 rounded-lg hover:bg-yellow-50 transition-colors">
-                        <img src="https://ui-avatars.com/api/?name=Admin&background=10b981&color=fff&rounded=true&size=40" alt="Admin Avatar" class="w-10 h-10 rounded-full border-2 border-white shadow-md">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=10b981&color=fff&rounded=true&size=40" alt="{{ Auth::user()->name }} Avatar" class="w-10 h-10 rounded-full border-2 border-white shadow-md">
                         <div class="text-left hidden sm:block">
-                            <span class="text-gray-800 font-semibold text-sm">Admin</span>
-                            <p class="text-xs text-gray-500">Super Admin</p>
+                            <span class="text-gray-800 font-semibold text-sm">{{ Auth::user()->name }}</span>
+                            <p class="text-xs text-gray-500 capitalize">{{ Auth::user()->role ?? 'User' }}</p>
                         </div>
                         <svg class="w-5 h-5 text-gray-500 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                     </button>
@@ -128,12 +128,16 @@
                             <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                             Profile
                         </a>
-                        <a href="/login" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-green-50 transition-colors duration-200 border-t border-slate-100">
-                           <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                            Logout
-                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-green-50 transition-colors duration-200 border-t border-slate-100">
+                               <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                Logout
+                            </button>
+                        </form>
                     </div>
                 </div>
+                @endauth
             </header>
             
             <!-- Main Content -->

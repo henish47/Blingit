@@ -3,15 +3,26 @@
 @section('title', 'Category Management')
 
 @section('content')
-{{-- 
-  This Blade template provides a modern, responsive "Category Management" page.
-  - It's styled entirely with Tailwind CSS, matching the "Blingit Grocery" theme.
-  - Features a clean header, an improved table layout, and a redesigned modal for adding/editing categories.
-  - The page is fully responsive and includes interactive modals for a better user experience.
-  - All icons are replaced with high-quality inline SVGs.
---}}
 
 <div>
+    <!-- Session Messages -->
+    @if(session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg" role="alert">
+            <p class="font-bold">Success</p>
+            <p>{{ session('success') }}</p>
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg" role="alert">
+             <p class="font-bold">Please fix the following errors:</p>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <!-- Header -->
     <div class="flex flex-col sm:flex-row justify-between items-center mb-8">
         <div>
@@ -30,42 +41,56 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="py-3 px-6 text-left font-semibold text-gray-600">#</th>
+                        <th class="py-3 px-6 text-left font-semibold text-gray-600">ID</th>
                         <th class="py-3 px-6 text-left font-semibold text-gray-600">Category Name</th>
                         <th class="py-3 px-6 text-left font-semibold text-gray-600">Product Count</th>
                         <th class="py-3 px-6 text-left font-semibold text-gray-600">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
+                    @forelse($categories as $category)
                     <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="py-4 px-6 font-semibold text-gray-700">1</td>
-                        <td class="py-4 px-6"><span class="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">Fruits</span></td>
-                        <td class="py-4 px-6 font-medium text-gray-800">15</td>
-                        <td class="py-4 px-6 flex gap-2">
-                            <button class="editCategoryBtn flex items-center gap-1 text-blue-600 hover:text-blue-800 font-semibold text-xs" data-id="1" data-name="Fruits"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>
-                            <button class="flex items-center gap-1 text-red-600 hover:text-red-800 font-semibold text-xs"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Delete</button>
+                        <td class="py-4 px-6 font-semibold text-gray-700">{{ $category->id }}</td>
+                        <td class="py-4 px-6">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">{{ $category->name }}</span>
+                        </td>
+                        <td class="py-4 px-6 font-medium text-gray-800">{{ $category->products_count }}</td>
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <button class="editCategoryBtn text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 rounded-full transition-colors" title="Edit"
+                                        data-id="{{ $category->id }}"
+                                        data-name="{{ $category->name }}"
+                                        data-action="{{ route('categories.update', $category->id) }}">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                </button>
+                                <form action="{{ route('categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800 p-2 hover:bg-red-50 rounded-full transition-colors" title="Delete">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="py-4 px-6 font-semibold text-gray-700">2</td>
-                        <td class="py-4 px-6"><span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Vegetables</span></td>
-                        <td class="py-4 px-6 font-medium text-gray-800">22</td>
-                        <td class="py-4 px-6 flex gap-2">
-                            <button class="editCategoryBtn flex items-center gap-1 text-blue-600 hover:text-blue-800 font-semibold text-xs" data-id="2" data-name="Vegetables"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>
-                            <button class="flex items-center gap-1 text-red-600 hover:text-red-800 font-semibold text-xs"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Delete</button>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="text-center py-10 text-gray-500">
+                             <div class="flex flex-col items-center">
+                                <svg class="w-12 h-12 text-gray-300 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0A2.25 2.25 0 013.75 7.5h16.5a2.25 2.25 0 012.25 2.25m-18.75 0h18.75v.008H3.75V9.776z" />
+                                </svg>
+                                No categories found. Click "Add New Category" to start.
+                            </div>
                         </td>
                     </tr>
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="py-4 px-6 font-semibold text-gray-700">3</td>
-                        <td class="py-4 px-6"><span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">Dairy & Eggs</span></td>
-                        <td class="py-4 px-6 font-medium text-gray-800">18</td>
-                        <td class="py-4 px-6 flex gap-2">
-                            <button class="editCategoryBtn flex items-center gap-1 text-blue-600 hover:text-blue-800 font-semibold text-xs" data-id="3" data-name="Dairy & Eggs"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>
-                            <button class="flex items-center gap-1 text-red-600 hover:text-red-800 font-semibold text-xs"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Delete</button>
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
+        </div>
+        <!-- Pagination Links -->
+        <div class="p-4 bg-gray-50 border-t border-gray-200">
+            {{ $categories->links() }}
         </div>
     </div>
 </div>
@@ -77,11 +102,12 @@
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-gray-800">Add New Category</h2>
-        <form id="categoryForm">
-            <input type="hidden" id="categoryId" name="id">
+        <form id="categoryForm" method="POST" action="">
+            @csrf
+            <input type="hidden" name="_method" id="formMethod">
             <div class="mb-4">
                 <label for="categoryName" class="block font-semibold text-gray-700 mb-1">Category Name</label>
-                <input type="text" id="categoryName" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., Fruits">
+                <input type="text" id="categoryName" name="name" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., Fruits">
             </div>
             <div class="flex justify-end gap-4 mt-8">
                 <button type="button" id="cancelCategoryModal" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold px-5 py-2.5 rounded-lg transition">Cancel</button>
@@ -91,86 +117,6 @@
     </div>
 </div>
 
-<!-- <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('categoryModal');
-    const modalContent = modal.querySelector('div');
-    const addBtn = document.getElementById('addCategoryBtn');
-    const closeBtn = document.getElementById('closeCategoryModal');
-    const cancelBtn = document.getElementById('cancelCategoryModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const categoryForm = document.getElementById('categoryForm');
-    const categoryNameInput = document.getElementById('categoryName');
-    const categoryIdInput = document.getElementById('categoryId');
-    const saveBtn = document.getElementById('saveCategoryBtn');
-    const editBtns = document.querySelectorAll('.editCategoryBtn');
-
-    function openModal() {
-        modal.classList.remove('hidden');
-        setTimeout(() => {
-            modalContent.classList.remove('scale-95', 'opacity-0');
-        }, 10);
-    }
-
-    function closeModal() {
-        modalContent.classList.add('scale-95', 'opacity-0');
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 200);
-    }
-
-    function setupAddModal() {
-        categoryForm.reset();
-        categoryIdInput.value = '';
-        modalTitle.textContent = 'Add New Category';
-        saveBtn.textContent = 'Save Category';
-        categoryForm.action = '/admin/categories'; // URL for creating
-        openModal();
-    }
-
-    function setupEditModal(id, name) {
-        categoryForm.reset();
-        categoryIdInput.value = id;
-        categoryNameInput.value = name;
-        modalTitle.textContent = 'Edit Category';
-        saveBtn.textContent = 'Update Category';
-        categoryForm.action = `/admin/categories/${id}`; // URL for updating
-        openModal();
-    }
-
-    addBtn.addEventListener('click', setupAddModal);
-    
-    editBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = this.dataset.id;
-            const name = this.dataset.name;
-            setupEditModal(id, name);
-        });
-    });
-
-    closeBtn.addEventListener('click', closeModal);
-    cancelBtn.addEventListener('click', closeModal);
-
-    window.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-            closeModal();
-        }
-    });
-
-    categoryForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Here you would typically submit the form data via AJAX
-        // For demonstration, we'll just log the data and close the modal.
-        const formData = new FormData(this);
-        console.log('Form submitted!');
-        console.log('Action:', this.action);
-        for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
-        closeModal();
-    });
-});
-</script> -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('categoryModal');
@@ -181,40 +127,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalTitle = document.getElementById('modalTitle');
     const categoryForm = document.getElementById('categoryForm');
     const categoryNameInput = document.getElementById('categoryName');
-    const categoryIdInput = document.getElementById('categoryId');
+    const formMethodInput = document.getElementById('formMethod');
     const saveBtn = document.getElementById('saveCategoryBtn');
     const editBtns = document.querySelectorAll('.editCategoryBtn');
 
     function openModal() {
         modal.classList.remove('hidden');
-        setTimeout(() => {
-            modalContent.classList.remove('scale-95', 'opacity-0');
-        }, 10);
+        setTimeout(() => modalContent.classList.remove('scale-95', 'opacity-0'), 10);
     }
 
     function closeModal() {
         modalContent.classList.add('scale-95', 'opacity-0');
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 200);
+        setTimeout(() => modal.classList.add('hidden'), 200);
     }
 
     function setupAddModal() {
         categoryForm.reset();
-        categoryIdInput.value = '';
         modalTitle.textContent = 'Add New Category';
         saveBtn.textContent = 'Save Category';
-        categoryForm.action = '/admin/categories';
+        categoryForm.action = '{{ route("categories.store") }}';
+        formMethodInput.value = 'POST';
         openModal();
     }
 
-    function setupEditModal(id, name) {
+    function setupEditModal(data) {
         categoryForm.reset();
-        categoryIdInput.value = id;
-        categoryNameInput.value = name;
+        categoryNameInput.value = data.name;
         modalTitle.textContent = 'Edit Category';
         saveBtn.textContent = 'Update Category';
-        categoryForm.action = `/admin/categories/${id}`;
+        categoryForm.action = data.action;
+        formMethodInput.value = 'PUT';
         openModal();
     }
 
@@ -222,60 +164,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     editBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            const id = this.dataset.id;
-            const name = this.dataset.name;
-            setupEditModal(id, name);
+            const data = {
+                name: this.dataset.name,
+                action: this.dataset.action,
+            };
+            setupEditModal(data);
         });
     });
 
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
-
-    window.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-            closeModal();
-        }
+    window.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
     });
 
-    // ✅ Strong JS Validation (only letters allowed)
     categoryForm.addEventListener('submit', function(e) {
-        const name = categoryNameInput.value.trim();
-        const namePattern = /^[A-Za-z\s]+$/; // Only letters and spaces
-
-        // Remove old error
-        const oldError = categoryNameInput.parentNode.querySelector('.category-error');
-        if (oldError) oldError.remove();
-
-        let isValid = true;
-
-        if (!name) {
-            showError('Category name is required.');
-            isValid = false;
-        } else if (name.length < 3) {
-            showError('Category name must be at least 3 characters.');
-            isValid = false;
-        } else if (name.length > 50) {
-            showError('Category name must not exceed 50 characters.');
-            isValid = false;
-        } else if (!namePattern.test(name)) {
-            showError('Only letters and spaces are not allowed in category name.');
-            isValid = false;
-        }
-
-        if (!isValid) {
-            e.preventDefault();
-            return;
-        }
-
-        function showError(msg) {
-            const errorEl = document.createElement('p');
-            errorEl.className = 'category-error text-sm text-red-500 mt-1';
-            errorEl.textContent = msg;
-            categoryNameInput.parentNode.appendChild(errorEl);
-        }
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = 'Saving...';
     });
 });
 </script>
-
 
 @endsection

@@ -78,22 +78,22 @@
         </div>
 
         <!-- Charts -->
-        <!-- <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8"> -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8"> 
         <!-- Sales Overview Chart -->
-        <!-- <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+        <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4">Sales Overview</h2>
                 <div class="h-80">
                     <canvas id="salesChart"></canvas>
                 </div>
-            </div> -->
+            </div> 
         <!-- Order Status Chart -->
-        <!-- <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 flex flex-col">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 flex flex-col">
                 <h2 class="text-xl font-bold text-gray-800 mb-4">Order Status</h2>
                 <div class="flex-grow flex items-center justify-center relative h-80">
                      <canvas id="orderStatusChart"></canvas>
                 </div>
             </div>
-        </div> -->
+        </div> 
 
         <!-- Recent Orders Table -->
         <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
@@ -161,7 +161,7 @@
         </div>
     </div>
 
-    <!-- <script>
+   <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Common Chart Font Styling
             Chart.defaults.font.family = 'Poppins, sans-serif';
@@ -300,5 +300,5 @@
                 }]
             });
         });
-    </script> -->
+    </script> 
 @endsection

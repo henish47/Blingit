@@ -5,11 +5,27 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
+// Controller Imports
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PlaceOrderController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\UserController; // Import the UserController
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
 
 // ✅ Public Routes
 Route::view('/', 'home')->name('home');
@@ -41,7 +57,7 @@ Route::get('/email/verify', function () {
     return view('verify-email');
 })->middleware('auth')->name('verification.notice');
 
-// ✅ Email verification link click
+// Email verification link click
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill(); // Mark email as verified
 
@@ -49,7 +65,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     return redirect()->route('login')->with('status', 'Email verified successfully. You can now login.');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-// ✅ Resend verification email
+// Resend verification email
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');
@@ -66,13 +82,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // ✅ Admin Routes
+// All routes in this group are prefixed with `/admin` (e.g., /admin/dashboard)
 Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
-    Route::view('/categories', 'admin.categories')->name('admin.categories');
     Route::view('/coupons', 'admin.coupons')->name('admin.coupons');
-    Route::view('/products', 'admin.products')->name('admin.products');
-    Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.orders');
-    Route::view('/users', 'admin.users')->name('admin.users');
     Route::view('/profile', 'admin.profile')->name('admin.profile');
     Route::view('/contact', 'admin.contact')->name('admin.contact');
+    
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.orders');
+
+    // Resource routes for Products, Categories, and Users
+    Route::resource('products', ProductController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('users', UserController::class); // This replaces the static view route
 });
