@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password | Blingit Grocery</title>
-  @vite('resources/css/app.css')
-    <!-- Tailwind CSS v3 -->
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
-    <script src="{{ asset('js/forgot_password.js') }}"></script>
-   
+    @vite('resources/css/app.css')
+    
     <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,16 +28,16 @@
                 <div class="relative z-10 flex flex-col justify-between h-full">
                     <div>
                         <a href="/" class="flex items-center gap-2 group mb-8">
-                             <span class="text-3xl font-extrabold px-3 py-1 rounded-lg shadow-lg blingit-logo-text"
-                        style="background-color: #FFFF00;">
-                        <span class="text-black">bling</span><span class="text-green-600">it</span>
-                    </span>
+                             <span class="text-3xl font-extrabold px-3 py-1 rounded-lg shadow-lg"
+                                   style="font-family: 'Montserrat', 'Poppins', sans-serif; background-color: #FFFF00;">
+                                <span class="text-black">bling</span><span class="text-green-600">it</span>
+                            </span>
                         </a>
                         <h2 class="text-4xl font-extrabold text-gray-800 leading-tight">
                             Forgot Your Password?
                         </h2>
                         <p class="mt-4 text-gray-600 text-lg">
-                            No worries! Just enter your Gmail address below, and we'll send you an OTP to reset your password.
+                            No worries! Just enter your email address below, and we'll send you an OTP to reset your password.
                         </p>
                     </div>
                     <div class="mt-10 space-y-6">
@@ -76,20 +73,31 @@
                             </span>
                         </a>
                         <h1 class="text-3xl font-extrabold text-gray-900">Reset Password</h1>
-                        <p class="text-gray-500 mt-1">Enter your registered Gmail to receive an OTP.</p>
+                        <p class="text-gray-500 mt-1">Enter your registered email to receive an OTP.</p>
                     </div>
 
-                    <form id="send-otp-form" class="space-y-6" novalidate>
+                    <!-- Session Status Message -->
+                    @if (session('status'))
+                        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('password.email') }}" class="space-y-6">
                         @csrf
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Gmail Address</label>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" /></svg>
                                 </span>
-                                <input type="email" id="email" name="email" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition" placeholder="you@gmail.com" required />
+                                <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus
+                                       class="w-full pl-10 pr-4 py-3 border @error('email') border-red-500 @else border-gray-300 @enderror rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition" 
+                                       placeholder="you@example.com" />
                             </div>
-                            <span id="email-error" class="text-red-600 text-xs mt-1 h-4 block"></span>
+                            @error('email')
+                                <span class="text-red-600 text-xs mt-1 h-4 block">{{ $message }}</span>
+                            @enderror
                         </div>
                         
                         <div>
@@ -100,7 +108,7 @@
                     </form>
 
                     <div class="mt-8 text-center">
-                        <a href="/login" class="text-green-600 font-bold hover:underline ml-1 flex items-center justify-center gap-2">
+                        <a href="{{ route('login') }}" class="text-green-600 font-bold hover:underline ml-1 flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                             Back to Login
                         </a>
@@ -109,62 +117,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('send-otp-form');
-            const emailInput = document.getElementById('email');
-            const emailError = document.getElementById('email-error');
-
-            form.addEventListener('submit', function(e) {
-                e.preventDefault(); // Prevent default form submission
-                
-                if (validateEmail()) {
-                    console.log('Validation successful. Redirecting for email:', emailInput.value);
-                    // On a real server, you would now make an API call to send the OTP.
-                    // For this demo, we'll redirect as originally intended.
-                    window.location.href = '/otp-verify';
-                } else {
-                    console.log('Validation failed.');
-                }
-            });
-
-            function validateEmail() {
-                const email = emailInput.value.trim();
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                const gmailRegex = /@gmail\.com$/;
-
-                if (email === '') {
-                    showError('Gmail address is required.');
-                    return false;
-                } else if (!emailRegex.test(email)) {
-                    showError('Please enter a valid email address.');
-                    return false;
-                } else if (!gmailRegex.test(email)) {
-                    showError('Please enter a valid @gmail.com address.');
-                    return false;
-                } else {
-                    hideError();
-                    return true;
-                }
-            }
-
-            function showError(message) {
-                emailInput.classList.add('border-red-500');
-                emailInput.classList.remove('border-gray-300');
-                emailError.textContent = message;
-            }
-
-            function hideError() {
-                emailInput.classList.remove('border-red-500');
-                emailInput.classList.add('border-gray-300');
-                emailError.textContent = '';
-            }
-
-            // Add real-time validation as the user types
-            emailInput.addEventListener('input', validateEmail);
-        });
-    </script>
-       {{-- <script src="{{ asset('js/forgot_password.js') }}"></script> --}}
 </body>
 </html>

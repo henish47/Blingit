@@ -8,13 +8,29 @@ use Illuminate\Http\Request;
 // Controller Imports
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PlaceOrderController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\ProfileController; 
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Admin\ContactMessageController; // Import the ContactMessageController
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
 
 // ✅ Public Routes
 Route::view('/', 'home')->name('home');
@@ -24,7 +40,8 @@ Route::view('/fruits', 'fruits')->name('fruits');
 Route::view('/electronics', 'electronics')->name('electronics');
 Route::view('/personal-products', 'personal-products')->name('personal-products');
 Route::view('/product', 'product')->name('product');
-Route::view('/contact', 'contact')->name('contact');
+Route::get('/contact', function () { return view('contact'); })->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 Route::view('/about', 'about')->name('about');
 
 // ✅ Authentication Routes
@@ -33,6 +50,19 @@ Route::post('/register', [RegisterController::class, 'store']);
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
+
+// Forgot Password & OTP Routes
+Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendOtp'])->name('password.email');
+
+// OTP Verification Route
+Route::get('otp-verify', [ResetPasswordController::class, 'showOtpForm'])->name('password.otp.form');
+Route::post('otp-verify', [ResetPasswordController::class, 'verifyOtp'])->name('password.otp.verify');
+
+// Password Reset Routes
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
+
 
 Route::post('/logout', function (Request $request) {
     Auth::logout();
@@ -75,7 +105,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Route::view('/coupons', 'admin.coupons')->name('admin.coupons');
-    Route::view('/contact', 'admin.contact')->name('admin.contact');
     
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.orders');
 
@@ -88,4 +117,8 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('users', UserController::class);
+    
+    // Contact Messages Route
+    Route::get('/contact', [ContactMessageController::class, 'index'])->name('admin.contact');
+    Route::delete('/contact/{message}', [ContactMessageController::class, 'destroy'])->name('admin.contact.destroy');
 });

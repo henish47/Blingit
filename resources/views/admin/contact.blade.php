@@ -3,13 +3,6 @@
 @section('title', 'Contact Messages')
 
 @section('content')
-{{-- 
-  This Blade template provides a modern, responsive "Contact Messages" management page.
-  - It's styled entirely with Tailwind CSS, matching the "Blingit Grocery" theme.
-  - Features a clean header, an improved table layout, and an interactive modal for viewing full messages.
-  - The page is fully responsive for a seamless experience on all devices.
-  - All icons are replaced with high-quality inline SVGs for optimal performance.
---}}
 
 <div>
     <!-- Header -->
@@ -18,11 +11,20 @@
             <h1 class="text-3xl font-extrabold text-gray-800">Contact Messages</h1>
             <p class="text-gray-500 mt-1">Review and respond to inquiries from your customers.</p>
         </div>
-        <button class="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-2.5 rounded-lg shadow-lg hover:shadow-green-500/30 transition-all duration-300 transform hover:-translate-y-0.5 mt-4 sm:mt-0">
+        {{-- This button is for demonstration; functionality can be added later --}}
+        <button class="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-500 text-white font-bold px-5 py-2.5 rounded-lg shadow-lg cursor-not-allowed" disabled>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
             Export All
         </button>
     </div>
+
+     <!-- Success Message -->
+    @if(session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg" role="alert">
+            <p class="font-bold">Success!</p>
+            <p>{{ session('success') }}</p>
+        </div>
+    @endif
 
     <!-- Messages Table -->
     <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
@@ -30,7 +32,7 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="py-3 px-6 text-left font-semibold text-gray-600">#</th>
+                        <th class="py-3 px-6 text-left font-semibold text-gray-600">ID</th>
                         <th class="py-3 px-6 text-left font-semibold text-gray-600">From</th>
                         <th class="py-3 px-6 text-left font-semibold text-gray-600">Subject</th>
                         <th class="py-3 px-6 text-left font-semibold text-gray-600">Message</th>
@@ -39,42 +41,49 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @php
-                        $messages = [
-                            ['id' => 1, 'name' => 'Aarav Patel', 'email' => 'aarav@example.com', 'subject' => 'Product Inquiry', 'message' => 'Hello, I would like to know more about the organic vegetables. Are they certified? Thanks!', 'date' => 'July 18, 2025'],
-                            ['id' => 2, 'name' => 'Sneha Mehta', 'email' => 'sneha@example.com', 'subject' => 'Feedback on Delivery', 'message' => 'Great service! My order arrived in less than 10 minutes. Just wanted to say thanks for the amazing speed and quality.', 'date' => 'July 17, 2025'],
-                            ['id' => 3, 'name' => 'Vikram Singh', 'email' => 'vikram@example.com', 'subject' => 'Issue with my order #1002', 'message' => 'Hi, I seem to be missing an item from my recent order. Can someone please look into this?', 'date' => 'July 16, 2025'],
-                        ];
-                    @endphp
-                    @foreach($messages as $message)
+                    @forelse($messages as $message)
                     <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="py-4 px-6 font-semibold text-gray-700">{{ $message['id'] }}</td>
+                        <td class="py-4 px-6 font-semibold text-gray-700">{{ $message->id }}</td>
                         <td class="py-4 px-6">
-                            <div class="font-medium text-gray-800">{{ $message['name'] }}</div>
-                            <div class="text-xs text-gray-500">{{ $message['email'] }}</div>
+                            <div class="font-medium text-gray-800">{{ $message->name }}</div>
+                            <div class="text-xs text-gray-500">{{ $message->email }}</div>
                         </td>
-                        <td class="py-4 px-6 font-medium text-gray-700">{{ $message['subject'] }}</td>
-                        <td class="py-4 px-6 text-gray-600 truncate max-w-xs">{{ $message['message'] }}</td>
-                        <td class="py-4 px-6 text-gray-600">{{ $message['date'] }}</td>
+                        <td class="py-4 px-6 font-medium text-gray-700">{{ $message->subject }}</td>
+                        <td class="py-4 px-6 text-gray-600 truncate max-w-xs" title="{{ $message->message }}">{{ $message->message }}</td>
+                        <td class="py-4 px-6 text-gray-600 text-xs whitespace-nowrap">{{ $message->created_at->format('d M Y, h:i A') }}</td>
                         <td class="py-4 px-6">
                             <div class="flex items-center gap-2">
                                 <button class="viewMessageBtn text-green-600 hover:text-green-800 p-2 hover:bg-green-50 rounded-full transition-colors" title="View Message"
-                                    data-name="{{$message['name']}}"
-                                    data-email="{{$message['email']}}"
-                                    data-subject="{{$message['subject']}}"
-                                    data-message="{{$message['message']}}"
-                                    data-date="{{$message['date']}}">
+                                        data-name="{{ $message->name }}"
+                                        data-email="{{ $message->email }}"
+                                        data-subject="{{ $message->subject }}"
+                                        data-message="{{ $message->message }}"
+                                        data-date="{{ $message->created_at->format('F d, Y, h:i A') }}">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 </button>
-                                <button class="text-red-600 hover:text-red-800 p-2 hover:bg-red-50 rounded-full transition-colors" title="Delete">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                </button>
+                                <form method="POST" action="{{ route('admin.contact.destroy', $message->id) }}" onsubmit="return confirm('Are you sure you want to delete this message?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800 p-2 hover:bg-red-50 rounded-full transition-colors" title="Delete">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-10 text-gray-500">
+                            No messages found.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
+        </div>
+         <!-- Pagination Links -->
+        <div class="p-4 bg-gray-50 border-t border-gray-200">
+            {{ $messages->links() }}
         </div>
     </div>
 </div>

@@ -21,22 +21,44 @@
             <!-- Left Column: Contact Form -->
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Send us a Message</h2>
-                <form id="contactForm" class="space-y-6" novalidate>
+
+                <!-- Success Message -->
+                @if(session('success'))
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg" role="alert">
+                        <p class="font-bold">Success!</p>
+                        <p>{{ session('success') }}</p>
+                    </div>
+                @endif
+
+                <form id="contactForm" method="POST" action="{{ route('contact.send') }}" class="space-y-6">
+                    @csrf
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                        <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="John Doe" required>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}" class="w-full px-4 py-3 border @error('name') border-red-500 @else border-gray-300 @enderror rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="John Doe" required>
+                        @error('name')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="you@example.com" required>
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" class="w-full px-4 py-3 border @error('email') border-red-500 @else border-gray-300 @enderror rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="you@example.com" required>
+                         @error('email')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                        <input type="text" id="subject" name="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., Question about a product" required>
+                        <input type="text" id="subject" name="subject" value="{{ old('subject') }}" class="w-full px-4 py-3 border @error('subject') border-red-500 @else border-gray-300 @enderror rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., Question about a product" required>
+                         @error('subject')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                        <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Write your message here..." required></textarea>
+                        <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 border @error('message') border-red-500 @else border-gray-300 @enderror rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Write your message here..." required>{{ old('message') }}</textarea>
+                         @error('message')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:shadow-green-500/30 transition-all duration-300 transform hover:-translate-y-0.5 text-lg flex items-center justify-center gap-2">
@@ -84,73 +106,12 @@
                                 <p class="text-gray-600 text-sm">123, Market Street, Mumbai, Maharashtra, India - 400001</p>
                             </div>
                         </div>
-                       
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-
-<!-- ✅ JavaScript Validation Script -->
-<script>
-    document.getElementById('contactForm').addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevent default submit
-
-        let form = e.target;
-        let name = form.name.value.trim();
-        let email = form.email.value.trim();
-        let subject = form.subject.value.trim();
-        let message = form.message.value.trim();
-        let isValid = true;
-
-        // Clear previous errors
-        document.querySelectorAll('.error-message').forEach(el => el.remove());
-
-        const showError = (input, message) => {
-            const error = document.createElement('p');
-            error.className = 'text-red-600 text-sm mt-1 error-message';
-            error.innerText = message;
-            input.insertAdjacentElement('afterend', error);
-        };
-
-        // Full Name validation
-       
-if (name.length < 3) {
-        isValid = false;
-        showError(form.name, 'Full name must be at least 3 characters.');
-    } else if (!/^[a-zA-Z\s]+$/.test(name)) {
-    isValid = false;
-    showError(form.name, 'Full name should not contain numbers or special characters.');
-    }
-
-        // Email validation
-        const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-        if (!emailPattern.test(email)) {
-            isValid = false;
-            showError(form.email, 'Enter a valid email address.');
-        }
-
-        // Subject validation
-        if (subject.length < 5) {
-            isValid = false;
-            showError(form.subject, 'Subject must be at least 5 characters.');
-        } else if (!/^[a-zA-Z\s]+$/.test(subject)) {
-            isValid = false;
-            showError(form.subject, 'Subject should contain only letters and spaces.');
-        }
-
-        // Message validation
-        if (message.length < 10) {
-            isValid = false;
-            showError(form.message, 'Message must be at least 10 characters.');
-        }
-
-        if (isValid) {
-            form.submit(); // Submit the form if everything is valid
-        }
-    });
-</script>
 
 @endsection
