@@ -18,7 +18,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\Admin\ContactMessageController; // Import the ContactMessageController
+use App\Http\Controllers\Admin\ContactMessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,7 +73,8 @@ Route::post('/logout', function (Request $request) {
 
 // ✅ Email Verification Routes
 Route::get('/email/verify', function () {
-    return view('verify-email');
+    // Pass the authenticated user to the view
+    return view('email.verify', ['user' => Auth::user()]);
 })->middleware('auth')->name('verification.notice');
 
 // Email verification link click
@@ -101,8 +102,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // ✅ Admin Routes
-// All routes in this group are prefixed with `/admin` (e.g., /admin/dashboard)
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'verified', 'is.admin'])->group(function () {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Route::view('/coupons', 'admin.coupons')->name('admin.coupons');
     
