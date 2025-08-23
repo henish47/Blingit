@@ -19,6 +19,10 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CategoryPageController;
+use App\Http\Controllers\ProductPageController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,13 +37,14 @@ use App\Http\Controllers\Admin\ContactMessageController;
 
 
 // ✅ Public Routes
-Route::view('/', 'home')->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/category/{category:name}', [CategoryPageController::class, 'show'])->name('category.products');
+Route::get('/product/{product:sku}', [ProductPageController::class, 'show'])->name('product.show');
 Route::view('/milk', 'milk')->name('milk');
 Route::view('/vegetables', 'vegetables')->name('vegetables');
 Route::view('/fruits', 'fruits')->name('fruits');
 Route::view('/electronics', 'electronics')->name('electronics');
 Route::view('/personal-products', 'personal-products')->name('personal-products');
-Route::view('/product', 'product')->name('product');
 Route::get('/contact', function () { return view('contact'); })->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 Route::view('/about', 'about')->name('about');
@@ -95,7 +100,13 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
     Route::view('/edit_profile', 'edit_profile')->name('edit_profile');
-    Route::get('/cart', fn () => view('cart'))->name('cart');
+    
+    // Cart Routes
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+
     Route::get('/checkout', fn () => view('checkout'))->name('checkout');
     Route::get('/place-order', [PlaceOrderController::class, 'show'])->name('place-order');
     Route::get('/orders', [OrderController::class, 'userOrders'])->name('orders');
