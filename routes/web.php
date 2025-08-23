@@ -23,6 +23,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryPageController;
 use App\Http\Controllers\ProductPageController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,7 +108,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 
-    Route::get('/checkout', fn () => view('checkout'))->name('checkout');
+    // Checkout Routes
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.place.order');
+
     Route::get('/place-order', [PlaceOrderController::class, 'show'])->name('place-order');
     Route::get('/orders', [OrderController::class, 'userOrders'])->name('orders');
 });
