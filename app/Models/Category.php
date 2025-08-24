@@ -14,12 +14,13 @@ class Category extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'status', // <-- આ લાઈન ઉમેરો
+    ];
 
     /**
      * Define the relationship to the Product model.
-     * This assumes the `products` table has a 'category' column
-     * that stores the category name as a string.
      */
     public function products()
     {

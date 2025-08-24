@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\CartItem;
+use App\Models\Coupon; // Import the Coupon model
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
@@ -14,9 +16,11 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-        $cartItems = session()->get('cart', []);
+        $cartItems = CartItem::with('product')
+            ->where('user_id', Auth::id())
+            ->get();
 
-        if (empty($cartItems)) {
+        if ($cartItems->isEmpty()) {
             return redirect()->route('home')->with('error', 'Your cart is empty.');
         }
 
@@ -38,18 +42,22 @@ class CheckoutController extends Controller
             'payment_method' => 'required|string|in:cod,razorpay',
         ]);
 
-        $cartItems = session()->get('cart', []);
+        $cartItems = CartItem::with('product')
+            ->where('user_id', Auth::id())
+            ->get();
         
-        if (empty($cartItems)) {
+        if ($cartItems->isEmpty()) {
             return redirect()->route('home')->with('error', 'Your cart is empty.');
         }
 
         $subtotal = 0;
         foreach($cartItems as $item) {
-            $subtotal += $item['price'] * $item['quantity'];
+            $subtotal += $item->product->price * $item->quantity;
         }
-        $deliveryFee = $subtotal >= 500 ? 0 : 40;
-        $total = $subtotal + $deliveryFee;
+        
+        $discount = session()->get('coupon')['discount'] ?? 0;
+        $deliveryFee = ($subtotal - $discount) >= 500 ? 0 : 40;
+        $total = ($subtotal - $discount) + $deliveryFee;
 
         $order = Order::create([
             'user_id' => Auth::id(),
@@ -63,20 +71,67 @@ class CheckoutController extends Controller
             'payment_method' => $request->payment_method,
         ]);
 
-        foreach ($cartItems as $id => $details) {
+        foreach ($cartItems as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
-                'product_id' => $id,
-                'name' => $details['name'],
-                'price' => $details['price'],
-                'quantity' => $details['quantity'],
+                'product_id' => $item->product_id,
+                'name' => $item->product->name,
+                'price' => $item->product->price,
+                'quantity' => $item->quantity,
             ]);
         }
 
-        // Clear the cart from the session
-        session()->forget('cart');
+        CartItem::where('user_id', Auth::id())->delete();
+        session()->forget('coupon'); // Clear the coupon from session
 
-        // Redirect to a success page (we'll use the place-order route for this)
         return redirect()->route('place-order')->with('success', 'Your order has been placed successfully!');
+    }
+
+    /**
+     * Apply a coupon to the cart.
+     */
+    public function applyCoupon(Request $request)
+    {
+        $request->validate(['coupon_code' => 'required|string']);
+
+        $coupon = Coupon::where('code', $request->coupon_code)
+            ->where('status', true)
+            ->where(function ($query) {
+                $query->whereNull('expires_at')->orWhere('expires_at', '>', now());
+            })
+            ->first();
+
+        if (!$coupon) {
+            return back()->withErrors(['coupon_code' => 'Invalid or expired coupon code.']);
+        }
+
+        $subtotal = 0;
+        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
+        foreach($cartItems as $item) {
+            $subtotal += $item->product->price * $item->quantity;
+        }
+
+        $discount = 0;
+        if ($coupon->type == 'fixed') {
+            $discount = $coupon->value;
+        } elseif ($coupon->type == 'percent') {
+            $discount = ($subtotal * $coupon->value) / 100;
+        }
+
+        session()->put('coupon', [
+            'code' => $coupon->code,
+            'discount' => $discount,
+        ]);
+
+        return back()->with('success', 'Coupon applied successfully!');
+    }
+
+    /**
+     * Remove the applied coupon.
+     */
+    public function removeCoupon()
+    {
+        session()->forget('coupon');
+        return back()->with('success', 'Coupon removed.');
     }
 }

@@ -41,7 +41,7 @@
         <aside id="admin-sidebar" class="fixed inset-y-0 left-0 w-64 bg-white border-r border-yellow-200 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-lg">
             <!-- Logo -->
             <div class="flex items-center justify-center px-6 py-4 border-b border-yellow-200 h-20 bg-gradient-to-r from-yellow-50 to-green-50">
-                <a href="/admin/dashboard" class="flex items-center gap-2">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2">
                    <span class="text-3xl font-extrabold px-3 py-1 rounded-lg shadow-lg"
                          style="font-family: 'Montserrat', 'Poppins', sans-serif; background-color: #FFFF00;">
                         <span class="text-black">bling</span><span class="text-green-600">it</span>
@@ -52,45 +52,51 @@
             <nav class="flex-1 px-4 py-4 overflow-y-auto">
                 <ul class="space-y-1">
                     <li>
-                        <a href="{{ url('/admin/dashboard') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->is('admin/dashboard')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('admin.dashboard')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a2 2 0 002 2h10a2 2 0 002-2V10M9 20h6"></path></svg>
                             Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('/admin/categories') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->is('admin/categories')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                        <a href="{{ route('categories.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('categories.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                             Categories
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('/admin/coupons') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->is('admin/coupons')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                        <a href="{{ route('coupons.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('coupons.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
                             Coupons
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('/admin/orders') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->is('admin/orders')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                        <a href="{{ route('admin.orders') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('admin.orders')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                             Orders
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('/admin/products') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->is('admin/products')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                        <a href="{{ route('products.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('products.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                             Products
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('/admin/users') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->is('admin/users')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                        <a href="{{ route('users.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('users.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197M15 21a6 6 0 006-6v-1a3 3 0 00-3-3H9a3 3 0 00-3 3v1a6 6 0 006 6z"></path></svg>
                             Users
                         </a>
                     </li>
                      <li>
-                        <a href="{{ url('/admin/contact') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->is('admin/contact')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                        <a href="{{ route('admin.contact') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('admin.contact')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                             Messages
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('notifications.create') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('notifications.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                            Notifications
                         </a>
                     </li>
                 </ul>
@@ -184,4 +190,3 @@
     </script>
 </body>
 </html>
-

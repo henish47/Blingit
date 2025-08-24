@@ -69,6 +69,13 @@
                                         <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
                                              class="w-full h-32 object-contain mb-3 transition-transform duration-200 group-hover:scale-105"
                                              onerror="this.onerror=null;this.src='https://placehold.co/150x128/E0E0E0/666666?text=Image+Not+Found';">
+                                        
+                                        {{-- Low Stock Badge --}}
+                                        @if($product->stock > 0 && $product->stock <= 10)
+                                            <div class="absolute top-0 right-0 bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-0.5 rounded-bl-md">
+                                                Only {{ $product->stock }} left
+                                            </div>
+                                        @endif
                                     </div>
                                 </a>
                                 <div class="flex-1 flex flex-col justify-between text-center">
@@ -77,20 +84,27 @@
                                 </div>
                                 <div class="flex items-center justify-between mt-3">
                                     <span class="text-xl font-extrabold text-green-700">₹{{ number_format($product->price, 2) }}</span>
-                                    @auth
-                                        <form action="{{ route('cart.add') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                            <input type="hidden" name="quantity" value="1">
-                                            <button type="submit" class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
+                                    
+                                    @if($product->stock > 0)
+                                        @auth
+                                            <form action="{{ route('cart.add') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                <input type="hidden" name="quantity" value="1">
+                                                <button type="submit" class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
+                                                    ADD
+                                                </button>
+                                            </form>
+                                        @else
+                                            <a href="{{ route('login') }}" class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
                                                 ADD
-                                            </button>
-                                        </form>
+                                            </a>
+                                        @endauth
                                     @else
-                                        <a href="{{ route('login') }}" class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
-                                            ADD
-                                        </a>
-                                    @endauth
+                                        <button class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-gray-300 text-gray-500 bg-gray-100 cursor-not-allowed" disabled>
+                                            Out of Stock
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         @endforeach

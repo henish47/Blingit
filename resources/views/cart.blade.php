@@ -17,12 +17,18 @@
                 {{ session('success') }}
             </div>
         @endif
+        
+        @if($errors->any())
+             <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg" role="alert">
+                {{ $errors->first() }}
+            </div>
+        @endif
 
-        @if(count($cartItems) > 0)
+        @if($cartItems->isNotEmpty())
         @php
             $subtotal = 0;
             foreach($cartItems as $item) {
-                $subtotal += $item['price'] * $item['quantity'];
+                $subtotal += $item->product->price * $item->quantity;
             }
             $deliveryFee = $subtotal >= 500 ? 0 : 40;
             $total = $subtotal + $deliveryFee;
@@ -43,33 +49,33 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
-                            @foreach($cartItems as $id => $item)
+                            @foreach($cartItems as $item)
                             <tr class="hover:bg-gray-50 transition-colors duration-200">
                                 <td class="py-4 px-6 whitespace-nowrap">
                                     <div class="flex items-center gap-4">
-                                        <img src="{{ $item['image_url'] }}" class="w-16 h-16 object-cover rounded-lg border border-gray-200 shadow-sm" alt="{{ $item['name'] }}">
-                                        <span class="font-semibold text-gray-800 text-base">{{ $item['name'] }}</span>
+                                        <img src="{{ $item->product->image_url }}" class="w-16 h-16 object-cover rounded-lg border border-gray-200 shadow-sm" alt="{{ $item->product->name }}">
+                                        <span class="font-semibold text-gray-800 text-base">{{ $item->product->name }}</span>
                                     </div>
                                 </td>
                                 <td class="py-4 px-6 whitespace-nowrap">
-                                    <span class="font-bold text-gray-700 text-base">₹{{ number_format($item['price'], 2) }}</span>
+                                    <span class="font-bold text-gray-700 text-base">₹{{ number_format($item->product->price, 2) }}</span>
                                 </td>
                                 <td class="py-4 px-6 whitespace-nowrap">
                                     <form action="{{ route('cart.update') }}" method="POST" class="flex items-center justify-center gap-2">
                                         @csrf
                                         @method('PATCH')
-                                        <input type="hidden" name="product_id" value="{{ $id }}">
-                                        <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="w-16 text-center font-bold text-gray-800 text-base border border-gray-300 rounded-md" onchange="this.form.submit()">
+                                        <input type="hidden" name="product_id" value="{{ $item->product_id }}">
+                                        <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stock }}" class="w-16 text-center font-bold text-gray-800 text-base border border-gray-300 rounded-md" onchange="this.form.submit()">
                                     </form>
                                 </td>
                                 <td class="py-4 px-6 whitespace-nowrap">
-                                    <span class="font-extrabold text-green-700 text-base">₹{{ number_format($item['price'] * $item['quantity'], 2) }}</span>
+                                    <span class="font-extrabold text-green-700 text-base">₹{{ number_format($item->product->price * $item->quantity, 2) }}</span>
                                 </td>
                                 <td class="py-4 px-6 text-center">
                                     <form action="{{ route('cart.remove') }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <input type="hidden" name="product_id" value="{{ $id }}">
+                                        <input type="hidden" name="product_id" value="{{ $item->product_id }}">
                                         <button type="submit" class="text-yellow-400 hover:text-red-600 rounded-full p-2 transition-colors duration-200" title="Remove item">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                         </button>
@@ -115,7 +121,7 @@
                     </div>
                     @endif
 
-                    <a href="/checkout" class="mt-6 w-full bg-green-600 hover:bg-green-700 text-white text-center px-6 py-3.5 rounded-xl font-bold text-base shadow-lg hover:shadow-green-500/30 transition-all duration-300 ease-in-out transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <a href="{{ route('checkout.index') }}" class="mt-6 w-full bg-green-600 hover:bg-green-700 text-white text-center px-6 py-3.5 rounded-xl font-bold text-base shadow-lg hover:shadow-green-500/30 transition-all duration-300 ease-in-out transform hover:-translate-y-1 flex items-center justify-center gap-2">
                         Proceed to Checkout
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </a>

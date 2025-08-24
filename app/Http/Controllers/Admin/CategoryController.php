@@ -14,7 +14,6 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        // Eager load the count of products for each category and paginate the results.
         $categories = Category::withCount('products')->latest()->paginate(10);
         return view('admin.categories', compact('categories'));
     }
@@ -26,6 +25,7 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|min:3|max:50|unique:categories,name',
+            'status' => 'required|boolean', // Validate the status field
         ]);
 
         Category::create($validated);
@@ -40,10 +40,9 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:50', Rule::unique('categories')->ignore($category->id)],
+            'status' => 'required|boolean', // Validate the status field
         ]);
 
-        // Note: Renaming a category might de-link existing products if you're
-        // relying on the name string. A foreign key relationship is a more robust solution.
         $category->update($validated);
 
         return redirect()->route('categories.index')->with('success', 'Category updated successfully!');
@@ -54,7 +53,6 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        // To prevent data integrity issues, check if the category is in use before deleting.
         if ($category->products()->count() > 0) {
             return back()->withErrors(['error' => 'Cannot delete a category that has products assigned to it.']);
         }

@@ -116,26 +116,42 @@
                     @php
                         $subtotal = 0;
                         foreach($cartItems as $item) {
-                            $subtotal += $item['price'] * $item['quantity'];
+                            $subtotal += $item->product->price * $item->quantity;
                         }
-                        $deliveryFee = $subtotal >= 500 ? 0 : 40;
-                        $total = $subtotal + $deliveryFee;
+                        $discount = session()->get('coupon')['discount'] ?? 0;
+                        $deliveryFee = ($subtotal - $discount) >= 500 ? 0 : 40;
+                        $total = ($subtotal - $discount) + $deliveryFee;
                     @endphp
 
                     <!-- Product List -->
                     <div class="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">
-                        @foreach($cartItems as $id => $item)
+                        @foreach($cartItems as $item)
                         <div class="flex items-center justify-between gap-4">
                             <div class="flex items-center gap-3">
-                                <img src="{{ $item['image_url'] }}" class="w-14 h-14 object-cover rounded-lg border border-gray-200" alt="{{ $item['name'] }}">
+                                <img src="{{ $item->product->image_url }}" class="w-14 h-14 object-cover rounded-lg border border-gray-200" alt="{{ $item->product->name }}">
                                 <div>
-                                    <p class="font-semibold text-gray-800 text-sm leading-tight">{{ $item['name'] }}</p>
-                                    <p class="text-gray-500 text-xs">Qty: {{ $item['quantity'] }}</p>
+                                    <p class="font-semibold text-gray-800 text-sm leading-tight">{{ $item->product->name }}</p>
+                                    <p class="text-gray-500 text-xs">Qty: {{ $item->quantity }}</p>
                                 </div>
                             </div>
-                            <span class="font-bold text-gray-800 text-sm">₹{{ number_format($item['price'] * $item['quantity'], 2) }}</span>
+                            <span class="font-bold text-gray-800 text-sm">₹{{ number_format($item->product->price * $item->quantity, 2) }}</span>
                         </div>
                         @endforeach
+                    </div>
+
+                    <!-- Discount Code Form -->
+                    <div class="mb-6">
+                        @if(!session()->has('coupon'))
+                            <form action="{{ route('coupon.apply') }}" method="POST">
+                                @csrf
+                                <label for="coupon_code" class="block text-sm font-medium text-gray-700 mb-1">Discount Code</label>
+                                <div class="flex gap-2">
+                                    <input type="text" name="coupon_code" id="coupon_code" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-green-500" placeholder="Enter code">
+                                    <button type="submit" class="px-4 py-2 bg-yellow-400 text-yellow-900 font-semibold rounded-lg hover:bg-yellow-500 transition">Apply</button>
+                                </div>
+                                @error('coupon_code')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
+                            </form>
+                        @endif
                     </div>
 
                     <!-- Totals -->
@@ -144,6 +160,18 @@
                             <span>Subtotal</span>
                             <span class="font-medium">₹{{ number_format($subtotal, 2) }}</span>
                         </div>
+
+                        @if(session()->has('coupon'))
+                        <div class="flex justify-between text-base text-green-600">
+                            <span>Discount ({{ session('coupon')['code'] }})</span>
+                            <span class="font-medium">- ₹{{ number_format($discount, 2) }}</span>
+                        </div>
+                        <form action="{{ route('coupon.remove') }}" method="POST" class="text-right">
+                            @csrf
+                            <button type="submit" class="text-xs text-red-500 hover:underline">Remove Coupon</button>
+                        </form>
+                        @endif
+
                         <div class="flex justify-between text-base text-gray-600">
                             <span>Delivery Fee</span>
                             <span class="font-medium">₹{{ number_format($deliveryFee, 2) }}</span>
