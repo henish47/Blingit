@@ -10,7 +10,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::orderBy('date', 'desc')->get();
+       $orders = Order::orderBy('created_at', 'desc')->get();
         return view('admin.orders', compact('orders'));
     }
 } 

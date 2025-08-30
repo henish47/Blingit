@@ -5,6 +5,7 @@
 @section('content')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <style>
+        /* Top Banner Swiper Styles */
         .topBannerSwiper .swiper-slide {
             position: relative; text-align: center; display: flex; justify-content: center; align-items: center;
         }
@@ -33,35 +34,45 @@
         .line-clamp-2 {
             display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
+
     </style>
 
     <div class="container mx-auto px-4 py-10">
         
-        <div class="swiper topBannerSwiper mb-10 rounded-2xl overflow-hidden shadow-xl">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <img src="/images/Frame 2.png" alt="Fresh Groceries Banner" onerror="this.onerror=null;this.src='https://placehold.co/1200x400/E0E0E0/666666?text=Image+Not+Available';">
+        <!-- Main Banner Carousel (Dynamic) -->
+        @if(isset($banners) && $banners->isNotEmpty())
+            <div class="swiper topBannerSwiper mb-12 rounded-2xl overflow-hidden shadow-xl">
+                <div class="swiper-wrapper">
+                    @foreach($banners as $banner)
+                        <div class="swiper-slide">
+                            <img src="{{ asset('storage/' . $banner->image_url) }}" alt="{{ $banner->alt_text ?? 'Blingit Grocery Banner' }}" onerror="this.onerror=null;this.src='https://placehold.co/1200x400/E0E0E0/666666?text=Image+Not+Available';">
+                        </div>
+                    @endforeach
                 </div>
-                <div class="swiper-slide">
-                    <img src="/images/Frame 3.png" alt="Fast Delivery Banner" onerror="this.onerror=null;this.src='https://placehold.co/1200x400/E0E0E0/666666?text=Image+Not+Available';">
-                </div>
-                <div class="swiper-slide">
-                    <img src="/images/Frame 4.png" alt="Special Offers Banner" onerror="this.onerror=null;this.src='https://placehold.co/1200x400/E0E0E0/666666?text=Image+Not+Available';">
-                </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
             </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
-        </div>
+        @endif
 
+
+        <!-- Product Categories Sections -->
         @foreach($categoriesWithProducts as $category)
             @if($category->products->isNotEmpty())
-                <div class="mb-10">
-                    <div class="flex items-center justify-between mb-4">
+                <div class="mb-12">
+                    <div class="flex items-center justify-between mb-6">
                         <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">{{ $category->name }}</h2>
-                        <a href="{{ route('category.products', $category) }}" class="text-green-600 font-semibold hover:underline text-lg">See All <i class="fas fa-arrow-right ml-1"></i></a>
+                        <a href="{{ route('category.products', $category) }}" class="text-green-600 font-semibold hover:underline text-lg inline-flex items-center gap-1">
+                            See All
+                            <!-- Replaced Font Awesome icon with an inline SVG for better performance -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
                     </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    
+                    <!-- Product Grid (Updated for better responsiveness across all screen sizes) -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                         @foreach($category->products as $product)
                             <div class="bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all p-4 flex flex-col justify-between group h-full">
                                 <a href="{{ route('product.show', $product) }}" class="block group">
@@ -78,33 +89,35 @@
                                         @endif
                                     </div>
                                 </a>
-                                <div class="flex-1 flex flex-col justify-between text-center">
-                                    <h3 class="text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">{{ $product->name }}</h3>
-                                    <p class="text-sm text-gray-500 mb-2 truncate">{{ $product->description }}</p>
-                                </div>
-                                <div class="flex items-center justify-between mt-3">
-                                    <span class="text-xl font-extrabold text-green-700">₹{{ number_format($product->price, 2) }}</span>
-                                    
-                                    @if($product->stock > 0)
-                                        @auth
-                                            <form action="{{ route('cart.add') }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                                <input type="hidden" name="quantity" value="1">
-                                                <button type="submit" class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
+                                <div class="flex-1 flex flex-col justify-between text-center mt-2">
+                                    <div>
+                                        <h3 class="text-base font-bold text-gray-800 line-clamp-2 leading-snug mb-1">{{ $product->name }}</h3>
+                                        <p class="text-sm text-gray-500 mb-2 truncate">{{ $product->description }}</p>
+                                    </div>
+                                    <div class="flex items-center justify-between mt-3">
+                                        <span class="text-xl font-extrabold text-green-700">₹{{ number_format($product->price, 2) }}</span>
+                                        
+                                        @if($product->stock > 0)
+                                            @auth
+                                                <form action="{{ route('cart.add') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                    <input type="hidden" name="quantity" value="1">
+                                                    <button type="submit" class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
+                                                        ADD
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <a href="{{ route('login') }}" class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
                                                     ADD
-                                                </button>
-                                            </form>
+                                                </a>
+                                            @endauth
                                         @else
-                                            <a href="{{ route('login') }}" class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-green-600 text-green-700 bg-green-50 hover:bg-green-600 hover:text-white transition duration-300 ease-in-out shadow-sm">
-                                                ADD
-                                            </a>
-                                        @endauth
-                                    @else
-                                        <button class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-gray-300 text-gray-500 bg-gray-100 cursor-not-allowed" disabled>
-                                            Out of Stock
-                                        </button>
-                                    @endif
+                                            <button class="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-gray-300 text-gray-500 bg-gray-100 cursor-not-allowed" disabled>
+                                                Out of Stock
+                                            </button>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
@@ -146,14 +159,18 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Top Banner Swiper
             new Swiper('.topBannerSwiper', {
                 loop: true,
                 effect: 'fade',
                 fadeEffect: { crossFade: true },
                 autoplay: { delay: 4000, disableOnInteraction: false, },
+                // *** MUKHYA SUDHARO AHIYA CHHE ***
+                // Corrected the pagination selector from '.pagination' to '.swiper-pagination'
                 pagination: { el: '.topBannerSwiper .swiper-pagination', clickable: true, },
                 navigation: { nextEl: '.topBannerSwiper .swiper-button-next', prevEl: '.topBannerSwiper .swiper-button-prev', },
             });
         });
     </script>
 @endsection
+

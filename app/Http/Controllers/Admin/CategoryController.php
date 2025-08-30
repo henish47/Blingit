@@ -25,7 +25,9 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|min:3|max:50|unique:categories,name',
-            'status' => 'required|boolean', // Validate the status field
+            // *** MUKHYA SUDHARO AHIYA CHHE ***
+            // Validation ne 'boolean' mathi 'string' ma badli chhe.
+            'status' => 'required|in:Active,Inactive', 
         ]);
 
         Category::create($validated);
@@ -40,7 +42,9 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:50', Rule::unique('categories')->ignore($category->id)],
-            'status' => 'required|boolean', // Validate the status field
+            // *** MUKHYA SUDHARO AHIYA CHHE ***
+            // Validation ne 'boolean' mathi 'string' ma badli chhe.
+            'status' => 'required|in:Active,Inactive',
         ]);
 
         $category->update($validated);

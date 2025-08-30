@@ -23,6 +23,7 @@ class Product extends Model
         'stock',
         'img',
         'description',
+        'status', // Status field added to allow mass assignment
     ];
 
     /**
@@ -45,3 +46,4 @@ class Product extends Model
         return 'https://placehold.co/100x100/f0f0f0/999999?text=No+Image';
     }
 }
+

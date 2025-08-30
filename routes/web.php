@@ -26,6 +26,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\BannerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,17 +128,18 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'is.admin'])->group(func
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.orders');
-
+    
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
-    // Resource routes for Products, Categories, Users, and Coupons
+    // Resource routes for Products, Categories, Users, Banners and Coupons
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('users', UserController::class);
     Route::resource('coupons', CouponController::class);
+    Route::resource('banners', BannerController::class);
     
     // Contact Messages Route
     Route::get('/contact', [ContactMessageController::class, 'index'])->name('admin.contact');
@@ -147,3 +149,4 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'is.admin'])->group(func
     Route::get('/notifications', [NotificationController::class, 'create'])->name('notifications.create');
     Route::post('/notifications', [NotificationController::class, 'send'])->name('notifications.send');
 });
+

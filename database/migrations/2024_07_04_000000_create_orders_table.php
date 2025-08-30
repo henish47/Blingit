@@ -23,6 +23,10 @@ return new class extends Migration
             $table->decimal('total', 10, 2);
             $table->string('payment_method');
             $table->string('status')->default('pending');
+            
+            // 👇 New column for order date
+            $table->date('order_date')->nullable();
+
             $table->timestamps();
         });
 

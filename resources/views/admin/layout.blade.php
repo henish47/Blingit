@@ -44,7 +44,7 @@
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2">
                    <span class="text-3xl font-extrabold px-3 py-1 rounded-lg shadow-lg"
                          style="font-family: 'Montserrat', 'Poppins', sans-serif; background-color: #FFFF00;">
-                        <span class="text-black">bling</span><span class="text-green-600">it</span>
+                         <span class="text-black">bling</span><span class="text-green-600">it</span>
                     </span>
                 </a>
             </div>
@@ -64,6 +64,18 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('products.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('products.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Products
+                        </a>
+                    </li>
+                     <li>
+                        <a href="{{ route('banners.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('banners.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1.586-1.586a2 2 0 00-2.828 0L6 14m6-6l.01.01"></path></svg>
+                            Banners
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('coupons.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('coupons.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
                             Coupons
@@ -73,12 +85,6 @@
                         <a href="{{ route('admin.orders') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('admin.orders')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                             Orders
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('products.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('products.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                            Products
                         </a>
                     </li>
                     <li>
@@ -138,8 +144,8 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="w-full text-left flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-green-50 transition-colors duration-200 border-t border-slate-100">
-                               <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                                Logout
+                                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                 Logout
                             </button>
                         </form>
                     </div>

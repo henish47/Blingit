@@ -46,7 +46,6 @@
             </div>
             <select name="category" class="w-full sm:w-auto px-4 py-2.5 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" onchange="this.form.submit()">
                 <option value="">All Categories</option>
-                {{-- Loop through the Category models from the controller --}}
                 @foreach($categories as $category)
                     <option value="{{ $category->name }}" @selected(request('category') == $category->name)>
                         {{ $category->name }}
@@ -69,6 +68,7 @@
                         <th class="py-3 px-6 text-left font-semibold text-gray-600">Category</th>
                         <th class="py-3 px-6 text-left font-semibold text-gray-600">Price</th>
                         <th class="py-3 px-6 text-left font-semibold text-gray-600">Stock</th>
+                        <th class="py-3 px-6 text-left font-semibold text-gray-600">Status</th>
                         <th class="py-3 px-6 text-left font-semibold text-gray-600">Actions</th>
                     </tr>
                 </thead>
@@ -90,6 +90,11 @@
                             </span>
                         </td>
                         <td class="py-4 px-6">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold shadow-sm {{ $product->status == 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' }}">
+                                {{ $product->status }}
+                            </span>
+                        </td>
+                        <td class="py-4 px-6">
                             <div class="flex items-center gap-2">
                                 <button class="editProductBtn text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 rounded-full transition-colors" title="Edit"
                                         data-id="{{$product->id}}"
@@ -98,6 +103,7 @@
                                         data-category="{{$product->category}}"
                                         data-price="{{$product->price}}"
                                         data-stock="{{$product->stock}}"
+                                        data-status="{{$product->status}}"
                                         data-description="{{$product->description}}"
                                         data-img="{{ $product->image_url }}"
                                         data-action="{{ route('products.update', $product->id) }}">
@@ -115,7 +121,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-10 text-gray-500">
+                        <td colspan="7" class="text-center py-10 text-gray-500">
                             <div class="flex flex-col items-center">
                                 <svg class="w-12 h-12 text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                 No products found. Try adjusting your search filters.
@@ -156,7 +162,6 @@
                     <div>
                         <label for="productCategory" class="block font-semibold text-gray-700 mb-1">Category</label>
                         <select id="productCategory" name="category" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" required>
-                             {{-- Loop through the Category models from the controller --}}
                              @foreach($categories as $category)
                                 <option value="{{ $category->name }}">{{ $category->name }}</option>
                             @endforeach
@@ -169,6 +174,13 @@
                     <div>
                         <label for="productStock" class="block font-semibold text-gray-700 mb-1">Stock Quantity</label>
                         <input type="number" id="productStock" name="stock" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="e.g., 50">
+                    </div>
+                    <div>
+                        <label for="productStatus" class="block font-semibold text-gray-700 mb-1">Status</label>
+                        <select id="productStatus" name="status" class="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
                     </div>
                 </div>
                 <div>
@@ -194,12 +206,10 @@
 </div>
 
 <script>
-// This script remains the same as it correctly handles the modal interactions.
-// The dynamic data is handled by Blade before the JavaScript runs.
 document.addEventListener('DOMContentLoaded', function() {
     // Modal elements
     const modal = document.getElementById('productModal');
-    const modalContent = modal.querySelector('div');
+    const modalContent = modal.querySelector('div > div'); // More specific selector
     const addBtn = document.getElementById('addProductBtn');
     const closeBtn = document.getElementById('closeProductModal');
     const cancelBtn = document.getElementById('cancelProductModal');
@@ -213,6 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const productCategoryInput = document.getElementById('productCategory');
     const productPriceInput = document.getElementById('productPrice');
     const productStockInput = document.getElementById('productStock');
+    const productStatusInput = document.getElementById('productStatus');
     const productDescriptionInput = document.getElementById('productDescription');
     const productImageInput = document.getElementById('productImage');
     const imagePreview = document.getElementById('imagePreview');
@@ -232,24 +243,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function setupAddModal() {
-        clearErrors();
         productForm.reset();
         modalTitle.textContent = 'Add New Product';
         saveBtn.textContent = 'Save Product';
         productForm.action = '{{ route("products.store") }}';
         formMethodInput.value = 'POST';
         imagePreview.src = defaultImage;
+        productStatusInput.value = 'Active'; // Default to Active
         openModal();
     }
 
     function setupEditModal(data) {
-        clearErrors();
         productForm.reset();
         productNameInput.value = data.name;
         productSkuInput.value = data.sku;
         productCategoryInput.value = data.category;
         productPriceInput.value = data.price;
         productStockInput.value = data.stock;
+        productStatusInput.value = data.status;
         productDescriptionInput.value = data.description;
         modalTitle.textContent = 'Edit Product';
         saveBtn.textContent = 'Update Product';
@@ -270,6 +281,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 category: this.dataset.category,
                 price: this.dataset.price,
                 stock: this.dataset.stock,
+                status: this.dataset.status,
                 description: this.dataset.description,
                 img: this.dataset.img,
             };
@@ -279,6 +291,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
     window.addEventListener('keydown', e => {
         if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
     });
@@ -293,27 +310,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Client-side validation is a good UX, but remember server-side is for security!
     productForm.addEventListener('submit', function(e) {
         saveBtn.disabled = true;
-        saveBtn.innerHTML = 'Saving...';
+        saveBtn.innerHTML = `<span class="spinner"></span> Saving...`; // Add a spinner for better UX
     });
-
-    function showError(input, message) {
-        const error = document.createElement('p');
-        error.className = 'text-sm text-red-500 mt-1';
-        error.textContent = message;
-        input.parentNode.appendChild(error);
-        input.classList.add('border-red-500', 'focus:ring-red-500');
-    }
-
-    function clearErrors() {
-        document.querySelectorAll('.text-red-500').forEach(el => el.remove());
-        productForm.querySelectorAll('input, select, textarea').forEach(el => {
-            el.classList.remove('border-red-500', 'focus:ring-red-500');
-        });
-    }
 });
 </script>
 
 @endsection
+

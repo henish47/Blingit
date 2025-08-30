@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Banner extends Model
 {
     use HasFactory;
 
@@ -15,17 +15,18 @@ class Category extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'status', // <-- Status field added here
+        'image_url',
+        'alt_text',
+        'order_column',
+        'is_active',
     ];
 
     /**
-     * Define the relationship to the Product model.
-     * Each category can have many products.
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
      */
-    public function products()
-    {
-        return $this->hasMany(Product::class, 'category', 'name');
-    }
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 }
-
