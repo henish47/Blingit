@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Route;
 
 // Controller Imports
 use App\Http\Controllers\Auth\LoginController;
@@ -27,6 +28,8 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\AiController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +55,14 @@ Route::view('/personal-products', 'personal-products')->name('personal-products'
 Route::get('/contact', function () { return view('contact'); })->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 Route::view('/about', 'about')->name('about');
+
+Route::get('/ai', function () {
+    return view('ai'); // ai.blade.php load karse
+});
+
+Route::post('/ai-suggest', [AIController::class, 'suggest'])->name('ai.suggest');
+
+
 
 // ✅ Authentication Routes
 Route::get('/register', [RegisterController::class, 'create'])->name('register');

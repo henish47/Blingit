@@ -4,10 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    
     <title>@yield('title', 'Blingit Grocery')</title>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Bootstrap 5 CDN -->
@@ -137,6 +135,71 @@
             color: white;
             font-weight: bold;
             font-size: 16px;
+        }
+        
+        /* Floating AI Button */
+        .floating-ai-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10B981, #34D399);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .floating-ai-button:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.6);
+        }
+        
+        .floating-ai-button i {
+            font-size: 24px;
+        }
+        
+        .floating-ai-button .tooltip {
+            position: absolute;
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .floating-ai-button:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            right: 75px;
+        }
+        
+        @media (max-width: 768px) {
+            .floating-ai-button {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+            
+            .floating-ai-button .tooltip {
+                display: none;
+            }
         }
     </style>
 
@@ -304,6 +367,12 @@
         @yield('content')
     </main>
 
+    <!-- Floating AI Button -->
+    <a href="/ai" class="floating-ai-button">
+        <i class="fas fa-robot"></i>
+        <span class="tooltip">AI Assistant</span>
+    </a>
+
     @if (!Route::is('login') && !Route::is('register'))
     <footer class="bling-gradient border-t border-yellow-200 mt-16 relative bling-shadow">
     <!-- Background Texture -->
@@ -368,8 +437,6 @@
 </footer>
     @endif
     
-    <!-- MODALS -->
-    <!-- ... (તમારા બધા modals અહીં આવશે) ... -->
 
     <script>
     // Mobile menu toggle
