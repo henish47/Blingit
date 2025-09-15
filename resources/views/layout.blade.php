@@ -124,82 +124,38 @@
             color: #10B981;
         }
         
+        /* user-avatar class has been updated to support img tag */
         .user-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #10B981, #34D399);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
-        /* Floating AI Button */
-        .floating-ai-button {
+
+        .ai-fab {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 25px;
+            right: 25px;
             width: 60px;
             height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #10B981, #34D399);
+            background: linear-gradient(135deg, #22c55e, #facc15);
             color: white;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+            font-size: 28px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease-in-out;
             z-index: 1000;
-            transition: all 0.3s ease;
-            cursor: pointer;
             text-decoration: none;
         }
-        
-        .floating-ai-button:hover {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.6);
-        }
-        
-        .floating-ai-button i {
-            font-size: 24px;
-        }
-        
-        .floating-ai-button .tooltip {
-            position: absolute;
-            right: 70px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.8);
+        .ai-fab:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-        
-        .floating-ai-button:hover .tooltip {
-            opacity: 1;
-            visibility: visible;
-            right: 75px;
-        }
-        
-        @media (max-width: 768px) {
-            .floating-ai-button {
-                bottom: 20px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-            }
-            
-            .floating-ai-button .tooltip {
-                display: none;
-            }
         }
     </style>
 
@@ -207,8 +163,6 @@
 </head>
 
 <body class="bg-transparent min-h-screen flex flex-col">
-    {{-- આ PHP બ્લોકની હવે જરૂર નથી --}}
-
     @if (!Route::is('login') && !Route::is('register'))
     <header class="bling-gradient bling-shadow sticky top-0 z-50 border-b border-green-100 py-4">
         <div class="container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -216,7 +170,7 @@
             <div class="flex items-center gap-4">
                 <a href="/" class="flex items-center gap-1 group">
                     <span class="text-3xl font-extrabold px-3 py-1 rounded-lg shadow-lg blingit-logo-text"
-                        style="background-color: #FFFF00;">
+                         style="background-color: #FFFF00;">
                         <span class="text-black">bling</span><span class="text-green-600">it</span>
                     </span>
                     <span class="text-sm font-semibold text-green-700 bg-green-100 px-3  py-1 rounded-full shadow-sm hidden sm:inline-flex animate-pulse group-hover:animate-none">
@@ -238,6 +192,12 @@
 
             <!-- Dynamic Navigation Based on Auth Status -->
             <div class="flex items-center gap-4">
+                <!-- AI Assistant Link -->
+                <a href="{{ url('/ai') }}" class="hidden md:flex items-center gap-2 text-green-700 hover:text-green-900 font-semibold transition-colors duration-200" title="AI Assistant">
+                    <i class="fa-solid fa-robot text-xl"></i>
+                    <span class="hidden lg:inline">Ask Gemini</span>
+                </a>
+
                 <!-- Cart Icon (Always Visible) -->
                 <a href="/cart" class="relative group text-green-700 hover:text-green-900 transition-colors duration-200">
                     <i class="fa fa-shopping-cart text-2xl"></i>
@@ -250,10 +210,8 @@
                     <!-- Logged In User Menu -->
                     <div class="user-menu">
                         <div class="flex items-center gap-3 cursor-pointer">
-                            <div class="user-avatar">
-                                {{-- યુઝરના નામનો પહેલો અક્ષર બતાવો --}}
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                            </div>
+                            <!-- User Avatar -->
+                            <img src="{{ Auth::user()->profile_photo_url ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=FFFFFF&background=10B981' }}" alt="{{ Auth::user()->name }}'s Avatar" class="user-avatar">
                             <div class="hidden md:block text-left">
                                 <div class="text-sm font-semibold text-green-800">
                                     {{ Auth::user()->name }}
@@ -267,16 +225,15 @@
                         
                         <!-- User Dropdown Menu -->
                         <div class="user-dropdown">
-                            <a href="{{ route('edit_profile') }}" class="flex items-center gap-2">
+                            <a href="/profile" class="flex items-center gap-2">
                                 <i class="fa fa-user"></i>
                                 My Profile
                             </a>
-                            <a href="{{ route('orders') }}" class="flex items-center gap-2">
+                            <a href="/orders" class="flex items-center gap-2">
                                 <i class="fa fa-shopping-bag"></i>
                                 My Orders
                             </a>
                             <hr class="my-2">
-                            {{-- લોગઆઉટ માટે ફોર્મનો ઉપયોગ કરો --}}
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="flex items-center gap-2 text-red-600 hover:text-red-700">
@@ -286,7 +243,7 @@
                             </form>
                         </div>
                     </div>
-                @endguest
+                @endauth
 
                 @guest
                     <!-- Guest User Menu -->
@@ -325,6 +282,9 @@
             <nav class="flex flex-col gap-2 bg-white rounded-lg shadow-lg p-4 border border-gray-100">
                 <a href="/" class="py-2 px-3 rounded bling-link hover:bg-green-50 font-medium">Home</a>
                 <a href="/shop" class="py-2 px-3 rounded bling-link hover:bg-green-50 font-medium">Shop</a>
+                <a href="{{ url('/ai') }}" class="py-2 px-3 rounded bling-link hover:bg-green-50 font-medium flex items-center gap-2">
+                    <i class="fa-solid fa-robot"></i> AI Assistant
+                </a>
                 <a href="/cart" class="py-2 px-3 rounded bling-link hover:bg-green-50 flex items-center gap-2 font-medium">
                     <i class="fa fa-shopping-cart"></i> Cart
                     <span class="ml-1 bling-badge text-xs px-2 py-0.5 rounded-full">3</span>
@@ -338,10 +298,10 @@
                         <div class="text-xs capitalize">{{ Auth::user()->role }}</div>
                     </div>
                     
-                    <a href="{{ route('edit_profile') }}" class="py-2 px-3 rounded bling-link hover:bg-green-50 font-medium">
+                    <a href="/profile" class="py-2 px-3 rounded bling-link hover:bg-green-50 font-medium">
                         <i class="fa fa-user mr-2"></i>My Profile
                     </a>
-                    <a href="{{ route('orders') }}" class="py-2 px-3 rounded bling-link hover:bg-green-50 font-medium">
+                    <a href="/orders" class="py-2 px-3 rounded bling-link hover:bg-green-50 font-medium">
                         <i class="fa fa-shopping-bag mr-2"></i>My Orders
                     </a>
                     
@@ -366,12 +326,12 @@
     <main class="flex-1">
         @yield('content')
     </main>
-
-    <!-- Floating AI Button -->
-    <a href="/ai" class="floating-ai-button">
-        <i class="fas fa-robot"></i>
-        <span class="tooltip">AI Assistant</span>
-    </a>
+    
+    @if (!Route::is('login') && !Route::is('register') && !Route::is('ai.chat'))
+        <a href="{{ url('/ai') }}" class="ai-fab" title="Ask Gemini AI">
+            <i class="fa-solid fa-robot"></i>
+        </a>
+    @endif
 
     @if (!Route::is('login') && !Route::is('register'))
     <footer class="bling-gradient border-t border-yellow-200 mt-16 relative bling-shadow">
