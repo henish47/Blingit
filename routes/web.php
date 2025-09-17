@@ -127,30 +127,33 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/place-order', [PlaceOrderController::class, 'show'])->name('place-order');
     Route::get('/orders', [OrderController::class, 'userOrders'])->name('orders');
 });
+Route::prefix('admin')
+    ->middleware(['auth', 'verified', 'is.admin'])
+    ->group(function () {
 
-// ✅ Admin Routes
-Route::prefix('admin')->middleware(['auth', 'verified', 'is.admin'])->group(function () {
-    Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
+        // Admin-only with admin. prefix
+        Route::as('admin.')->group(function () {
+            Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+            Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
 
-    Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.orders');
+            // Profile
+            Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+            Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+            Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
-    // Admin Profile Routes
-    Route::get('/profile', [ProfileController::class, 'index'])->name('admin.profile.index');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
-    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('admin.profile.password.update');
+            // Contact
+            Route::get('/contact', [ContactMessageController::class, 'index'])->name('contact');
+            Route::delete('/contact/{message}', [ContactMessageController::class, 'destroy'])->name('contact.destroy');
+        });
 
-    // Resource routes
-    Route::resource('products', ProductController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('users', UserController::class);
-    Route::resource('coupons', CouponController::class);
-    Route::resource('banners', BannerController::class);
+        // 🚨 Notifications without admin. prefix
+        Route::get('/notifications', [NotificationController::class, 'create'])->name('notifications.create');
+        Route::post('/notifications', [NotificationController::class, 'send'])->name('notifications.send');
 
-    // Contact Messages
-    Route::get('/contact', [ContactMessageController::class, 'index'])->name('admin.contact');
-    Route::delete('/contact/{message}', [ContactMessageController::class, 'destroy'])->name('admin.contact.destroy');
-
-    // Notifications
-    Route::get('/notifications', [NotificationController::class, 'create'])->name('notifications.create');
-    Route::post('/notifications', [NotificationController::class, 'send'])->name('notifications.send');
-});
+        // Resources
+        Route::resource('products', ProductController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('users', UserController::class);
+        Route::resource('coupons', CouponController::class);
+        Route::resource('banners', BannerController::class);
+    });

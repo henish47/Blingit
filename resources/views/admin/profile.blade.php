@@ -5,21 +5,18 @@
 @section('content')
 
     <div>
-        <!-- Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-extrabold text-gray-800">My Profile</h1>
             <p class="text-gray-500 mt-1">Manage your profile details and update your password.</p>
         </div>
 
-        <!-- Session Messages for Profile Update -->
         @if(session('profile_success'))
             <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg" role="alert">
                 <p class="font-bold">Success</p>
                 <p>{{ session('profile_success') }}</p>
             </div>
         @endif
-
-        <!-- Session Messages for Password Update -->
+        
         @if(session('password_success'))
             <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg" role="alert">
                 <p class="font-bold">Success</p>
@@ -27,11 +24,10 @@
             </div>
         @endif
 
-        <!-- Validation Errors -->
         @if ($errors->any())
             <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg" role="alert">
-                 <p class="font-bold">Please fix the following errors:</p>
-                <ul>
+                <p class="font-bold">Please fix the following errors:</p>
+                <ul class="list-disc list-inside ml-4">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -40,26 +36,31 @@
         @endif
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left Column: Profile Card -->
             <div class="lg:col-span-1">
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 text-center">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=10b981&color=fff&size=128&rounded=true"
-                         alt="{{ Auth::user()->name }} Avatar" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-green-100 shadow-md">
-                    <h2 class="text-2xl font-bold text-gray-800">{{ Auth::user()->name }}</h2>
+                    <form id="profilePhotoForm" method="POST" action="{{ route('admin.profile.update') }}" enctype="multipart/form-data">
+                        @csrf
+                        @method('PATCH')
+                        <div class="relative w-32 h-32 mx-auto group">
+                            <img src="{{ Auth::user()->profile_photo_url }}"
+                                 alt="{{ Auth::user()->name }} Avatar" class="w-32 h-32 rounded-full object-cover border-4 border-green-100 shadow-md">
+                            <label for="profile_photo" 
+                                   class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-sm font-semibold rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                Change
+                            </label>
+                            <input type="file" name="profile_photo" id="profile_photo" class="hidden" onchange="document.getElementById('profilePhotoForm').submit();">
+                            <input type="hidden" name="name" value="{{ Auth::user()->name }}">
+                            <input type="hidden" name="email" value="{{ Auth::user()->email }}">
+                        </div>
+                    </form>
+                    <h2 class="text-2xl font-bold text-gray-800 mt-4">{{ Auth::user()->name }}</h2>
                     <p class="text-gray-500 capitalize">{{ Auth::user()->role }}</p>
-                    {{-- Profile picture change functionality can be added later --}}
-                    <button
-                        class="mt-4 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg transition text-sm cursor-not-allowed" disabled>
-                        Change Profile Picture
-                    </button>
                 </div>
             </div>
 
-            <!-- Right Column: Forms -->
             <div class="lg:col-span-2 space-y-8">
-                <!-- Profile Information Form -->
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-                    <form id="profileForm" method="POST" action="{{ route('profile.update') }}">
+                    <form id="profileForm" method="POST" action="{{ route('admin.profile.update') }}">
                         @csrf
                         @method('PATCH')
                         <h3 class="text-xl font-bold text-gray-800 mb-4">Profile Information</h3>
@@ -84,9 +85,8 @@
                     </form>
                 </div>
 
-                <!-- Change Password Form -->
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-                     <form id="passwordForm" method="POST" action="{{ route('profile.password.update') }}">
+                     <form id="passwordForm" method="POST" action="{{ route('admin.profile.password.update') }}">
                         @csrf
                         @method('PATCH')
                         <h3 class="text-xl font-bold text-gray-800 mb-4">Change Password</h3>

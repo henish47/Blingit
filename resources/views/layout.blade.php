@@ -192,12 +192,6 @@
 
             <!-- Dynamic Navigation Based on Auth Status -->
             <div class="flex items-center gap-4">
-                <!-- AI Assistant Link -->
-                <a href="{{ url('/ai') }}" class="hidden md:flex items-center gap-2 text-green-700 hover:text-green-900 font-semibold transition-colors duration-200" title="AI Assistant">
-                    <i class="fa-solid fa-robot text-xl"></i>
-                    <span class="hidden lg:inline">Ask Gemini</span>
-                </a>
-
                 <!-- Cart Icon (Always Visible) -->
                 <a href="/cart" class="relative group text-green-700 hover:text-green-900 transition-colors duration-200">
                     <i class="fa fa-shopping-cart text-2xl"></i>
@@ -225,7 +219,7 @@
                         
                         <!-- User Dropdown Menu -->
                         <div class="user-dropdown">
-                            <a href="/profile" class="flex items-center gap-2">
+                            <a href="/edit_profile" class="flex items-center gap-2">
                                 <i class="fa fa-user"></i>
                                 My Profile
                             </a>
