@@ -9,18 +9,15 @@ class CategoryPageController extends Controller
 {
     /**
      * Show all products for a specific category.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Contracts\View\View
      */
     public function show(Category $category)
     {
-        // Eager load all products for the given category and paginate them
-        $products = $category->products()->latest()->paginate(15);
+        // *** MUKHYA SUDHARO AHIYA CHHE ***
+        // Category mathi products lavti vakhate, fakt 'Active' status vala products j shodho.
+        $products = $category->products()
+                             ->where('status', 'Active')
+                             ->paginate(15); // Ek page par 15 products batavo
 
-        return view('category-products', [
-            'category' => $category,
-            'products' => $products,
-        ]);
+        return view('category-products', compact('category', 'products'));
     }
 }
