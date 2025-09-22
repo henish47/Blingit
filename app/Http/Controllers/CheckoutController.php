@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
-    /**
-     * Display the checkout page.
-     */
     public function index()
     {
         $cartItems = CartItem::with('product')
@@ -126,9 +123,6 @@ class CheckoutController extends Controller
         return back()->with('success', 'Coupon applied successfully!');
     }
 
-    /**
-     * Remove the applied coupon.
-     */
     public function removeCoupon()
     {
         session()->forget('coupon');

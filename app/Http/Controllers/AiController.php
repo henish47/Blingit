@@ -18,7 +18,7 @@ class AIController extends Controller
         // 1. API Key ne sachi rite config mathi lavo
         $apiKey = config('services.gemini.key');
         if (!$apiKey) {
-            return response()->json(['error' => 'Gemini API key is not configured.'], 500);
+            return response()->json(['error' => 'Something went wrong'], 500);
         }
 
         // 2. Sacha ane latest model no upyog karo
@@ -34,7 +34,7 @@ class AIController extends Controller
 
             if ($response->failed()) {
                 return response()->json([
-                    'error'   => 'Gemini API error',
+                    'error'   => 'Something went wrong',
                     'details' => $response->json() ?? $response->body(),
                 ], $response->status());
             }
@@ -46,7 +46,7 @@ class AIController extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'error'   => 'Server error during API call.',
+                'error'   => 'Something went wrong',
                 'details' => $e->getMessage()
             ], 500);
         }

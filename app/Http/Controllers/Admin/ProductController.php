@@ -50,7 +50,7 @@ class ProductController extends Controller
             'stock'       => 'required|integer|min:0|max:9999',
             'description' => 'required|string|min:10',
             'status'      => 'required|in:Active,Inactive', // Status validation added
-            'img'         => 'required|image|mimes:jpeg,png,jpg,gif,svg,avif,webp|max:2048',
+            'img'         => 'required|image|mimes:jpeg,png,jpg,gif,svg,avif,webp|max:20480',
         ]);
         
         $dataToCreate = $validatedData;
