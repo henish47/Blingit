@@ -193,12 +193,18 @@
             <!-- Dynamic Navigation Based on Auth Status -->
             <div class="flex items-center gap-4">
                 <!-- Cart Icon (Always Visible) -->
-                <a href="/cart" class="relative group text-green-700 hover:text-green-900 transition-colors duration-200">
-                    <i class="fa fa-shopping-cart text-2xl"></i>
-                    <span class="bling-badge absolute -top-1 -right-2 text-xs px-2 py-0.5 rounded-full">
-                        3
-                    </span>
-                </a>
+              <a href="/cart" class="relative group text-green-700 hover:text-green-900 transition-colors duration-200">
+    <i class="fa fa-shopping-cart text-2xl"></i>
+    <span class="bling-badge absolute -top-1 -right-2 text-xs px-2 py-0.5 rounded-full">
+        @auth
+            {{ \App\Models\CartItem::where('user_id', Auth::id())->sum('quantity') }}
+        @else
+            {{ session('cart') ? collect(session('cart'))->sum('quantity') : 0 }}
+        @endauth
+    </span>
+</a>
+
+
 
                 @auth
                     <!-- Logged In User Menu -->

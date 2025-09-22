@@ -3,34 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class PlaceOrderController extends Controller
 {
+    /**
+     * Display the order confirmation page.
+     * It fetches the most recent order for the logged-in user.
+     */
     public function show()
     {
-        $order = (object) [
-            'id' => 1001,
-            'total' => 113,
-            'address' => '123 Main St',
-            'state' => 'Delhi',
-            'zip' => '110001',
-        ];
-        $items = [
-            [
-                'img' => 'https://www.bigbasket.com/media/uploads/p/l/1203470_2-amul-gold-homogenised-standardised-milk.jpg',
-                'name' => 'Amul Gold Full Cream Milk',
-                'qty' => 2,
-                'price' => 34,
-                'total' => 68,
-            ],
-            [
-                'img' => 'https://www.bigbasket.com/media/uploads/p/l/40075561_2-fresho-banana-robusta.jpg',
-                'name' => 'Banana Robusta',
-                'qty' => 1,
-                'price' => 45,
-                'total' => 45,
-            ],
-        ];
-        return view('place-order', compact('order', 'items'));
+        // User na chhella order ne teni items sathe fetch karo.
+        $order = Order::where('user_id', Auth::id())
+                      ->with('items.product') // Eager load items and their associated products
+                      ->latest() // Sauthi navo order pahela
+                      ->first();
+
+        // Jo koi order na male, to homepage par redirect karo.
+        if (!$order) {
+            return redirect()->route('home')->with('error', 'Could not find your recent order.');
+        }
+
+        return view('place-order', compact('order'));
     }
-} 
+}

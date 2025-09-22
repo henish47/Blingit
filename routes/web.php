@@ -11,7 +11,6 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PlaceOrderController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -124,9 +123,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/coupon', [CheckoutController::class, 'applyCoupon'])->name('coupon.apply');
     Route::post('/coupon/remove', [CheckoutController::class, 'removeCoupon'])->name('coupon.remove');
 
-    Route::get('/place-order', [PlaceOrderController::class, 'show'])->name('place-order');
+    // ✅ After placing order redirect here
+    Route::get('/place-order/{order}', [CheckoutController::class, 'thankYou'])->name('place.order');
+
+    // User orders page
     Route::get('/orders', [OrderController::class, 'userOrders'])->name('orders');
 });
+
+// ✅ Admin Routes
 Route::prefix('admin')
     ->middleware(['auth', 'verified', 'is.admin'])
     ->group(function () {

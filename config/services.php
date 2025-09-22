@@ -30,8 +30,15 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+
     'gemini' => [
-    'key' => env('GEMINI_API_KEY'),
-],
+        'key' => env('GEMINI_API_KEY'),
+    ],
+    
+    'razorpay' => [
+        'key_id'     => env('RAZORPAY_KEY_ID'),
+        'key_secret' => env('RAZORPAY_KEY_SECRET'),
+    ],
 
 ];
+

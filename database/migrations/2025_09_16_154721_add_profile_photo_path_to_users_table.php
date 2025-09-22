@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // 'email' column pachi profile picture no path save karva mate navi column.
-            $table->string('profile_photo_path', 2048)->nullable()->after('email');
+            // Check if the column does not exist before adding it
+            if (!Schema::hasColumn('users', 'profile_photo_path')) {
+                // 'email' column pachi profile picture no path save karva mate navi column.
+                $table->string('profile_photo_path', 2048)->nullable()->after('email');
+            }
         });
     }
 
@@ -23,8 +26,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // Jo migration ne revert karvi hoy to column ne kadhi nakhvani.
-            $table->dropColumn('profile_photo_path');
+            // Check if the column exists before dropping it
+            if (Schema::hasColumn('users', 'profile_photo_path')) {
+                $table->dropColumn('profile_photo_path');
+            }
         });
     }
 };
