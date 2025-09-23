@@ -30,7 +30,7 @@
                     </div>
                 @endif
 
-                <form id="contactForm" method="POST" action="{{ route('contact.send') }}" class="space-y-6">
+                <form id="contactForm" method="POST" action="{{ route('contact.send') }}" class="space-y-6" novalidate>
                     @csrf
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
@@ -115,3 +115,105 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const contactForm = document.getElementById('contactForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const subjectInput = document.getElementById('subject');
+    const messageInput = document.getElementById('message');
+
+    // Add novalidate to the form to disable default browser validation
+    contactForm.setAttribute('novalidate', true);
+
+    contactForm.addEventListener('submit', function (event) {
+        // Prevent form submission to validate first
+        event.preventDefault();
+        
+        // Clear all previous errors
+        clearAllErrors();
+
+        let isFormValid = true;
+
+        // --- Validation Rules ---
+
+        // 1. Name validation
+        if (nameInput.value.trim() === '') {
+            showError(nameInput, 'The name field is required.');
+            isFormValid = false;
+        }
+
+        // 2. Email validation
+        if (emailInput.value.trim() === '') {
+            showError(emailInput, 'The email field is required.');
+            isFormValid = false;
+        } else if (!isValidEmail(emailInput.value.trim())) {
+            showError(emailInput, 'Please enter a valid email address.');
+            isFormValid = false;
+        }
+
+        // 3. Subject validation
+        if (subjectInput.value.trim() === '') {
+            showError(subjectInput, 'The subject field is required.');
+            isFormValid = false;
+        }
+
+        // 4. Message validation
+        if (messageInput.value.trim() === '') {
+            showError(messageInput, 'The message field is required.');
+            isFormValid = false;
+        }
+
+        // If form is valid, submit it
+        if (isFormValid) {
+            contactForm.submit();
+        }
+    });
+
+    /**
+     * Displays an error message for a given input field.
+     * @param {HTMLElement} input - The input element with the error.
+     * @param {string} message - The error message to display.
+     */
+    function showError(input, message) {
+        // Add red border to the input
+        input.classList.add('border-red-500');
+        input.classList.remove('border-gray-300');
+
+        // Create and display error message
+        const errorElement = document.createElement('p');
+        errorElement.className = 'text-red-600 text-sm mt-1 js-error';
+        errorElement.textContent = message;
+        
+        // Insert the error message after the input element
+        input.parentNode.insertBefore(errorElement, input.nextSibling);
+    }
+
+    /**
+     * Clears all client-side validation errors from the form.
+     */
+    function clearAllErrors() {
+        const errorMessages = contactForm.querySelectorAll('.js-error');
+        errorMessages.forEach(error => error.remove());
+
+        const inputsWithErrors = contactForm.querySelectorAll('.border-red-500');
+        inputsWithErrors.forEach(input => {
+            input.classList.remove('border-red-500');
+            input.classList.add('border-gray-300');
+        });
+    }
+
+    /**
+     * Validates an email address format using a regular expression.
+     * @param {string} email - The email string to validate.
+     * @returns {boolean} - True if the email is valid, false otherwise.
+     */
+    function isValidEmail(email) {
+        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return regex.test(email);
+    }
+});
+</script>
+@endpush

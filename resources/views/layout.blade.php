@@ -244,8 +244,8 @@
                                     <div class="text-sm font-semibold text-green-800">
                                         {{ Auth::user()->name }}
                                     </div>
-                                    <div class="text-xs text-green-600 capitalize">
-                                        {{ Auth::user()->role }}
+                                    <div class="text-xs text-green-600 lowercase">
+                                        {{ Auth::user()->email }}
                                     </div>
                                 </div>
                                 <i class="fa fa-chevron-down text-green-600 text-sm"></i>
@@ -273,6 +273,7 @@
                         </div>
                     @endauth
 
+
                     @guest
                         <!-- Guest User Menu -->
                         <div class="flex items-center gap-3">
@@ -281,7 +282,7 @@
                                 Login
                             </a>
                             <a href="{{ route('register') }}"
-                                class="hidden md:inline-block px-5 py-2 rounded-full border-2 border-green-600 text-green-700 bg-white hover:bg-green-50 shadow-md transition-colors">
+                                class="hidden md:inline-block px-5 py-2 rounded-full border-2 border-green-600 text-green-700 bg-white hover:bg-green-50 shadow-md transition-colors bling-btn">
                                 Register
                             </a>
                         </div>

@@ -32,7 +32,7 @@
                         <a href="/" class="flex items-center gap-2 group mb-8">
                              <span class="text-3xl font-extrabold px-3 py-1 rounded-lg shadow-lg"
                                    style="font-family: 'Montserrat', 'Poppins', sans-serif; background-color: #FFFF00;">
-                                <span class="text-black">bling</span><span class="text-green-600">it</span>
+                                 <span class="text-black">bling</span><span class="text-green-600">it</span>
                             </span>
                         </a>
                         <h2 class="text-4xl font-extrabold text-gray-800 leading-tight">
@@ -78,7 +78,7 @@
                         <p class="text-gray-500 mt-1">Please create a new password for your account.</p>
                     </div>
 
-                    <form method="POST" action="{{ route('password.update') }}" class="space-y-5">
+                    <form id="resetPasswordForm" method="POST" action="{{ route('password.update') }}" class="space-y-5" novalidate>
                         @csrf
                         {{-- Hidden fields to pass the token and email --}}
                         <input type="hidden" name="token" value="{{ $token }}">
@@ -93,7 +93,7 @@
                                 <input type="password" id="password" name="password" class="w-full pl-10 pr-4 py-3 border @error('password') border-red-500 @else border-gray-300 @enderror rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" required>
                             </div>
                              @error('password')
-                                <span class="text-red-600 text-xs mt-1">{{ $message }}</span>
+                                 <span class="text-red-600 text-xs mt-1">{{ $message }}</span>
                             @enderror
                         </div>
 
@@ -117,5 +117,67 @@
             </div>
         </div>
     </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('resetPasswordForm');
+    const passwordInput = document.getElementById('password');
+    const passwordConfirmationInput = document.getElementById('password_confirmation');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        clearAllErrors();
+        let isValid = true;
+
+        // --- Validation Rules ---
+
+        // 1. Password Validation
+        const passwordValue = passwordInput.value;
+        if (passwordValue.trim() === '') {
+            showError(passwordInput, 'The new password field is required.');
+            isValid = false;
+        } else if (passwordValue.length < 8) {
+            showError(passwordInput, 'The password must be at least 8 characters long.');
+            isValid = false;
+        }
+
+        // 2. Password Confirmation Validation
+        const passwordConfirmationValue = passwordConfirmationInput.value;
+        if (passwordConfirmationValue.trim() === '') {
+            showError(passwordConfirmationInput, 'The password confirmation field is required.');
+            isValid = false;
+        } else if (passwordValue !== passwordConfirmationValue) {
+            showError(passwordConfirmationInput, 'The password confirmation does not match.');
+            isValid = false;
+        }
+
+        if (isValid) {
+            form.submit();
+        }
+    });
+
+    function showError(input, message) {
+        input.classList.add('border-red-500');
+        input.classList.remove('border-gray-300');
+        
+        const errorElement = document.createElement('span');
+        errorElement.className = 'text-red-600 text-xs mt-1 js-error';
+        errorElement.textContent = message;
+        
+        // Insert after the input's parent container div
+        input.parentElement.parentElement.appendChild(errorElement);
+    }
+
+    function clearAllErrors() {
+        const errorMessages = form.querySelectorAll('.js-error');
+        errorMessages.forEach(error => error.remove());
+
+        const inputsWithErrors = form.querySelectorAll('.border-red-500');
+        inputsWithErrors.forEach(input => {
+            input.classList.remove('border-red-500');
+            input.classList.add('border-gray-300');
+        });
+    }
+});
+</script>
 </body>
 </html>

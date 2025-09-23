@@ -4,18 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail; // <-- Mail facade ne import karyo
+use App\Mail\VerifyEmail;             // <-- Tamaro navo Mailable import karyo
 
 class RegisterController extends Controller
 {
-    // Show the registration form
+    /**
+     * Show the registration form.
+     */
     public function create()
     {
-        return view('register'); // adjust to 'auth.register' if file is inside 'auth' folder
+        return view('register');
     }
 
-    // Handle the registration
+    /**
+     * Handle a new registration.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -27,12 +32,19 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
+            'password' => Hash::make($validated['password']),
         ]);
 
-        event(new Registered($user)); // Sends email verification
-        Auth::login($user); // Auto-login
+        // *** MUKHYA SUDHARO AHIYA CHHE ***
+        // Have, default email ne badle tamaro custom verification email jase.
+        try {
+            Mail::to($user->email)->send(new VerifyEmail($user));
+        } catch (\Exception $e) {
+            // Jo email na jay to pan user ne aagal vadhva do, pan error ne log kari shakay
+        }
 
-        return redirect()->route('verification.notice');
+        // User ne login page par ek success message sathe redirect karo.
+        return redirect()->route('login')->with('status', 'Registration successful! Please check your email to verify your account.');
     }
 }
+

@@ -10,6 +10,7 @@
 <style>
     .profile-card { transition: all 0.3s ease; background-color: #fff; }
     .profile-input { transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; background-color: #fff; }
+    .profile-input.border-red-500 { border-color: #ef4444; } /* Ensure error border color is applied */
     .profile-input:hover { border-color: #22c55e; box-shadow: 0 0 8px rgba(34, 197, 94, 0.2); }
     .image-upload-container { position: relative; cursor: pointer; width: 128px; height: 128px; margin: 0 auto; transition: transform 0.3s ease; }
     .image-upload-container:hover { transform: scale(1.05); }
@@ -69,7 +70,7 @@
             </div>
 
             <div class="lg:col-span-2">
-                <form action="{{ route('profile.update') }}" method="POST" class="space-y-8 bg-white p-8 rounded-2xl shadow-lg">
+                <form id="profile-update-form" action="{{ route('profile.update') }}" method="POST" class="space-y-8 bg-white p-8 rounded-2xl shadow-lg" novalidate>
                     @csrf
                     @method('PATCH')
                     
@@ -81,11 +82,11 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                                <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input">
+                                <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input" required>
                             </div>
                             <div>
                                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                                <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input">
+                                <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input" required>
                             </div>
                         </div>
                     </div>
@@ -120,8 +121,11 @@
         </div>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <script>
+    // Handles previewing the new profile picture and submitting the form
     function previewImage(event) {
         const reader = new FileReader();
         reader.onload = function(){
@@ -132,6 +136,89 @@
         // Automatically submit the form when a new image is selected
         document.getElementById('profile-pic-form').submit();
     }
-</script>
 
-@endsection
+    // Handles client-side validation for the main profile form
+    document.addEventListener('DOMContentLoaded', function () {
+        const profileForm = document.getElementById('profile-update-form');
+        if (!profileForm) return;
+
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const passwordConfirmationInput = document.getElementById('password_confirmation');
+
+        profileForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            clearAllErrors();
+            let isFormValid = true;
+
+            // --- Validation Rules ---
+
+            // 1. Name validation: required, no numbers or special characters
+            const nameValue = nameInput.value.trim();
+            if (nameValue === '') {
+                showError(nameInput, 'The name field is required.');
+                isFormValid = false;
+            } else if (!/^[a-zA-Z\s.'-]+$/.test(nameValue)) {
+                showError(nameInput, 'The name may only contain letters and spaces.');
+                isFormValid = false;
+            }
+
+            // 2. Email validation: required, must be a valid email format
+            const emailValue = emailInput.value.trim();
+            if (emailValue === '') {
+                showError(emailInput, 'The email field is required.');
+                isFormValid = false;
+            } else if (!isValidEmail(emailValue)) {
+                showError(emailInput, 'Please enter a valid email address.');
+                isFormValid = false;
+            }
+
+            // 3. Password validation: only if user intends to change it
+            const passwordValue = passwordInput.value;
+            const passwordConfirmationValue = passwordConfirmationInput.value;
+
+            if (passwordValue !== '' || passwordConfirmationValue !== '') {
+                if (passwordValue.length < 8) {
+                    showError(passwordInput, 'The new password must be at least 8 characters long.');
+                    isFormValid = false;
+                }
+                if (passwordValue !== passwordConfirmationValue) {
+                    showError(passwordConfirmationInput, 'The password confirmation does not match.');
+                    isFormValid = false;
+                }
+            }
+
+            if (isFormValid) {
+                profileForm.submit();
+            }
+        });
+
+        function showError(input, message) {
+            input.classList.add('border-red-500');
+            input.classList.remove('border-gray-300');
+            const errorElement = document.createElement('p');
+            errorElement.className = 'text-red-600 text-sm mt-1 js-error';
+            errorElement.textContent = message;
+            // Insert error message in the parent div after the input
+            input.parentNode.appendChild(errorElement);
+        }
+
+        function clearAllErrors() {
+            const errorMessages = profileForm.querySelectorAll('.js-error');
+            errorMessages.forEach(error => error.remove());
+            const inputsWithErrors = profileForm.querySelectorAll('.border-red-500');
+            inputsWithErrors.forEach(input => {
+                input.classList.remove('border-red-500');
+                input.classList.add('border-gray-300');
+            });
+        }
+
+        function isValidEmail(email) {
+            const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            return regex.test(email);
+        }
+    });
+</script>
+@endpush
+

@@ -21,6 +21,7 @@
         .disabled-link {
             color: #9ca3af; /* gray-400 */
             pointer-events: none;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -92,13 +93,13 @@
                     @endif
                     @error('otp')
                          <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg" role="alert">
-                            {{ $message }}
-                        </div>
+                             {{ $message }}
+                         </div>
                     @enderror
 
-                    <form id="otp-form" method="POST" action="{{ route('password.otp.verify') }}" class="space-y-4">
+                    <form id="otp-form" method="POST" action="{{ route('password.otp.verify') }}" class="space-y-4" novalidate>
                         @csrf
-                        <input type="hidden" name="email" value="{{ session('email') }}">
+                        <input type="hidden" name="email" value="{{ request()->email ?? session('email') }}">
                         <input type="hidden" name="otp" id="otp-full">
 
                         <div>
@@ -127,7 +128,8 @@
                     
                     <div class="mt-6 text-center text-sm">
                         <p class="text-gray-600">Didn't receive the code? 
-                            <a href="{{ route('password.request') }}" class="font-semibold text-green-600 hover:underline">Request a new one</a>
+                            <a id="resend-otp-link" href="{{ route('password.request') }}" class="font-semibold text-green-600 hover:underline">Request a new one</a>
+                            <span id="resend-timer" class="text-gray-500 ml-1"></span>
                         </p>
                     </div>
                 </div>
@@ -141,10 +143,13 @@
             const otpInputs = document.querySelectorAll('.otp-input');
             const otpFullInput = document.getElementById('otp-full');
             const otpError = document.getElementById('otp-error');
+            const resendLink = document.getElementById('resend-otp-link');
+            const resendTimerSpan = document.getElementById('resend-timer');
 
-            // --- OTP Input Handling (Auto-focus and Backspace) ---
+            // --- OTP Input Handling (Auto-focus, Backspace, Paste) ---
             otpInputs.forEach((input, index) => {
                 input.addEventListener('input', (e) => {
+                    // Only allow numeric input
                     e.target.value = e.target.value.replace(/[^0-9]/g, '');
                     
                     if (input.value.length === 1 && index < otpInputs.length - 1) {
@@ -159,21 +164,34 @@
                     }
                 });
             });
+
+            // Handle pasting OTP
+            otpInputs[0].addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim();
+                if (/^\d{6}$/.test(pasteData)) {
+                    pasteData.split('').forEach((char, index) => {
+                        otpInputs[index].value = char;
+                    });
+                    updateFullOtp();
+                    otpInputs[5].focus();
+                }
+            });
             
             function updateFullOtp() {
                 let otpValue = Array.from(otpInputs).map(input => input.value).join('');
                 otpFullInput.value = otpValue;
             }
 
-            // --- Form Submission ---
+            // --- Form Submission Validation ---
             otpForm.addEventListener('submit', function(e) {
                 updateFullOtp(); // Ensure the hidden field is up-to-date
+                clearError();
                 
                 if (otpFullInput.value.length !== 6) {
                     e.preventDefault(); // Stop submission if OTP is incomplete
                     showError('Please enter the complete 6-digit OTP.');
                 }
-                // The form will now submit normally to the backend if validation passes.
             });
 
             function showError(message) {
@@ -183,6 +201,36 @@
                     input.classList.remove('border-gray-300');
                 });
             }
+
+            function clearError() {
+                otpError.textContent = '';
+                otpInputs.forEach(input => {
+                    input.classList.remove('border-red-500');
+                    input.classList.add('border-gray-300');
+                });
+            }
+
+            // --- Resend OTP Timer ---
+            let timerInterval;
+            function startResendTimer(duration = 59) {
+                let timer = duration;
+                resendLink.classList.add('disabled-link');
+                
+                timerInterval = setInterval(() => {
+                    resendTimerSpan.textContent = `(in ${timer}s)`;
+                    if (--timer < 0) {
+                        clearInterval(timerInterval);
+                        resendLink.classList.remove('disabled-link');
+                        resendLink.textContent = 'Request a new one';
+                        resendTimerSpan.textContent = '';
+                    }
+                }, 1000);
+
+                resendLink.textContent = 'Resending...';
+            }
+            
+            // Start the timer on page load
+            startResendTimer();
         });
     </script>
 </body>

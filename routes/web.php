@@ -28,54 +28,42 @@ use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\AiController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\Auth\VerifyEmailController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application.
-|
 */
 
-// ✅ Public Routes
+// ------------------------
+// Public Routes
+// ------------------------
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/category/{category:name}', [CategoryPageController::class, 'show'])->name('category.products');
 Route::get('/product/{product:sku}', [ProductPageController::class, 'show'])->name('product.show');
+
 Route::view('/milk', 'milk')->name('milk');
 Route::view('/vegetables', 'vegetables')->name('vegetables');
 Route::view('/fruits', 'fruits')->name('fruits');
 Route::view('/electronics', 'electronics')->name('electronics');
 Route::view('/personal-products', 'personal-products')->name('personal-products');
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 Route::view('/about', 'about')->name('about');
 
-Route::get('/ai', function () {
-    return view('ai'); // ai.blade.php load karse
-});
+Route::get('/contact', fn() => view('contact'))->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
+Route::get('/ai', fn() => view('ai'));
 Route::post('/ai-suggest', [AiController::class, 'suggest'])->name('ai.suggest');
 
-// ✅ Authentication Routes
+// ------------------------
+// Authentication Routes
+// ------------------------
 Route::get('/register', [RegisterController::class, 'create'])->name('register');
 Route::post('/register', [RegisterController::class, 'store']);
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-
-// Forgot Password & OTP Routes
-Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('forgot-password', [ForgotPasswordController::class, 'sendOtp'])->name('password.email');
-
-// OTP Verification Route
-Route::get('otp-verify', [ResetPasswordController::class, 'showOtpForm'])->name('password.otp.form');
-Route::post('otp-verify', [ResetPasswordController::class, 'verifyOtp'])->name('password.otp.verify');
-
-// Password Reset Routes
-Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
 
 Route::post('/logout', function (Request $request) {
     Auth::logout();
@@ -84,80 +72,99 @@ Route::post('/logout', function (Request $request) {
     return redirect('/');
 })->name('logout');
 
-// ✅ Email Verification Routes
-Route::get('/email/verify', function () {
-    return view('email.verify', ['user' => Auth::user()]);
-})->middleware('auth')->name('verification.notice');
+// ------------------------
+// Password Reset & OTP
+// ------------------------
+Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendOtp'])->name('password.email');
 
-// Email verification link click
+Route::get('otp-verify', [ResetPasswordController::class, 'showOtpForm'])->name('password.otp.form');
+Route::post('otp-verify', [ResetPasswordController::class, 'verifyOtp'])->name('password.otp.verify');
+
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
+
+// ------------------------
+// Email Verification
+// ------------------------
+Route::middleware('auth')->group(function () {
+    // Notice
+    Route::get('/email/verify', function () {
+        return view('email.verify', ['user' => Auth::user()]);
+    })->name('verification.notice');
+
+    // Resend verification
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('message', '📧 Verification link sent!');
+    })->middleware('throttle:6,1')->name('verification.send');
+});
+
+// Verification link
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill(); // Mark email as verified
-    return redirect()->route('login')->with('status', 'Email verified successfully. You can now login.');
+    $request->fulfill();
+    return redirect()->route('login')->with('status', '✅ Email verified successfully. You can now login.');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-// Resend verification email
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('message', 'Verification link sent!');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
-// ✅ Verified & Authenticated User Routes
+Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
+    ->name('verification.verify')
+    ->middleware('signed'); // remove 'auth' so it works even if logged out
+    
+// ------------------------
+// Authenticated & Verified User Routes
+// ------------------------
 Route::middleware(['auth', 'verified'])->group(function () {
+
     Route::view('/dashboard', 'dashboard')->name('dashboard');
 
-    // User Profile Routes
+    // Profile
     Route::get('/edit_profile', [UserProfileController::class, 'show'])->name('edit_profile');
     Route::patch('/edit_profile', [UserProfileController::class, 'update'])->name('profile.update');
 
-    // Cart Routes
+    // Cart
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 
-    // Checkout Routes
+    // Checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.place.order');
-
-    // Coupon Routes
     Route::post('/coupon', [CheckoutController::class, 'applyCoupon'])->name('coupon.apply');
     Route::post('/coupon/remove', [CheckoutController::class, 'removeCoupon'])->name('coupon.remove');
 
-    // ✅ After placing order redirect here
+    // Orders
     Route::get('/place-order/{order}', [CheckoutController::class, 'thankYou'])->name('place.order');
-
-    // User orders page
     Route::get('/orders', [OrderController::class, 'userOrders'])->name('orders');
 });
 
-// ✅ Admin Routes
-Route::prefix('admin')
-    ->middleware(['auth', 'verified', 'is.admin'])
-    ->group(function () {
+// ------------------------
+// Admin Routes
+// ------------------------
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'is.admin'])->group(function () {
 
-        // Admin-only with admin. prefix
-        Route::as('admin.')->group(function () {
-            Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
-            Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
+    Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
 
-            // Profile
-            Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-            Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-            Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    // Profile
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
-            // Contact
-            Route::get('/contact', [ContactMessageController::class, 'index'])->name('contact');
-            Route::delete('/contact/{message}', [ContactMessageController::class, 'destroy'])->name('contact.destroy');
-        });
+    // Contact Messages
+    Route::get('/contact', [ContactMessageController::class, 'index'])->name('contact');
+    Route::delete('/contact/{message}', [ContactMessageController::class, 'destroy'])->name('contact.destroy');
 
-        // 🚨 Notifications without admin. prefix
-        Route::get('/notifications', [NotificationController::class, 'create'])->name('notifications.create');
-        Route::post('/notifications', [NotificationController::class, 'send'])->name('notifications.send');
+    // Notifications
+    Route::get('/notifications', [NotificationController::class, 'create'])->name('notifications.create');
+    Route::post('/notifications', [NotificationController::class, 'send'])->name('notifications.send');
 
-        // Resources
-        Route::resource('products', ProductController::class);
-        Route::resource('categories', CategoryController::class);
-        Route::resource('users', UserController::class);
-        Route::resource('coupons', CouponController::class);
-        Route::resource('banners', BannerController::class);
-    });
+    // Resources
+    Route::resources([
+        'products' => ProductController::class,
+        'categories' => CategoryController::class,
+        'users' => UserController::class,
+        'coupons' => CouponController::class,
+        'banners' => BannerController::class,
+    ]);
+});

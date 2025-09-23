@@ -74,7 +74,7 @@
                     <!-- Name -->
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                        <input type="text" id="name" name="name" value="{{ old('name') }}" class="w-full px-4 py-3 border @error('name') border-red-500 @else border-gray-300 @enderror rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500" placeholder="John Doe" required>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}" class="w-full px-4 py-3 border @error('name') border-red-500 @else border-gray-300 @enderror rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500" placeholder="Enter Your Name" required>
                         @error('name')<span class="text-red-600 text-xs mt-1">{{ $message }}</span>@enderror
                     </div>
 
