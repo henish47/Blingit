@@ -139,88 +139,94 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const reviewForm = document.getElementById('review-form');
-    if (reviewForm) {
-        const starsContainer = document.getElementById('star-rating');
-        const stars = starsContainer.querySelectorAll('.star');
-        const starError = document.getElementById('star-rating-error');
-        const textarea = document.getElementById('review-textarea');
-        const textareaError = document.getElementById('review-textarea-error');
-        let currentRating = 0;
+    if (!reviewForm) return;
 
-        stars.forEach(star => {
-            star.addEventListener('mouseenter', () => {
-                if (currentRating === 0) {
-                    highlightStars(star.dataset.value);
-                }
-            });
+    const stars = document.querySelectorAll('#star-rating .star');
+    const starError = document.getElementById('star-rating-error');
+    const textarea = document.getElementById('review-textarea');
+    const textareaError = document.getElementById('review-textarea-error');
 
-            star.addEventListener('mouseleave', () => {
-                if (currentRating === 0) {
-                    highlightStars(0);
-                } else {
-                    highlightStars(currentRating);
-                }
-            });
+    let currentRating = 0;
+    let isHovering = false;
+    let hoverRating = 0;
 
-            star.addEventListener('click', () => {
-                currentRating = star.dataset.value;
-                highlightStars(currentRating);
-                validateStars();
-            });
+    stars.forEach(star => {
+        const value = parseInt(star.dataset.value);
+
+        // Hover effect
+        star.addEventListener('mouseenter', () => {
+            isHovering = true;
+            hoverRating = value;
+            fillStars(hoverRating);
         });
 
-        function highlightStars(rating) {
-            stars.forEach(star => {
-                if (star.dataset.value <= rating) {
-                    star.classList.remove('text-gray-300');
-                    star.classList.add('text-yellow-400');
-                } else {
-                    star.classList.remove('text-yellow-400');
-                    star.classList.add('text-gray-300');
-                }
-            });
-        }
+        star.addEventListener('mouseleave', () => {
+            isHovering = false;
+            fillStars(currentRating);
+        });
 
-        function validateStars() {
-            if (currentRating === 0) {
-                starError.textContent = 'Please select a rating.';
-                return false;
+        // Click to set rating
+        star.addEventListener('click', () => {
+            currentRating = value;
+            fillStars(currentRating);
+            validateStars();
+        });
+    });
+
+    function fillStars(rating) {
+        stars.forEach(star => {
+            const starValue = parseInt(star.dataset.value);
+            if (starValue <= rating) {
+                star.classList.add('text-yellow-400');
+                star.classList.remove('text-gray-300');
+            } else {
+                star.classList.add('text-gray-300');
+                star.classList.remove('text-yellow-400');
             }
+        });
+    }
+
+    function validateStars() {
+        if (currentRating === 0) {
+            starError.textContent = 'Please select a rating.';
+            return false;
+        } else {
             starError.textContent = '';
             return true;
         }
+    }
 
-        function validateTextarea() {
-            if (textarea.value.trim() === '') {
-                textareaError.textContent = 'Please share your feedback in the text box.';
-                textarea.classList.add('border-red-500');
-                return false;
-            }
+    function validateTextarea() {
+        if (textarea.value.trim() === '') {
+            textareaError.textContent = 'Please share your feedback.';
+            textarea.classList.add('border-red-500');
+            return false;
+        } else {
             textareaError.textContent = '';
             textarea.classList.remove('border-red-500');
             return true;
         }
-
-        textarea.addEventListener('input', validateTextarea);
-
-        reviewForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const isStarsValid = validateStars();
-            const isTextareaValid = validateTextarea();
-
-            if (isStarsValid && isTextareaValid) {
-                console.log('Review Submitted:', { rating: currentRating, feedback: textarea.value });
-                alert('Thank you for your feedback!');
-                reviewForm.reset();
-                currentRating = 0;
-                highlightStars(0);
-            } else {
-                console.log('Review form is invalid.');
-            }
-        });
     }
+
+    textarea.addEventListener('input', validateTextarea);
+
+    reviewForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const starsValid = validateStars();
+        const textValid = validateTextarea();
+
+        if (starsValid && textValid) {
+            console.log('Review Submitted:', { rating: currentRating, feedback: textarea.value });
+            alert('Thank you for your feedback!');
+            reviewForm.reset();
+            currentRating = 0;
+            fillStars(0);
+        }
+    });
+
+    // Initialize stars
+    fillStars(0);
 });
 </script>
 @endpush
-

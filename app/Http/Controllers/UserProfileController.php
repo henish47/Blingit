@@ -16,7 +16,6 @@ class UserProfileController extends Controller
      */
     public function show()
     {
-        // Fetch the currently authenticated user and pass it to the view.
         return view('edit_profile', [
             'user' => Auth::user(),
         ]);
@@ -29,44 +28,51 @@ class UserProfileController extends Controller
     {
         $user = Auth::user();
 
-        // *** MUKHYA SUDHARO AHIYA CHHE ***
-        // Have, controller fakt e j fields ne check ane update karshe je form sathe aavya chhe.
-        $rules = [];
+        // Validation rules
+        $rules = [
+            'name'  => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s.\'-]+$/'], // No numbers or special chars
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+        ];
 
-        if ($request->has('name')) {
-            $rules['name'] = ['required', 'string', 'max:255'];
-        }
-        if ($request->has('email')) {
-            $rules['email'] = ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)];
-        }
+        // If changing password
         if ($request->filled('password')) {
+            $rules['old_password'] = ['required'];
             $rules['password'] = ['required', 'string', Password::min(8)->mixedCase()->numbers()->symbols(), 'confirmed'];
         }
+
+        // If updating profile photo
         if ($request->hasFile('profile_photo')) {
-            $rules['profile_photo'] = ['required', 'image', 'max:2048'];
+            $rules['profile_photo'] = ['required', 'image', 'max:2048']; // Max 2MB
         }
 
         $validated = $request->validate($rules);
-        
-        // Fakt validated data ne j update karvano.
-        $user->fill($validated);
 
-        // Password ne alag thi handle karvano.
+        // Update name and email
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+
+        // Handle password update
         if ($request->filled('password')) {
+            if (! Hash::check($validated['old_password'], $user->password)) {
+                return back()->withErrors([
+                    'old_password' => '❌ The current password does not match our records.'
+                ])->withInput();
+            }
+
             $user->password = Hash::make($validated['password']);
         }
 
-        // Profile photo ne alag thi handle karvano.
+        // Handle profile photo upload
         if ($request->hasFile('profile_photo')) {
             if ($user->profile_photo_path) {
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
+
             $user->profile_photo_path = $request->file('profile_photo')->store('profile-photos', 'public');
         }
 
         $user->save();
 
-        return redirect()->route('edit_profile')->with('success', 'Profile updated successfully!');
+        return redirect()->route('edit_profile')->with('success', '✅ Profile updated successfully!');
     }
 }
-
