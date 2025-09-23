@@ -4,6 +4,51 @@
 
 @section('content')
 
+<style>
+    /* Custom CSS for enhanced UI and animations */
+    .review-card, .review-success {
+        transition: all 0.5s ease-in-out;
+    }
+    .star-rating {
+        display: inline-flex;
+        flex-direction: row-reverse; /* Stars ne ulta क्रम ma muko */
+        font-size: 2.5rem;
+        justify-content: center;
+    }
+    .star-rating input { display: none; }
+    .star-rating label {
+        color: #d1d5db; /* Gray color for empty stars */
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .star-rating input:checked ~ label,
+    .star-rating:not(:checked) > label:hover,
+    .star-rating:not(:checked) > label:hover ~ label {
+        color: #f59e0b; /* Yellow color for selected/hovered stars */
+    }
+    .animate-check {
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+        animation: draw-check 1s ease-in-out forwards;
+    }
+    @keyframes draw-check {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+    .fade-in-up {
+        animation: fade-in-up 0.6s ease-in-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    @keyframes fade-in-up {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
 <div class="bg-gray-100 min-h-screen font-sans flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="relative w-full max-w-5xl bg-white rounded-3xl shadow-2xl border border-gray-200 p-6 sm:p-10 z-10 mx-auto overflow-hidden">
         
@@ -14,28 +59,27 @@
                 <div class="flex flex-col items-center text-center mb-8">
                     <div class="bg-green-100 p-4 rounded-full mb-5 ring-4 ring-green-50">
                         <div class="bg-green-200 p-3 rounded-full">
-                            <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path class="animate-check" stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
                     </div>
-                    <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Thank You for Your Order!</h1>
-                    <p class="text-gray-600 text-base md:text-lg max-w-2xl">{{ session('success') }}</p>
-                    <p class="mt-4 text-lg font-bold text-gray-500">Order ID: <span class="text-green-600">#BLINGIT-{{ $order->id }}</span></p>
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2 fade-in-up" style="animation-delay: 0.2s;">Thank You for Your Order!</h1>
+                    <p class="text-gray-600 text-base md:text-lg max-w-2xl fade-in-up" style="animation-delay: 0.4s;">{{ session('success') }}</p>
+                    <p class="mt-4 text-lg font-bold text-gray-500 fade-in-up" style="animation-delay: 0.6s;">Order ID: <span class="text-green-600">#BLINGIT-{{ $order->id }}</span></p>
                 </div>
 
                 <!-- Grid Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
                     
                     <!-- Left Column: Order Summary -->
-                    <div class="lg:col-span-3">
+                    <div class="lg:col-span-3 fade-in-up" style="animation-delay: 0.8s;">
                         <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
                             Order Summary
                         </h2>
                         <div class="space-y-4">
                             @forelse($order->items as $item)
-                            <!-- Product Card -->
                             <div class="bg-gray-50 rounded-2xl p-4 shadow-sm border border-gray-200">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-4">
@@ -59,7 +103,7 @@
                     </div>
 
                     <!-- Right Column: Address, Payment -->
-                    <div class="lg:col-span-2 space-y-8">
+                    <div class="lg:col-span-2 space-y-8 fade-in-up" style="animation-delay: 1s;">
                         <div>
                             <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -89,7 +133,7 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4 mt-12 border-t border-gray-200 pt-8">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12 border-t border-gray-200 pt-8">
                     <a href="{{ route('home') }}" class="flex-1 bg-green-600 hover:bg-green-700 text-white text-center py-3 px-6 text-base font-bold rounded-xl transition shadow-lg hover:shadow-green-500/30 hover:-translate-y-1 transform duration-300 ease-in-out flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                         <span>Continue Shopping</span>
@@ -98,6 +142,10 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                         <span>View My Orders</span>
                     </a>
+                    <a href="{{ route('orders.invoice', $order) }}" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3 px-6 text-base font-bold rounded-xl transition shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1 transform duration-300 ease-in-out flex items-center justify-center gap-2" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        <span>Download Invoice</span>
+                    </a>
                 </div>
 
                 <!-- Website Review Section -->
@@ -105,19 +153,40 @@
                     <div>
                         <h2 class="text-2xl font-bold text-gray-800 mb-2 text-center">How was your experience?</h2>
                         <p class="text-gray-500 text-center mb-6">Your feedback helps us improve our service.</p>
-                        <form id="review-form" class="bg-gray-50 rounded-2xl p-6 space-y-4 shadow-sm border border-gray-200 max-w-2xl mx-auto" novalidate>
-                             <div id="star-rating" class="flex justify-center gap-2 text-gray-300 text-4xl">
-                                 <svg data-value="1" class="star w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                 <svg data-value="2" class="star w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                 <svg data-value="3" class="star w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                 <svg data-value="4" class="star w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                 <svg data-value="5" class="star w-10 h-10 cursor-pointer transition-colors hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                             </div>
-                             <p id="star-rating-error" class="text-red-600 text-xs text-center h-4"></p>
-                             <textarea id="review-textarea" rows="3" placeholder="Tell us more..." class="w-full rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition"></textarea>
-                             <p id="review-textarea-error" class="text-red-600 text-xs h-4"></p>
-                             <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-semibold shadow-sm transition-transform hover:-translate-y-0.5 text-base">Submit Feedback</button>
+                        
+                        <form id="review-form" class="bg-gray-50 rounded-2xl p-6 space-y-4 shadow-sm border border-gray-200 max-w-2xl mx-auto review-card" novalidate>
+                            <div class="text-center">
+                                <div class="star-rating inline-block">
+                                    <input type="radio" id="star5" name="rating" value="5"><label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
+                                    <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
+                                    <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
+                                    <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
+                                    <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="1 star"><i class="fas fa-star"></i></label>
+                                </div>
+                                <p id="star-rating-error" class="text-red-600 text-xs text-center h-4 mt-2"></p>
+                                <p id="rating-description" class="text-gray-600 text-sm mt-2 h-6 transition-all duration-300"></p>
+                            </div>
+                            
+                            <div>
+                                <textarea id="review-textarea" rows="3" placeholder="Tell us more about your experience..." class="w-full rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition"></textarea>
+                                <p id="review-textarea-error" class="text-red-600 text-xs h-4 mt-1"></p>
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>Minimum 10 characters required</span>
+                                    <span id="char-count">0/500</span>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-semibold shadow-sm transition-transform hover:-translate-y-0.5 text-base">
+                                <span id="submit-text">Submit Feedback</span>
+                                <div id="submit-spinner" class="hidden"><i class="fas fa-spinner fa-spin"></i> Submitting...</div>
+                            </button>
                         </form>
+                        
+                        <div id="review-success" class="hidden mt-6 bg-green-500 border border-green-600 rounded-2xl p-6 text-center max-w-2xl mx-auto review-success text-white">
+                            <div class="flex justify-center mb-4"><i class="fas fa-check-circle text-4xl"></i></div>
+                            <h3 class="text-xl font-bold mb-2">Thank You!</h3>
+                            <p>Your feedback has been submitted successfully.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -135,98 +204,71 @@
 </div>
 @endsection
 
-@push('scripts')
+@push('script')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const reviewForm = document.getElementById('review-form');
-    if (!reviewForm) return;
+    if (reviewForm) {
+        const ratingInputs = document.querySelectorAll('input[name="rating"]');
+        const ratingDescription = document.getElementById('rating-description');
+        const starError = document.getElementById('star-rating-error');
+        const textarea = document.getElementById('review-textarea');
+        const textareaError = document.getElementById('review-textarea-error');
+        const charCount = document.getElementById('char-count');
+        const submitText = document.getElementById('submit-text');
+        const submitSpinner = document.getElementById('submit-spinner');
+        const reviewSuccess = document.getElementById('review-success');
 
-    const stars = document.querySelectorAll('#star-rating .star');
-    const starError = document.getElementById('star-rating-error');
-    const textarea = document.getElementById('review-textarea');
-    const textareaError = document.getElementById('review-textarea-error');
+        const ratingDescriptions = {
+            1: "Poor", 2: "Fair", 3: "Good", 4: "Very Good", 5: "Excellent!"
+        };
 
-    let currentRating = 0;
-    let isHovering = false;
-    let hoverRating = 0;
-
-    stars.forEach(star => {
-        const value = parseInt(star.dataset.value);
-
-        // Hover effect
-        star.addEventListener('mouseenter', () => {
-            isHovering = true;
-            hoverRating = value;
-            fillStars(hoverRating);
+        ratingInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                ratingDescription.textContent = ratingDescriptions[this.value];
+                validateStars();
+            });
         });
 
-        star.addEventListener('mouseleave', () => {
-            isHovering = false;
-            fillStars(currentRating);
+        textarea.addEventListener('input', function() {
+            charCount.textContent = `${this.value.length}/500`;
+            validateTextarea();
         });
 
-        // Click to set rating
-        star.addEventListener('click', () => {
-            currentRating = value;
-            fillStars(currentRating);
-            validateStars();
-        });
-    });
+        function validateStars() {
+            const selected = document.querySelector('input[name="rating"]:checked');
+            starError.textContent = selected ? '' : 'Please select a rating.';
+            return !!selected;
+        }
 
-    function fillStars(rating) {
-        stars.forEach(star => {
-            const starValue = parseInt(star.dataset.value);
-            if (starValue <= rating) {
-                star.classList.add('text-yellow-400');
-                star.classList.remove('text-gray-300');
-            } else {
-                star.classList.add('text-gray-300');
-                star.classList.remove('text-yellow-400');
+        function validateTextarea() {
+            const val = textarea.value.trim();
+            if (val.length < 10) {
+                textareaError.textContent = 'Please provide at least 10 characters.';
+                return false;
+            }
+            if (val.length > 500) {
+                textareaError.textContent = 'Review cannot exceed 500 characters.';
+                return false;
+            }
+            textareaError.textContent = '';
+            return true;
+        }
+
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateStars() && validateTextarea()) {
+                submitText.classList.add('hidden');
+                submitSpinner.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    reviewForm.style.display = 'none';
+                    reviewSuccess.style.display = 'block';
+                }, 1500);
             }
         });
     }
-
-    function validateStars() {
-        if (currentRating === 0) {
-            starError.textContent = 'Please select a rating.';
-            return false;
-        } else {
-            starError.textContent = '';
-            return true;
-        }
-    }
-
-    function validateTextarea() {
-        if (textarea.value.trim() === '') {
-            textareaError.textContent = 'Please share your feedback.';
-            textarea.classList.add('border-red-500');
-            return false;
-        } else {
-            textareaError.textContent = '';
-            textarea.classList.remove('border-red-500');
-            return true;
-        }
-    }
-
-    textarea.addEventListener('input', validateTextarea);
-
-    reviewForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const starsValid = validateStars();
-        const textValid = validateTextarea();
-
-        if (starsValid && textValid) {
-            console.log('Review Submitted:', { rating: currentRating, feedback: textarea.value });
-            alert('Thank you for your feedback!');
-            reviewForm.reset();
-            currentRating = 0;
-            fillStars(0);
-        }
-    });
-
-    // Initialize stars
-    fillStars(0);
 });
 </script>
 @endpush
+

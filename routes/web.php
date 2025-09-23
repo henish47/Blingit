@@ -29,6 +29,8 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\AiController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\InvoiceController; // <-- InvoiceController ne import karyo
+
 
 /*
 |--------------------------------------------------------------------------
@@ -136,6 +138,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Orders
     Route::get('/place-order/{order}', [CheckoutController::class, 'thankYou'])->name('place.order');
     Route::get('/orders', [OrderController::class, 'userOrders'])->name('orders');
+
+    Route::get('/orders/{order}/invoice', [InvoiceController::class, 'generate'])->name('orders.invoice');
 });
 
 // ------------------------
