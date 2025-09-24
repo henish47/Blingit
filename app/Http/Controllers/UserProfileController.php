@@ -22,7 +22,7 @@ class UserProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
+     * Update the user's profile information (AJAX supported).
      */
     public function update(Request $request)
     {
@@ -30,49 +30,83 @@ class UserProfileController extends Controller
 
         // Validation rules
         $rules = [
-            'name'  => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s.\'-]+$/'], // No numbers or special chars
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'name'  => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-zA-Z\s.\'-]+$/'
+            ],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'profile_photo' => [
+                'nullable', 'image', 'max:2048' // Max 2MB
+            ],
         ];
 
         // If changing password
         if ($request->filled('password')) {
             $rules['old_password'] = ['required'];
-            $rules['password'] = ['required', 'string', Password::min(8)->mixedCase()->numbers()->symbols(), 'confirmed'];
-        }
-
-        // If updating profile photo
-        if ($request->hasFile('profile_photo')) {
-            $rules['profile_photo'] = ['required', 'image', 'max:2048']; // Max 2MB
+            $rules['password'] = [
+                'required',
+                'string',
+                Password::min(8)->mixedCase()->numbers()->symbols(),
+                'confirmed'
+            ];
         }
 
         $validated = $request->validate($rules);
+
+        // Handle password update
+        if ($request->filled('password')) {
+            if (! Hash::check($validated['old_password'], $user->password)) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'The current password does not match our records.'
+                    ], 422);
+                }
+                return back()->withErrors([
+                    'old_password' => 'The current password does not match our records.'
+                ])->withInput();
+            }
+            $user->password = Hash::make($validated['password']);
+        }
 
         // Update name and email
         $user->name = $validated['name'];
         $user->email = $validated['email'];
 
-        // Handle password update
-        if ($request->filled('password')) {
-            if (! Hash::check($validated['old_password'], $user->password)) {
-                return back()->withErrors([
-                    'old_password' => '❌ The current password does not match our records.'
-                ])->withInput();
-            }
-
-            $user->password = Hash::make($validated['password']);
-        }
-
         // Handle profile photo upload
         if ($request->hasFile('profile_photo')) {
+            // Delete old photo if exists
             if ($user->profile_photo_path) {
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
-
+            // Save new photo
             $user->profile_photo_path = $request->file('profile_photo')->store('profile-photos', 'public');
         }
 
         $user->save();
 
-        return redirect()->route('edit_profile')->with('success', '✅ Profile updated successfully!');
+        // AJAX response
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Profile updated successfully!',
+                'user' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'profile_photo_url' => $user->profile_photo_path ? asset('storage/'.$user->profile_photo_path) : $user->profile_photo_url,
+                ]
+            ]);
+        }
+
+        // Fallback for non-AJAX
+        return redirect()->route('edit_profile')->with('success', 'Profile updated successfully!');
     }
 }

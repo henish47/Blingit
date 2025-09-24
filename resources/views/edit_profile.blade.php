@@ -12,22 +12,17 @@
             transition: all 0.3s ease;
             background-color: #fff;
         }
-
         .profile-input {
             transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             background-color: #fff;
         }
-
         .profile-input.border-red-500 {
             border-color: #ef4444;
         }
-
-        /* Ensure error border color is applied */
         .profile-input:hover {
             border-color: #22c55e;
             box-shadow: 0 0 8px rgba(34, 197, 94, 0.2);
         }
-
         .image-upload-container {
             position: relative;
             cursor: pointer;
@@ -36,11 +31,9 @@
             margin: 0 auto;
             transition: transform 0.3s ease;
         }
-
         .image-upload-container:hover {
             transform: scale(1.05);
         }
-
         .image-upload-container img {
             width: 100%;
             height: 100%;
@@ -49,7 +42,6 @@
             border: 4px solid #fff;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
         .upload-icon {
             position: absolute;
             bottom: 5px;
@@ -67,22 +59,18 @@
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease;
         }
-
         .upload-icon:hover {
             background-color: #16a34a;
             transform: scale(1.1);
         }
-
         .btn-custom:hover {
             opacity: 0.9;
         }
-
         .profile-input:focus {
             outline: none;
             border-color: #22c55e;
             box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
         }
-
         .section-header {
             display: flex;
             align-items: center;
@@ -97,55 +85,39 @@
                 <p class="text-gray-500">Keep your personal information up to date.</p>
             </div>
 
-            <!-- Session Messages -->
-            @if (session('success'))
-                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg" role="alert">
-                    <p class="font-bold">Success!</p>
-                    <p>{{ session('success') }}</p>
-                </div>
-            @endif
-
-            @if ($errors->any())
-                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg" role="alert">
-                    <p class="font-bold">Please fix the following errors:</p>
-                    <ul class="list-disc list-inside">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
+            <!-- Flash Messages -->
+            <div id="ajax-message" class="hidden mb-6 p-4 rounded-lg"></div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left Sidebar -->
                 <div class="lg:col-span-1">
                     <div class="bg-white p-6 rounded-2xl shadow-lg text-center profile-card">
-                        <form id="profile-pic-form" action="{{ route('profile.update') }}" method="POST"
-                            enctype="multipart/form-data">
-                            @csrf
-                            @method('PATCH')
-                            <div class="image-upload-container mx-auto mb-4"
-                                onclick="document.getElementById('profile-pic-upload').click()">
-                                <img id="profile-pic-preview" src="{{ $user->profile_photo_url }}" alt="Profile Picture">
-                                <div class="upload-icon">
-                                    <i class="fas fa-camera"></i>
-                                </div>
-                                <input type="file" name="profile_photo" id="profile-pic-upload" class="hidden"
-                                    accept="image/*" onchange="previewImage(event)">
+                        <div class="image-upload-container mx-auto mb-4"
+                             onclick="document.getElementById('profile-pic-upload').click()">
+                            <img id="profile-pic-preview" src="{{ $user->profile_photo_url }}" alt="Profile Picture">
+                            <div class="upload-icon">
+                                <i class="fas fa-camera"></i>
                             </div>
-                        </form>
+                        </div>
                         <h2 class="text-2xl font-bold text-gray-800 mt-2">{{ $user->name }}</h2>
                         <p class="text-gray-500 mb-2">{{ $user->email }}</p>
                         <p class="text-sm text-gray-400">Joined on: {{ $user->created_at->format('F j, Y') }}</p>
                     </div>
                 </div>
 
+                <!-- Right Form Section -->
                 <div class="lg:col-span-2">
                     <form id="profile-update-form" action="{{ route('profile.update') }}" method="POST"
-                        class="space-y-8 bg-white p-8 rounded-2xl shadow-lg" novalidate>
+                          class="space-y-8 bg-white p-8 rounded-2xl shadow-lg"
+                          enctype="multipart/form-data" novalidate>
                         @csrf
                         @method('PATCH')
 
+                        <!-- Hidden Profile Photo Input -->
+                        <input type="file" name="profile_photo" id="profile-pic-upload"
+                               class="hidden" accept="image/*" onchange="previewImage(event)">
+
+                        <!-- Personal Information -->
                         <div>
                             <div class="section-header mb-6 border-b pb-4">
                                 <i class="fas fa-user-circle text-green-600 text-xl"></i>
@@ -155,17 +127,17 @@
                                 <div>
                                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                                     <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input" required>
+                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input" required>
                                 </div>
                                 <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email
-                                        Address</label>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                                     <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input" required>
+                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input" required>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Change Password -->
                         <div>
                             <div class="section-header mb-6 border-b pb-4">
                                 <i class="fas fa-lock text-green-600 text-xl"></i>
@@ -173,37 +145,33 @@
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="old_password" class="block text-sm font-medium text-gray-700 mb-1">Current
-                                        Password</label>
+                                    <label for="old_password" class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
                                     <input type="password" id="old_password" name="old_password"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input"
-                                        placeholder="Enter current password">
+                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input"
+                                           placeholder="Enter current password">
                                 </div>
-
                                 <div>
-                                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New
-                                        Password</label>
+                                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
                                     <input type="password" id="password" name="password"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input"
-                                        placeholder="Enter new password">
+                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input"
+                                           placeholder="Enter new password">
                                 </div>
                                 <div>
-                                    <label for="password_confirmation"
-                                        class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
                                     <input type="password" id="password_confirmation" name="password_confirmation"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input"
-                                        placeholder="Confirm new password">
+                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg profile-input"
+                                           placeholder="Confirm new password">
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex justify-end space-x-4 mt-6">
                             <a href="{{ route('edit_profile') }}"
-                                class="px-8 py-3 text-sm font-semibold rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 transition btn-custom">
+                               class="px-8 py-3 text-sm font-semibold rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 transition btn-custom">
                                 Cancel
                             </a>
                             <button type="submit"
-                                class="px-8 py-3 text-sm font-semibold rounded-lg border-2 border-green-600 text-white bg-green-600 hover:bg-green-700 transition shadow-md btn-custom">
+                                    class="px-8 py-3 text-sm font-semibold rounded-lg border-2 border-green-600 text-white bg-green-600 hover:bg-green-700 transition shadow-md btn-custom">
                                 <i class="fas fa-save mr-2"></i> Save Changes
                             </button>
                         </div>
@@ -215,100 +183,63 @@
 @endsection
 
 @push('scripts')
-    <script>
-        // Handles previewing the new profile picture and submitting the form
-        function previewImage(event) {
-            const reader = new FileReader();
-            reader.onload = function () {
-                const output = document.getElementById('profile-pic-preview');
-                output.src = reader.result;
-            };
-            reader.readAsDataURL(event.target.files[0]);
-            // Automatically submit the form when a new image is selected
-            document.getElementById('profile-pic-form').submit();
-        }
+<script>
+    // Image preview before upload
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            document.getElementById('profile-pic-preview').src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
 
-        // Handles client-side validation for the main profile form
-        document.addEventListener('DOMContentLoaded', function () {
-            const profileForm = document.getElementById('profile-update-form');
-            if (!profileForm) return;
+    document.addEventListener('DOMContentLoaded', function () {
+        const profileForm = document.getElementById('profile-update-form');
+        const ajaxMessage = document.getElementById('ajax-message');
 
-            const nameInput = document.getElementById('name');
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-            const passwordConfirmationInput = document.getElementById('password_confirmation');
+        profileForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            clearErrors();
 
-            profileForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                clearAllErrors();
-                let isFormValid = true;
+            let formData = new FormData(this);
 
-                // --- Validation Rules ---
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name=_token]').value,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    ajaxMessage.className = "mb-6 p-4 rounded-lg bg-green-100 border-l-4 border-green-500 text-green-700";
+                    ajaxMessage.innerHTML = `<p class="font-bold">Success!</p><p>${data.message}</p>`;
+                    ajaxMessage.classList.remove('hidden');
 
-                // 1. Name validation: required, no numbers or special characters
-                const nameValue = nameInput.value.trim();
-                if (nameValue === '') {
-                    showError(nameInput, 'The name field is required.');
-                    isFormValid = false;
-                } else if (!/^[a-zA-Z\s.'-]+$/.test(nameValue)) {
-                    showError(nameInput, 'The name may only contain letters and spaces.');
-                    isFormValid = false;
-                }
-
-                // 2. Email validation: required, must be a valid email format
-                const emailValue = emailInput.value.trim();
-                if (emailValue === '') {
-                    showError(emailInput, 'The email field is required.');
-                    isFormValid = false;
-                } else if (!isValidEmail(emailValue)) {
-                    showError(emailInput, 'Please enter a valid email address.');
-                    isFormValid = false;
-                }
-
-                // 3. Password validation: only if user intends to change it
-                const passwordValue = passwordInput.value;
-                const passwordConfirmationValue = passwordConfirmationInput.value;
-
-                if (passwordValue !== '' || passwordConfirmationValue !== '') {
-                    if (passwordValue.length < 8) {
-                        showError(passwordInput, 'The new password must be at least 8 characters long.');
-                        isFormValid = false;
+                    // Update UI
+                    if (data.user.profile_photo_url) {
+                        document.getElementById('profile-pic-preview').src = data.user.profile_photo_url;
                     }
-                    if (passwordValue !== passwordConfirmationValue) {
-                        showError(passwordConfirmationInput, 'The password confirmation does not match.');
-                        isFormValid = false;
-                    }
+                } else {
+                    ajaxMessage.className = "mb-6 p-4 rounded-lg bg-red-100 border-l-4 border-red-500 text-red-700";
+                    ajaxMessage.innerHTML = `<p class="font-bold">Error!</p><p>${data.message}</p>`;
+                    ajaxMessage.classList.remove('hidden');
                 }
-
-                if (isFormValid) {
-                    profileForm.submit();
-                }
+            })
+            .catch(err => {
+                console.error(err);
+                ajaxMessage.className = "mb-6 p-4 rounded-lg bg-red-100 border-l-4 border-red-500 text-red-700";
+                ajaxMessage.innerHTML = `<p class="font-bold">Error!</p><p>Something went wrong. Please try again.</p>`;
+                ajaxMessage.classList.remove('hidden');
             });
-
-            function showError(input, message) {
-                input.classList.add('border-red-500');
-                input.classList.remove('border-gray-300');
-                const errorElement = document.createElement('p');
-                errorElement.className = 'text-red-600 text-sm mt-1 js-error';
-                errorElement.textContent = message;
-                // Insert error message in the parent div after the input
-                input.parentNode.appendChild(errorElement);
-            }
-
-            function clearAllErrors() {
-                const errorMessages = profileForm.querySelectorAll('.js-error');
-                errorMessages.forEach(error => error.remove());
-                const inputsWithErrors = profileForm.querySelectorAll('.border-red-500');
-                inputsWithErrors.forEach(input => {
-                    input.classList.remove('border-red-500');
-                    input.classList.add('border-gray-300');
-                });
-            }
-
-            function isValidEmail(email) {
-                const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-                return regex.test(email);
-            }
         });
-    </script>
+
+        function clearErrors() {
+            ajaxMessage.innerHTML = '';
+            ajaxMessage.classList.add('hidden');
+        }
+    });
+</script>
 @endpush

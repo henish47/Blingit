@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,7 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'profile_photo_path', // <-- Navi column add kari
+        'profile_photo_path', // profile photo column
     ];
 
     /**
@@ -35,9 +34,9 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
     protected function casts(): array
     {
@@ -48,15 +47,18 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the URL to the user's profile photo.
+     * Accessor: Get the full URL of the user's profile photo.
+     *
+     * @return string
      */
-    public function getProfilePhotoUrlAttribute()
+    public function getProfilePhotoUrlAttribute(): string
     {
         if ($this->profile_photo_path) {
+            // Returns /storage/.... (make sure you ran `php artisan storage:link`)
             return Storage::url($this->profile_photo_path);
         }
 
-        // Jo photo na hoy to default UI Avatar dekhadse.
+        // Default avatar if no photo is uploaded
         return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=22c55e&color=fff&size=128';
     }
 }
