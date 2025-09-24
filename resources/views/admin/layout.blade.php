@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin Dashboard')</title>
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+    {{--
+    <script src="https://cdn.tailwindcss.com"></script> --}}
 
     @vite('resources/css/app.css')
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,35 +57,83 @@
             <!-- Sidebar Navigation -->
             <nav class="flex-1 px-4 py-4 overflow-y-auto">
                 <ul class="space-y-1">
-                    <li><a href="{{ route('admin.dashboard') }}"
-                            class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('admin.dashboard')) bg-green-100 text-green-800 font-bold shadow-sm @endif"><i
-                                class="fas fa-grid-2 text-lg w-5 h-5 text-center"></i> Dashboard</a></li>
-                    <li><a href="{{ route('categories.index') }}"
-                            class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('categories.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif"><i
-                                class="fas fa-layer-group text-lg w-5 h-5 text-center"></i> Categories</a></li>
-                    <li><a href="{{ route('products.index') }}"
-                            class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('products.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif"><i
-                                class="fas fa-box-open text-lg w-5 h-5 text-center"></i> Products</a></li>
-                    <li><a href="{{ route('banners.index') }}"
-                            class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('banners.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif"><i
-                                class="fas fa-images text-lg w-5 h-5 text-center"></i> Banners</a></li>
-                    <li><a href="{{ route('coupons.index') }}"
-                            class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('coupons.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif"><i
-                                class="fas fa-tag text-lg w-5 h-5 text-center"></i> Coupons</a></li>
-                    <li><a href="{{ route('admin.orders') }}"
-                            class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('admin.orders')) bg-green-100 text-green-800 font-bold shadow-sm @endif"><i
-                                class="fas fa-shopping-bag text-lg w-5 h-5 text-center"></i> Orders</a></li>
-                    <li><a href="{{ route('users.index') }}"
-                            class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('users.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif"><i
-                                class="fas fa-users text-lg w-5 h-5 text-center"></i> Users</a></li>
-                    <li><a href="{{ route('admin.contact') }}"
-                            class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('admin.contact')) bg-green-100 text-green-800 font-bold shadow-sm @endif"><i
-                                class="fas fa-envelope text-lg w-5 h-5 text-center"></i> Messages</a></li>
-                    <li><a href="{{ route('notifications.create') }}"
-                            class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-200 @if(request()->routeIs('notifications.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif"><i
-                                class="fas fa-bell text-lg w-5 h-5 text-center"></i> Notifications</a></li>
+                    <li>
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 
+            hover:bg-green-50 hover:text-green-700 transition-colors duration-200 
+            @if(request()->routeIs('admin.dashboard')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <i class="fas fa-grid-2 text-lg w-5 h-5 text-center"></i> Dashboard
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 
+            hover:bg-green-50 hover:text-green-700 transition-colors duration-200 
+            @if(request()->routeIs('admin.categories.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <i class="fas fa-layer-group text-lg w-5 h-5 text-center"></i> Categories
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('admin.products.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 
+            hover:bg-green-50 hover:text-green-700 transition-colors duration-200 
+            @if(request()->routeIs('admin.products.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <i class="fas fa-box-open text-lg w-5 h-5 text-center"></i> Products
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('admin.banners.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 
+            hover:bg-green-50 hover:text-green-700 transition-colors duration-200 
+            @if(request()->routeIs('admin.banners.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <i class="fas fa-images text-lg w-5 h-5 text-center"></i> Banners
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('admin.coupons.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 
+            hover:bg-green-50 hover:text-green-700 transition-colors duration-200 
+            @if(request()->routeIs('admin.coupons.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <i class="fas fa-tag text-lg w-5 h-5 text-center"></i> Coupons
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('admin.orders') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 
+            hover:bg-green-50 hover:text-green-700 transition-colors duration-200 
+            @if(request()->routeIs('admin.orders')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <i class="fas fa-shopping-bag text-lg w-5 h-5 text-center"></i> Orders
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 
+            hover:bg-green-50 hover:text-green-700 transition-colors duration-200 
+            @if(request()->routeIs('admin.users.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <i class="fas fa-users text-lg w-5 h-5 text-center"></i> Users
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('admin.contact') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 
+            hover:bg-green-50 hover:text-green-700 transition-colors duration-200 
+            @if(request()->routeIs('admin.contact')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <i class="fas fa-envelope text-lg w-5 h-5 text-center"></i> Messages
+                        </a>
+                    </li>
+
+                    <li>
+<a href="{{ route('admin.notifications.create') }}" 
+   class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700
+          hover:bg-green-50 hover:text-green-700 transition-colors duration-200
+          @if(request()->routeIs('admin.notifications.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+    <i class="fas fa-bell text-lg w-5 h-5 text-center"></i> Notifications
+</a>
+
+
+                    </li>
                 </ul>
             </nav>
+
             <div class="mt-auto p-4 text-xs text-gray-400 text-center border-t border-yellow-200">&copy; {{ date('Y') }}
                 Blingit Admin</div>
         </aside>
@@ -110,9 +159,8 @@
                     <div class="relative">
                         <button id="userDropdownBtn"
                             class="flex items-center gap-3 focus:outline-none p-2 rounded-lg hover:bg-yellow-50 transition-colors">
-                            <img src="{{ Auth::user()->profile_photo_url }}"
-                                 alt="{{ Auth::user()->name }} Avatar"
-                                 class="w-10 h-10 rounded-full border-2 border-white shadow-md object-cover">
+                            <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }} Avatar"
+                                class="w-10 h-10 rounded-full border-2 border-white shadow-md object-cover">
                             <div class="text-left hidden sm:block">
                                 <span class="text-gray-800 font-semibold text-sm">{{ Auth::user()->name }}</span>
                                 <p class="text-xs text-gray-500 capitalize">{{ Auth::user()->role ?? 'User' }}</p>

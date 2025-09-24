@@ -28,34 +28,45 @@
             </div>
         @endif
 
-
-        <form action="{{ route('banners.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        {{-- Banner Form --}}
+        <form action="{{ route('admin.banners.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             <!-- Banner Image Upload -->
             <div>
-                <label for="image_url" class="block text-gray-700 text-sm font-bold mb-2">Banner Image (Recommended: 1200x400px)</label>
-                <input type="file" id="image_url" name="image_url" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" required>
+                <label for="image_url" class="block text-gray-700 text-sm font-bold mb-2">
+                    Banner Image (Recommended: 1200x400px)
+                </label>
+                <input type="file" id="image_url" name="image_url"
+                       class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                       required>
             </div>
 
             <!-- Alt Text -->
             <div>
                 <label for="alt_text" class="block text-gray-700 text-sm font-bold mb-2">Alternative Text (for SEO & Accessibility)</label>
-                <input type="text" id="alt_text" name="alt_text" placeholder="e.g., Fresh vegetables special offer" class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500" value="{{ old('alt_text') }}">
+                <input type="text" id="alt_text" name="alt_text" placeholder="e.g., Fresh vegetables special offer"
+                       class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500"
+                       value="{{ old('alt_text') }}">
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Order -->
                 <div>
                     <label for="order_column" class="block text-gray-700 text-sm font-bold mb-2">Display Order</label>
-                    <input type="number" id="order_column" name="order_column" placeholder="e.g., 1" class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500" value="{{ old('order_column', 0) }}">
+                    <input type="number" id="order_column" name="order_column" placeholder="e.g., 1"
+                           class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight
+                           focus:outline-none focus:ring-2 focus:ring-green-500"
+                           value="{{ old('order_column', 0) }}">
                     <p class="text-gray-600 text-xs italic mt-1">Banners will be shown in ascending order (1, 2, 3...)</p>
                 </div>
 
                 <!-- Status -->
                 <div>
                     <label for="is_active" class="block text-gray-700 text-sm font-bold mb-2">Status</label>
-                    <select id="is_active" name="is_active" class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <select id="is_active" name="is_active"
+                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight
+                            focus:outline-none focus:ring-2 focus:ring-green-500">
                         <option value="1" selected>Active</option>
                         <option value="0">Inactive</option>
                     </select>
@@ -64,7 +75,8 @@
 
             <!-- Submit Button -->
             <div class="flex items-center justify-end pt-4">
-                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:shadow-outline transition duration-300">
+                <button type="submit"
+                        class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:shadow-outline transition duration-300">
                     Add Banner
                 </button>
             </div>
@@ -90,7 +102,8 @@
                     @forelse ($banners as $banner)
                         <tr>
                             <td class="py-4 px-6 whitespace-nowrap">
-                                <img src="{{ asset('storage/' . $banner->image_url) }}" alt="{{ $banner->alt_text }}" class="w-40 h-16 object-cover rounded-md">
+                                <img src="{{ asset('storage/' . $banner->image_url) }}" alt="{{ $banner->alt_text }}"
+                                     class="w-40 h-16 object-cover rounded-md">
                             </td>
                             <td class="py-4 px-6 whitespace-nowrap text-sm text-gray-800">{{ $banner->alt_text ?? '-' }}</td>
                             <td class="py-4 px-6 whitespace-nowrap text-center text-sm text-gray-500">{{ $banner->order_column }}</td>
@@ -102,7 +115,8 @@
                                 @endif
                             </td>
                             <td class="py-4 px-6 whitespace-nowrap text-right text-sm font-medium">
-                                <form action="{{ route('banners.destroy', $banner->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this banner?');">
+                                <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST"
+                                      onsubmit="return confirm('Are you sure you want to delete this banner?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-900 font-semibold">Delete</button>

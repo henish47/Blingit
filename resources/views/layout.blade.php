@@ -226,7 +226,7 @@
                         <!-- Optional Label -->
                         <span
                             class="hidden sm:inline ml-2 font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-200">
-                            Cart
+                            
                         </span>
                     </a>
 

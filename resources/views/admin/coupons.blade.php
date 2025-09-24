@@ -3,7 +3,6 @@
 @section('title', 'Coupons Management')
 
 @section('content')
-
 <div>
     <!-- Session Messages -->
     @if(session('success'))
@@ -30,10 +29,25 @@
             <p class="text-gray-500 mt-1">Create, manage, and track promotional coupons.</p>
         </div>
         <button id="addCouponBtn" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-2.5 rounded-lg shadow-lg hover:shadow-green-500/30 transition-all duration-300 transform hover:-translate-y-0.5 mt-4 sm:mt-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
             Add New Coupon
         </button>
     </div>
+<div>
+
+    @if ($errors->any())
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg" role="alert">
+            <p class="font-bold">Please fix the following errors:</p>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
 
     <!-- Coupons Table -->
     <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
@@ -53,7 +67,9 @@
                     @forelse($coupons as $coupon)
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="py-4 px-6 font-mono text-gray-700">{{ $coupon->code }}</td>
-                        <td class="py-4 px-6"><span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full capitalize">{{ $coupon->type }}</span></td>
+                        <td class="py-4 px-6">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full capitalize">{{ $coupon->type }}</span>
+                        </td>
                         <td class="py-4 px-6 font-medium text-gray-800">{{ $coupon->type == 'percent' ? $coupon->value.'%' : '₹'.number_format($coupon->value, 2) }}</td>
                         <td class="py-4 px-6 text-gray-600">{{ $coupon->expires_at ? $coupon->expires_at->format('M d, Y') : 'No Expiry' }}</td>
                         <td class="py-4 px-6">
@@ -72,14 +88,18 @@
                                         data-value="{{ $coupon->value }}"
                                         data-expires_at="{{ $coupon->expires_at ? $coupon->expires_at->format('Y-m-d') : '' }}"
                                         data-status="{{ $coupon->status ? 1 : 0 }}"
-                                        data-action="{{ route('coupons.update', $coupon->id) }}">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                        data-action="{{ route('admin.coupons.update', $coupon->id) }}">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
                                 </button>
-                                <form action="{{ route('coupons.destroy', $coupon->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this coupon?');">
+                                <form action="{{ route('admin.coupons.destroy', $coupon->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this coupon?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-800 p-2 hover:bg-red-50 rounded-full" title="Delete">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
                                     </button>
                                 </form>
                             </div>
@@ -103,7 +123,9 @@
 <div id="couponModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md relative transform transition-all scale-95 opacity-0">
         <button id="closeCouponModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
         </button>
         <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-gray-800">Add New Coupon</h2>
         <form id="couponForm" method="POST" action="">
@@ -144,7 +166,6 @@
         </form>
     </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('couponModal');
@@ -178,7 +199,8 @@ document.addEventListener('DOMContentLoaded', function() {
         couponForm.reset();
         modalTitle.textContent = 'Add New Coupon';
         saveBtn.textContent = 'Save Coupon';
-        couponForm.action = '{{ route("coupons.store") }}';
+        // FIX: Use admin route prefix
+        couponForm.action = '{{ route("admin.coupons.store") }}';
         formMethodInput.value = 'POST';
         openModal();
     }
@@ -226,5 +248,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 
 @endsection

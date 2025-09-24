@@ -32,6 +32,8 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\InvoiceController; // <-- InvoiceController ne import karyo
 
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -142,12 +144,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/orders/{order}/invoice', [InvoiceController::class, 'generate'])->name('orders.invoice');
 });
 
-// ------------------------
+
+
 // Admin Routes
-// ------------------------
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'is.admin'])->group(function () {
 
+    // Dashboard
     Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+
+    // Orders
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
 
     // Profile
@@ -159,16 +164,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'is.admi
     Route::get('/contact', [ContactMessageController::class, 'index'])->name('contact');
     Route::delete('/contact/{message}', [ContactMessageController::class, 'destroy'])->name('contact.destroy');
 
-    // Notifications
+     // Notifications
     Route::get('/notifications', [NotificationController::class, 'create'])->name('notifications.create');
-    Route::post('/notifications', [NotificationController::class, 'send'])->name('notifications.send');
+    Route::post('/notifications/send', [NotificationController::class, 'send'])->name('notifications.send');
+    
 
-    // Resources
+    // Resource Controllers
     Route::resources([
-        'products' => ProductController::class,
+        'products'   => ProductController::class,
         'categories' => CategoryController::class,
-        'users' => UserController::class,
-        'coupons' => CouponController::class,
-        'banners' => BannerController::class,
+        'users'      => UserController::class,
+        'coupons'    => CouponController::class,
+        'banners'    => BannerController::class,
     ]);
 });

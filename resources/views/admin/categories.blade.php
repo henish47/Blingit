@@ -63,10 +63,10 @@
                                         data-id="{{ $category->id }}"
                                         data-name="{{ $category->name }}"
                                         data-status="{{ $category->status }}"
-                                        data-action="{{ route('categories.update', $category->id) }}">
+                                        data-action="{{ route('admin.categories.update', $category->id) }}">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 </button>
-                                <form action="{{ route('categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure? Deleting a category cannot be undone.');">
+                                <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure? Deleting a category cannot be undone.');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-800 p-2 hover:bg-red-50 rounded-full">
@@ -142,9 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
         categoryForm.reset();
         modalTitle.textContent = 'Add New Category';
         saveBtn.textContent = 'Save Category';
-        categoryForm.action = '{{ route("categories.store") }}';
+        categoryForm.action = '{{ route("admin.categories.store") }}';
         formMethodInput.value = 'POST';
-        categoryStatusInput.value = 'Active'; // Default to Active
+        categoryStatusInput.value = 'Active';
         openModal();
     }
 
@@ -179,4 +179,3 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 @endsection
-

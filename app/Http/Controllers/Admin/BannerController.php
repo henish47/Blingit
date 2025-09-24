@@ -18,7 +18,7 @@ class BannerController extends Controller
     {
         $banners = Banner::orderBy('order_column', 'asc')->get();
         
-        // Path badli ne 'admin.banners.coursel' mathi 'admin.coursel' karvama aavyo chhe
+        // Return the admin view
         return view('admin.coursel', compact('banners'));
     }
 
@@ -38,14 +38,15 @@ class BannerController extends Controller
         ]);
 
         if ($request->hasFile('image_url')) {
-            // 'banners' folder ma image save karvi
+            // Save image to 'banners' folder
             $path = $request->file('image_url')->store('banners', 'public');
             $validatedData['image_url'] = $path;
         }
 
         Banner::create($validatedData);
 
-        return redirect()->route('banners.index')->with('success', 'Banner added successfully!');
+        // Redirect using correct route name
+        return redirect()->route('admin.banners.index')->with('success', 'Banner added successfully!');
     }
 
     /**
@@ -56,13 +57,13 @@ class BannerController extends Controller
      */
     public function destroy(Banner $banner)
     {
-        // Storage mathi image delete karvi
+        // Delete image from storage
         Storage::disk('public')->delete($banner->image_url);
         
-        // Database mathi banner delete karvu
+        // Delete banner from database
         $banner->delete();
 
-        return redirect()->route('banners.index')->with('success', 'Banner deleted successfully!');
+        // Redirect using correct route name
+        return redirect()->route('admin.banners.index')->with('success', 'Banner deleted successfully!');
     }
 }
-

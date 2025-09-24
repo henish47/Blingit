@@ -49,18 +49,16 @@ class ProductController extends Controller
             'price'       => 'required|numeric|min:0|max:99999.99',
             'stock'       => 'required|integer|min:0|max:9999',
             'description' => 'required|string|min:10',
-            'status'      => 'required|in:Active,Inactive', // Status validation added
+            'status'      => 'required|in:Active,Inactive',
             'img'         => 'required|image|mimes:jpeg,png,jpg,gif,svg,avif,webp|max:20480',
         ]);
-        
-        $dataToCreate = $validatedData;
-        
+
         $imagePath = $request->file('img')->store('products', 'public');
-        $dataToCreate['img'] = $imagePath; 
+        $validatedData['img'] = $imagePath; 
 
-        Product::create($dataToCreate);
+        Product::create($validatedData);
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully!');
+        return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
     }
 
     /**
@@ -68,7 +66,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        // 1. Define the validation rules, including the status.
         $rules = [
             'name'        => 'required|string|min:3|max:255',
             'sku'         => ['required', 'string', 'min:5', 'max:50', Rule::unique('products')->ignore($product->id)],
@@ -76,33 +73,26 @@ class ProductController extends Controller
             'price'       => 'required|numeric|min:0|max:99999.99',
             'stock'       => 'required|integer|min:0|max:9999',
             'description' => 'required|string|min:10',
-            'status'      => 'required|in:Active,Inactive', // Status is now always required
+            'status'      => 'required|in:Active,Inactive',
         ];
 
-        // 2. Conditionally add the image validation rule ONLY if a new file is being uploaded.
         if ($request->hasFile('img')) {
-            $rules['img'] = 'required|image|mimes:jpeg,png,jpg,gif,svg,avif,webp|max:2048';
+            $rules['img'] = 'required|image|mimes:jpeg,png,jpg,gif,svg,avif,webp|max:20480';
         }
 
-        // 3. Run the validation.
         $validatedData = $request->validate($rules);
 
-        // Prepare the data for updating.
-        $dataToUpdate = $validatedData;
-
-        // 4. If a new image was uploaded, handle file storage.
         if ($request->hasFile('img')) {
             if ($product->img) {
                 Storage::disk('public')->delete($product->img);
             }
             $imagePath = $request->file('img')->store('products', 'public');
-            $dataToUpdate['img'] = $imagePath;
+            $validatedData['img'] = $imagePath;
         }
 
-        // 5. Update the product.
-        $product->update($dataToUpdate);
+        $product->update($validatedData);
 
-        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
+        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully!');
     }
 
     /**
@@ -114,7 +104,6 @@ class ProductController extends Controller
             Storage::disk('public')->delete($product->img);
         }
         $product->delete();
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
+        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully!');
     }
 }
-

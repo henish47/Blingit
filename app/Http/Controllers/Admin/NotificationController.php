@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Mail;
 class NotificationController extends Controller
 {
     /**
-     * Show the form to create a new notification.
+     * Show the notification form.
      */
     public function create()
     {
@@ -23,18 +23,21 @@ class NotificationController extends Controller
      */
     public function send(Request $request)
     {
+        // Validate input
         $validated = $request->validate([
             'subject' => 'required|string|max:255',
             'message' => 'required|string|min:10',
         ]);
 
-        // Fetch all users who have verified their email
+        // Fetch all active users (users with verified email)
         $activeUsers = User::whereNotNull('email_verified_at')->get();
 
         foreach ($activeUsers as $user) {
             Mail::to($user->email)->send(new UserNotificationMail($validated['subject'], $validated['message']));
         }
 
-        return redirect()->route('notifications.create')->with('success', 'Notification has been sent to all active users!');
+        // Redirect back to the notification form
+        return redirect()->route('admin.notifications.create')
+                         ->with('success', 'Notification has been sent to all active users!');
     }
 }

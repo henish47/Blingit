@@ -31,13 +31,14 @@ class CouponController extends Controller
 
         // Send email to all active users
         if ($coupon->status) {
-            $activeUsers = User::where('email_verified_at', '!=', null)->get();
+            $activeUsers = User::whereNotNull('email_verified_at')->get();
             foreach ($activeUsers as $user) {
                 Mail::to($user->email)->send(new NewCouponMail($coupon));
             }
         }
 
-        return redirect()->route('coupons.index')->with('success', 'Coupon created and notification sent to active users!');
+        return redirect()->route('admin.coupons.index')
+                         ->with('success', 'Coupon created and notification sent to active users!');
     }
 
     public function update(Request $request, Coupon $coupon)
@@ -52,12 +53,14 @@ class CouponController extends Controller
 
         $coupon->update($validated);
 
-        return redirect()->route('coupons.index')->with('success', 'Coupon updated successfully!');
+        return redirect()->route('admin.coupons.index')
+                         ->with('success', 'Coupon updated successfully!');
     }
 
     public function destroy(Coupon $coupon)
     {
         $coupon->delete();
-        return redirect()->route('coupons.index')->with('success', 'Coupon deleted successfully!');
+        return redirect()->route('admin.coupons.index')
+                         ->with('success', 'Coupon deleted successfully!');
     }
 }

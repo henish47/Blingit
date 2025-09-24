@@ -14,7 +14,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        // Get categories with product count, latest first, paginated
         $categories = Category::withCount('products')->latest()->paginate(10);
+
+        // Return the admin categories view
         return view('admin.categories', compact('categories'));
     }
 
@@ -24,15 +27,13 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|min:3|max:50|unique:categories,name',
-            // *** MUKHYA SUDHARO AHIYA CHHE ***
-            // Validation ne 'boolean' mathi 'string' ma badli chhe.
-            'status' => 'required|in:Active,Inactive', 
+            'name'   => 'required|string|min:3|max:50|unique:categories,name',
+            'status' => 'required|in:Active,Inactive',
         ]);
 
         Category::create($validated);
 
-        return redirect()->route('categories.index')->with('success', 'Category created successfully!');
+        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully!');
     }
 
     /**
@@ -41,15 +42,13 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:50', Rule::unique('categories')->ignore($category->id)],
-            // *** MUKHYA SUDHARO AHIYA CHHE ***
-            // Validation ne 'boolean' mathi 'string' ma badli chhe.
+            'name'   => ['required', 'string', 'min:3', 'max:50', Rule::unique('categories')->ignore($category->id)],
             'status' => 'required|in:Active,Inactive',
         ]);
 
         $category->update($validated);
 
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully!');
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully!');
     }
 
     /**
@@ -60,9 +59,9 @@ class CategoryController extends Controller
         if ($category->products()->count() > 0) {
             return back()->withErrors(['error' => 'Cannot delete a category that has products assigned to it.']);
         }
-        
+
         $category->delete();
 
-        return redirect()->route('categories.index')->with('success', 'Category deleted successfully!');
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully!');
     }
 }

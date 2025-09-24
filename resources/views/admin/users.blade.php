@@ -30,7 +30,9 @@
             <p class="text-gray-500 mt-1">Manage all registered users and their roles.</p>
         </div>
         <button id="addUserBtn" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-2.5 rounded-lg shadow-lg hover:shadow-green-500/30 transition-all duration-300 transform hover:-translate-y-0.5 mt-4 sm:mt-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
             Add New User
         </button>
     </div>
@@ -73,15 +75,19 @@
                                         data-name="{{ $user->name }}"
                                         data-email="{{ $user->email }}"
                                         data-role="{{ $user->role }}"
-                                        data-action="{{ route('users.update', $user->id) }}">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                        data-action="{{ route('admin.users.update', $user->id) }}">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
                                 </button>
-                                @if(auth()->id() !== $user->id) {{-- Prevent deleting own account --}}
-                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                @if(auth()->id() !== $user->id)
+                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-800 p-2 hover:bg-red-50 rounded-full transition-colors" title="Delete">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
                                     </button>
                                 </form>
                                 @endif
@@ -105,7 +111,6 @@
                 </tbody>
             </table>
         </div>
-        <!-- Pagination Links -->
         <div class="p-4 bg-gray-50 border-t border-gray-200">
             {{ $users->links() }}
         </div>
@@ -116,7 +121,9 @@
 <div id="userModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md relative transform transition-all scale-95 opacity-0">
         <button id="closeUserModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
         </button>
         <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-gray-800">Add New User</h2>
         <form id="userForm" method="POST" action="" class="space-y-4">
@@ -188,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
         userForm.reset();
         modalTitle.textContent = 'Add New User';
         saveBtn.textContent = 'Save User';
-        userForm.action = '{{ route("users.store") }}';
+        userForm.action = '{{ route("admin.users.store") }}';
         formMethodInput.value = 'POST';
         openModal();
     }
@@ -229,8 +236,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     userForm.addEventListener('submit', function(e) {
-        // We'll rely on Laravel's server-side validation, 
-        // but disable the button to prevent multiple submissions.
         saveBtn.disabled = true;
         saveBtn.innerHTML = 'Saving...';
     });
