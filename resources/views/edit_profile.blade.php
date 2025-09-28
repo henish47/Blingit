@@ -85,8 +85,35 @@
                 <p class="text-gray-500">Keep your personal information up to date.</p>
             </div>
 
-            <!-- Flash Messages -->
-            <div id="ajax-message" class="hidden mb-6 p-4 rounded-lg"></div>
+           <!-- Flash Messages -->
+<div id="ajax-message" class="hidden mb-6 p-4 rounded-lg"></div>
+
+<!-- Laravel Session Messages (Cookies) -->
+@if (session('success'))
+    <div class="mb-6 p-4 rounded-lg bg-green-100 border-l-4 border-green-500 text-green-700">
+        <p class="font-bold">Success!</p>
+        <p>{{ session('success') }}</p>
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="mb-6 p-4 rounded-lg bg-red-100 border-l-4 border-red-500 text-red-700">
+        <p class="font-bold">Error!</p>
+        <p>{{ session('error') }}</p>
+    </div>
+@endif
+
+@if ($errors->any())
+    <div class="mb-6 p-4 rounded-lg bg-red-100 border-l-4 border-red-500 text-red-700">
+        <p class="font-bold">Validation Errors:</p>
+        <ul class="list-disc pl-6">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Left Sidebar -->
