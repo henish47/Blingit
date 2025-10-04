@@ -19,5 +19,37 @@ class ContactMessage extends Model
         'email',
         'subject',
         'message',
+        'reply',
+        'replied_at',
+        'replied_by',
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'replied_at' => 'datetime',
+    ];
+
+    /**
+     * Check if the message has been replied to.
+     */
+    public function isReplied(): bool
+    {
+        return !is_null($this->reply);
+    }
+
+    /**
+     * Mark the message as replied.
+     */
+    public function markAsReplied(string $reply, string $repliedBy): void
+    {
+        $this->update([
+            'reply' => $reply,
+            'replied_at' => now(),
+            'replied_by' => $repliedBy,
+        ]);
+    }
 }

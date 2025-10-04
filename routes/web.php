@@ -176,6 +176,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'is.admi
 
     // Contact Messages
     Route::get('/contact', [ContactMessageController::class, 'index'])->name('contact');
+    Route::post('/contact/{message}/reply', [ContactMessageController::class, 'reply'])->name('contact.reply');
     Route::delete('/contact/{message}', [ContactMessageController::class, 'destroy'])->name('contact.destroy');
 
      // Notifications

@@ -22,11 +22,12 @@ class Order extends Model
         'city',
         'state',
         'zip',
-        'subtotal',       // <-- Sudharo
-        'discount',       // <-- Sudharo
-        'delivery_fee',   // <-- Sudharo
+        'subtotal',
+        'discount',
+        'delivery_fee',
         'total',
         'payment_method',
+        'payment_id',
         'payment_status',
         'status',
     ];

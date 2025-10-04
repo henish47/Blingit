@@ -8,7 +8,9 @@ use App\Models\OrderItem;
 use App\Models\CartItem;
 use App\Models\Coupon;
 use App\Models\Review;
+use App\Mail\OrderPlaced;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -89,6 +91,7 @@ class CheckoutController extends Controller
             'total'          => $total,
             'payment_method' => $request->payment_method,
             'payment_id'     => $paymentId,
+            'payment_status' => $status,
             'status'         => 'Pending',
         ]);
 
@@ -101,6 +104,16 @@ class CheckoutController extends Controller
                 'price'      => $item->product->price,
                 'quantity'   => $item->quantity,
             ]);
+        }
+
+        // ---------- Send Order Confirmation Email ----------
+        try {
+            // Load order with items and products for email
+            $order->load('items.product');
+            Mail::to($order->email)->send(new OrderPlaced($order));
+        } catch (\Exception $e) {
+            // Log error but don't break the order process
+            \Log::error('Failed to send order confirmation email: ' . $e->getMessage());
         }
 
         // ---------- Cleanup ----------
