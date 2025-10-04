@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\CartItem;
 use App\Models\Coupon;
+use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
@@ -88,7 +89,7 @@ class CheckoutController extends Controller
             'total'          => $total,
             'payment_method' => $request->payment_method,
             'payment_id'     => $paymentId,
-            'status'         => $status,
+            'status'         => 'Pending',
         ]);
 
         // ---------- Save Items ----------
@@ -116,7 +117,20 @@ class CheckoutController extends Controller
      */
     public function thankYou(Order $order)
     {
-        return view('place-order', compact('order'));
+        // Ensure the order belongs to the authenticated user
+        if ($order->user_id !== Auth::id()) {
+            abort(403, 'THIS ACTION IS UNAUTHORIZED.');
+        }
+
+        // Determine whether a review already exists for this order by this user
+        $reviewExists = Review::where('order_id', $order->id)
+                              ->where('user_id', Auth::id())
+                              ->exists();
+
+        // Eager-load items and associated products for the view
+        $order->load('items.product');
+
+        return view('place-order', compact('order', 'reviewExists'));
     }
 
     /**

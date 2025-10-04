@@ -4,27 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 
 class PlaceOrderController extends Controller
 {
     /**
-     * Display the order confirmation page.
-     * It fetches the most recent order for the logged-in user.
+     * Display the specific order confirmation page.
      */
-    public function show()
+    public function show(Order $order)
     {
-        // User na chhella order ne teni items sathe fetch karo.
-        $order = Order::where('user_id', Auth::id())
-                      ->with('items.product') // Eager load items and their associated products
-                      ->latest() // Sauthi navo order pahela
-                      ->first();
-
-        // Jo koi order na male, to homepage par redirect karo.
-        if (!$order) {
-            return redirect()->route('home')->with('error', 'Could not find your recent order.');
+        // Security Check: Chokkas karo ke aa order login karela user no j chhe.
+        if ($order->user_id !== Auth::id()) {
+            abort(403, 'THIS ACTION IS UNAUTHORIZED.');
         }
 
-        return view('place-order', compact('order'));
+        // Check karo ke aa order no review pahelathi j aapvama aavyo chhe ke nahi.
+        $reviewExists = Review::where('order_id', $order->id)
+                              ->where('user_id', Auth::id())
+                              ->exists();
+
+        // Order, teni items, ane review status ne view ma pass karo.
+        $order->load('items.product');
+
+        return view('place-order', compact('order', 'reviewExists'));
     }
 }
+

@@ -30,6 +30,11 @@ use App\Http\Controllers\AiController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\InvoiceController; // <-- InvoiceController ne import karyo
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ReviewController; 
+// use App\Http\Controllers\AboutController;
+use App\Http\Controllers\AboutController;
 
 
 
@@ -44,15 +49,18 @@ use App\Http\Controllers\InvoiceController; // <-- InvoiceController ne import k
 // Public Routes
 // ------------------------
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/search', [SearchController::class, 'search'])->name('products.search'); // <-- Navi Search Route
 Route::get('/category/{category:name}', [CategoryPageController::class, 'show'])->name('category.products');
 Route::get('/product/{product:sku}', [ProductPageController::class, 'show'])->name('product.show');
+
+
 
 Route::view('/milk', 'milk')->name('milk');
 Route::view('/vegetables', 'vegetables')->name('vegetables');
 Route::view('/fruits', 'fruits')->name('fruits');
 Route::view('/electronics', 'electronics')->name('electronics');
 Route::view('/personal-products', 'personal-products')->name('personal-products');
-Route::view('/about', 'about')->name('about');
+Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 Route::get('/contact', fn() => view('contact'))->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
@@ -119,7 +127,7 @@ Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
 // ------------------------
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Profile
     Route::get('/edit_profile', [UserProfileController::class, 'show'])->name('edit_profile');
@@ -144,16 +152,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/orders/{order}/invoice', [InvoiceController::class, 'generate'])->name('orders.invoice');
 });
 
+// Allow authenticated users to submit reviews via JSON endpoint
+Route::middleware(['auth'])->group(function () {
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+});
+
 
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'is.admin'])->group(function () {
 
     // Dashboard
-    Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
-
-    // Orders
-    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+ // Orders Routes
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
@@ -177,4 +191,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'is.admi
         'coupons'    => CouponController::class,
         'banners'    => BannerController::class,
     ]);
+
+    // Reviews management
+    Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 });

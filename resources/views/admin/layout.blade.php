@@ -98,9 +98,9 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('admin.orders') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 
-            hover:bg-green-50 hover:text-green-700 transition-colors duration-200 
-            @if(request()->routeIs('admin.orders')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                       <a href="{{ route('admin.orders.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700
+            hover:bg-green-50 hover:text-green-700 transition-colors duration-200
+            @if(request()->routeIs('admin.orders.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
                             <i class="fas fa-shopping-bag text-lg w-5 h-5 text-center"></i> Orders
                         </a>
                     </li>
@@ -110,6 +110,14 @@
             hover:bg-green-50 hover:text-green-700 transition-colors duration-200 
             @if(request()->routeIs('admin.users.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
                             <i class="fas fa-users text-lg w-5 h-5 text-center"></i> Users
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('admin.reviews.index') }}" class="flex items-center gap-3 py-2.5 px-4 rounded-lg font-medium text-gray-700 
+            hover:bg-green-50 hover:text-green-700 transition-colors duration-200 
+            @if(request()->routeIs('admin.reviews.*')) bg-green-100 text-green-800 font-bold shadow-sm @endif">
+                            <i class="fas fa-star text-lg w-5 h-5 text-center"></i> Reviews
                         </a>
                     </li>
 

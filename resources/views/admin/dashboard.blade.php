@@ -8,12 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <div>
-        <!-- Header -->
-        <!-- <div class="mb-8">
-            <h1 class="text-3xl font-extrabold text-gray-800">Welcome back, Admin!</h1>
-            <p class="text-gray-500 mt-1">Here's a snapshot of your store's performance today.</p>
-        </div> -->
-
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <!-- Total Revenue Card -->
@@ -22,13 +16,13 @@
                 <div class="bg-green-100 p-4 rounded-full">
                     <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01M12 6v-1m0-1V4m0 2.01v.01M12 18v-1m0-1v-1m0-1v-1m0-1v-1m0-1v-1m0 0V9.01M12 4.01V3">
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01M12 6v-1m0-1V4m0 2.01v.01M12 18v-1m0-1v-1m0-1v-1m0-1v-1m0 0V9.01M12 4.01V3">
                         </path>
                     </svg>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500 font-medium">Total Revenue</p>
-                    <p class="text-3xl font-extrabold text-gray-800">₹12,500</p>
+                    <p class="text-3xl font-extrabold text-gray-800">₹{{ number_format($totalRevenue, 2) }}</p>
                 </div>
             </div>
             <!-- Total Orders Card -->
@@ -43,7 +37,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-500 font-medium">Total Orders</p>
-                    <p class="text-3xl font-extrabold text-gray-800">34</p>
+                    <p class="text-3xl font-extrabold text-gray-800">{{ $totalOrders }}</p>
                 </div>
             </div>
             <!-- Total Customers Card -->
@@ -58,7 +52,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-500 font-medium">Total Customers</p>
-                    <p class="text-3xl font-extrabold text-gray-800">56</p>
+                    <p class="text-3xl font-extrabold text-gray-800">{{ $totalCustomers }}</p>
                 </div>
             </div>
             <!-- Pending Orders Card -->
@@ -72,25 +66,23 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-500 font-medium">Pending Orders</p>
-                    <p class="text-3xl font-extrabold text-gray-800">3</p>
+                    <p class="text-3xl font-extrabold text-gray-800">{{ $pendingOrders }}</p>
                 </div>
             </div>
         </div>
 
         <!-- Charts -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8"> 
-        <!-- Sales Overview Chart -->
-        <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-                <h2 class="text-xl font-bold text-gray-800 mb-4">Sales Overview</h2>
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Sales Overview (Last 7 Days)</h2>
                 <div class="h-80">
                     <canvas id="salesChart"></canvas>
                 </div>
             </div> 
-        <!-- Order Status Chart -->
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 flex flex-col">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 flex flex-col">
                 <h2 class="text-xl font-bold text-gray-800 mb-4">Order Status</h2>
                 <div class="flex-grow flex items-center justify-center relative h-80">
-                     <canvas id="orderStatusChart"></canvas>
+                   <canvas id="orderStatusChart"></canvas>
                 </div>
             </div>
         </div> 
@@ -111,50 +103,22 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
+                        @forelse($recentOrders as $order)
                         <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="py-4 px-6 font-mono text-gray-700">#1005</td>
-                            <td class="py-4 px-6 font-medium text-gray-800">Rahul Singh</td>
-                            <td class="py-4 px-6 text-gray-600">July 18, 2025</td>
-                            <td class="py-4 px-6 font-semibold text-gray-800">₹150.00</td>
-                            <td class="py-4 px-6"><span
-                                    class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">Cancelled</span>
+                            <td class="py-4 px-6 font-mono text-gray-700">#{{ $order->id }}</td>
+                            <td class="py-4 px-6 font-medium text-gray-800">{{ $order->user->name ?? 'N/A' }}</td>
+                            <td class="py-4 px-6 text-gray-600">{{ $order->created_at->format('M d, Y') }}</td>
+                            <td class="py-4 px-6 font-semibold text-gray-800">₹{{ number_format($order->total, 2) }}</td>
+                            <td class="py-4 px-6">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold @switch($order->status) @case('Completed') bg-green-100 text-green-700 @break @case('Pending') bg-yellow-100 text-yellow-700 @break @case('Cancelled') bg-red-100 text-red-700 @break @default bg-gray-100 text-gray-700 @endswitch">{{ $order->status }}</span>
                             </td>
-                            <td class="py-4 px-6"><a href="#" class="text-green-600 hover:underline font-semibold">View</a>
-                            </td>
+                            <td class="py-4 px-6"><a href="{{ route('admin.orders.index', ['search' => $order->id]) }}" class="text-green-600 hover:underline font-semibold">View</a></td>
                         </tr>
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="py-4 px-6 font-mono text-gray-700">#1004</td>
-                            <td class="py-4 px-6 font-medium text-gray-800">Priya Verma</td>
-                            <td class="py-4 px-6 text-gray-600">July 17, 2025</td>
-                            <td class="py-4 px-6 font-semibold text-gray-800">₹580.00</td>
-                            <td class="py-4 px-6"><span
-                                    class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Completed</span>
-                            </td>
-                            <td class="py-4 px-6"><a href="#" class="text-green-600 hover:underline font-semibold">View</a>
-                            </td>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center py-10 text-gray-500">No recent orders found.</td>
                         </tr>
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="py-4 px-6 font-mono text-gray-700">#1003</td>
-                            <td class="py-4 px-6 font-medium text-gray-800">Amit Kumar</td>
-                            <td class="py-4 px-6 text-gray-600">July 17, 2025</td>
-                            <td class="py-4 px-6 font-semibold text-gray-800">₹210.00</td>
-                            <td class="py-4 px-6"><span
-                                    class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Completed</span>
-                            </td>
-                            <td class="py-4 px-6"><a href="#" class="text-green-600 hover:underline font-semibold">View</a>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="py-4 px-6 font-mono text-gray-700">#1002</td>
-                            <td class="py-4 px-6 font-medium text-gray-800">Jane Smith</td>
-                            <td class="py-4 px-6 text-gray-600">July 16, 2025</td>
-                            <td class="py-4 px-6 font-semibold text-gray-800">₹320.00</td>
-                            <td class="py-4 px-6"><span
-                                    class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold">Pending</span>
-                            </td>
-                            <td class="py-4 px-6"><a href="#" class="text-green-600 hover:underline font-semibold">View</a>
-                            </td>
-                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -163,7 +127,6 @@
 
    <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Common Chart Font Styling
             Chart.defaults.font.family = 'Poppins, sans-serif';
             Chart.defaults.font.weight = '500';
 
@@ -174,17 +137,17 @@
             salesGradient.addColorStop(1, 'rgba(34, 197, 94, 0)');
 
             new Chart(salesCtx, {
-                type: 'line', // Changed to line chart for a better look
+                type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    labels: @json($salesChartLabels),
                     datasets: [{
                         label: 'Revenue (₹)',
-                        data: [6500, 5900, 8000, 8100, 5600, 5500, 12500],
+                        data: @json($salesChartData),
                         backgroundColor: salesGradient,
                         borderColor: '#16a34a',
                         borderWidth: 3,
                         fill: true,
-                        tension: 0.4, // Makes the line curved
+                        tension: 0.4,
                         pointBackgroundColor: '#16a34a',
                         pointBorderColor: '#fff',
                         pointBorderWidth: 2,
@@ -196,28 +159,18 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: '#e5e7eb' },
-                            ticks: {
-                                callback: function (value) { return '₹' + value / 1000 + 'k'; }
-                            }
-                        },
+                        y: { beginAtZero: true, grid: { color: '#e5e7eb' }, ticks: { callback: value => '₹' + value.toLocaleString() } },
                         x: { grid: { display: false } }
                     },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: '#1f2937',
-                            titleFont: { size: 16 },
-                            bodyFont: { size: 14 },
                             padding: 12,
                             cornerRadius: 8,
                             displayColors: false,
                             callbacks: {
-                                label: function (context) {
-                                    return `Revenue: ₹${context.raw.toLocaleString()}`;
-                                }
+                                label: context => `Revenue: ₹${context.raw.toLocaleString()}`
                             }
                         }
                     }
@@ -226,16 +179,28 @@
 
             // Order Status Chart
             const orderStatusCtx = document.getElementById('orderStatusChart').getContext('2d');
-            const orderData = [29, 3, 2];
+            const orderLabels = @json($orderStatusChartLabels);
+            const orderData = @json($orderStatusChartData);
             const totalOrders = orderData.reduce((a, b) => a + b, 0);
+            
+            const backgroundColors = orderLabels.map(label => {
+                switch(label) {
+                    case 'Completed': return '#10B981';
+                    case 'Pending': return '#F59E0B';
+                    case 'Cancelled': return '#EF4444';
+                    case 'Processing': return '#8B5CF6';
+                    case 'Shipped': return '#3B82F6';
+                    default: return '#6B7280';
+                }
+            });
 
             new Chart(orderStatusCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Completed', 'Pending', 'Cancelled'],
+                    labels: orderLabels,
                     datasets: [{
                         data: orderData,
-                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                        backgroundColor: backgroundColors,
                         borderColor: '#ffffff',
                         borderWidth: 4,
                         hoverOffset: 12,
@@ -246,28 +211,9 @@
                     maintainAspectRatio: false,
                     cutout: '75%',
                     plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                boxWidth: 12,
-                                font: { size: 14, weight: '500' }
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: '#1f2937',
-                            titleFont: { size: 14 },
-                            bodyFont: { size: 12 },
-                            padding: 10,
-                            cornerRadius: 8,
-                            displayColors: true,
-                        },
-                        // Custom plugin to draw text in the center
-                        centerText: {
-                            display: true,
-                            text: totalOrders,
-                            subtext: 'Total Orders'
-                        }
+                        legend: { position: 'bottom', labels: { padding: 20, boxWidth: 12, font: { size: 14 } } },
+                        tooltip: { backgroundColor: '#1f2937', padding: 10, cornerRadius: 8 },
+                        centerText: { display: true, text: totalOrders, subtext: 'Total Orders' }
                     }
                 },
                 plugins: [{
@@ -275,25 +221,18 @@
                     beforeDraw: function (chart) {
                         if (chart.options.plugins.centerText.display) {
                             const ctx = chart.ctx;
-                            const H = chart.height;
-                            const W = chart.width;
+                            const { width, height } = chart;
                             ctx.restore();
-
                             const text = chart.options.plugins.centerText.text;
                             const subtext = chart.options.plugins.centerText.subtext;
-
                             ctx.font = "bold 32px Poppins, sans-serif";
                             ctx.fillStyle = "#1f2937";
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'middle';
-                            const textX = W / 2;
-                            const textY = H / 2 - 10;
-                            ctx.fillText(text, textX, textY);
-
+                            ctx.fillText(text, width / 2, height / 2 - 10);
                             ctx.font = "500 14px Poppins, sans-serif";
                             ctx.fillStyle = "#6b7280";
-                            ctx.fillText(subtext, textX, textY + 25);
-
+                            ctx.fillText(subtext, width / 2, height / 2 + 25);
                             ctx.save();
                         }
                     }
@@ -302,3 +241,4 @@
         });
     </script> 
 @endsection
+

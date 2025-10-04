@@ -3,29 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
+    /**
+     * Display a listing of the authenticated user's orders.
+     */
     public function userOrders()
     {
-        $orders = [
-            (object) [
-                'id' => 1001,
-                'date' => '2024-07-01',
-                'total' => 450.00,
-                'status' => 'Completed',
-                'address' => '123 Main St, City',
-                'payment_method' => 'Credit Card',
-            ],
-            (object) [
-                'id' => 1002,
-                'date' => '2024-07-02',
-                'total' => 320.00,
-                'status' => 'Pending',
-                'address' => '456 Park Ave, City',
-                'payment_method' => 'UPI',
-            ],
-        ];
+        $orders = Order::where('user_id', Auth::id())
+                        ->with('items.product') // Eager load order items and their products
+                        ->latest() // Show the most recent orders first
+                        ->paginate(10); // Paginate the results
+
         return view('orders', compact('orders'));
     }
-} 
+}
+

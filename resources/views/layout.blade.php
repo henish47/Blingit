@@ -192,16 +192,18 @@
                     </a>
                 </div>
 
-                <!-- Search Bar (Desktop) -->
+               
+                <!-- Desktop Search Form -->
                 <div class="hidden md:flex flex-1 justify-center px-5">
-                    <div class="relative w-full max-w-xl">
+                    <form action="{{ route('products.search') }}" method="GET" class="relative w-full max-w-xl">
                         <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                             <i class="fa fa-search text-green-500 text-lg"></i>
                         </div>
-                        <input type="text" placeholder="Search fruits, snacks, daily needs..."
+                        <input type="search" name="query" value="{{ request('query') }}" placeholder="Search fruits, snacks, daily needs..."
                             class="w-full pl-10 pr-4 py-3 rounded-xl border border-green-300 focus:outline-none focus:ring-2 focus:ring-green-400 bg-white shadow-lg text-base transition focus:shadow-xl" />
-                    </div>
+                    </form>
                 </div>
+
 
                 <!-- Dynamic Navigation Based on Auth Status -->
                 <div class="flex items-center gap-4">
