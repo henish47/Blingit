@@ -86,7 +86,7 @@
                                         <img src="{{ $item->product->image_url ?? 'https://placehold.co/64x64' }}" class="w-16 h-16 rounded-xl border border-gray-200 object-cover" alt="{{$item->name}}" onerror="this.onerror=null;this.src='https://placehold.co/64x64/f0f0f0/999999?text=Img';">
                                         <div>
                                             <div class="font-semibold text-base text-gray-800">{{$item->name}}</div>
-                                            <div class="text-sm text-gray-500">Quantity: {{$item->quantity}}</div>
+                                            <div class="text-sm text-gray-500">Qty: {{$item->quantity}}</div>
                                         </div>
                                     </div>
                                     <div class="text-green-700 text-lg font-bold">₹{{number_format($item->price * $item->quantity, 2)}}</div>
@@ -96,9 +96,14 @@
                                 <p class="text-gray-500">Could not find items for this order.</p>
                             @endforelse
                         </div>
-                        <div class="flex justify-between items-center text-xl font-extrabold mt-6 pt-6 border-t border-gray-200">
-                            <span class="text-gray-900">Total Paid</span>
-                            <span class="text-green-600">₹{{number_format($order->total, 2)}}</span>
+                        <div class="mt-6 pt-6 border-t border-gray-200 space-y-3">
+                            <div class="flex justify-between items-center text-gray-600"><span>Subtotal</span><span class="font-semibold">₹{{number_format($order->subtotal, 2)}}</span></div>
+                            <div class="flex justify-between items-center text-gray-600"><span>Discount</span><span class="font-semibold">- ₹{{number_format($order->discount, 2)}}</span></div>
+                            <div class="flex justify-between items-center text-gray-600"><span>Delivery Fee</span><span class="font-semibold">₹{{number_format($order->delivery_fee, 2)}}</span></div>
+                            <div class="flex justify-between items-center text-xl font-extrabold text-gray-900 mt-2">
+                                <span>Total Paid</span>
+                                <span class="text-green-600">₹{{number_format($order->total, 2)}}</span>
+                            </div>
                         </div>
                     </div>
 
@@ -109,9 +114,19 @@
                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 Delivery Address
                             </h2>
-                            <div class="bg-gray-50 rounded-2xl p-5 text-gray-700 text-base shadow-sm border border-gray-200">
+                            <div class="bg-gray-50 rounded-2xl p-5 text-gray-700 text-base shadow-sm border border-gray-200 space-y-1">
                                 <p class="font-semibold text-gray-800">{{ $order->name }}</p>
                                 <p>{{ $order->address }}</p>
+                                <p>{{ $order->city }}, {{ $order->state }} - {{ $order->zip }}</p>
+                            </div>
+                        </div>
+                        <div>
+                             <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                Contact Information
+                            </h2>
+                            <div class="bg-gray-50 rounded-2xl p-5 text-gray-700 text-base shadow-sm border border-gray-200">
+                                <p>{{ $order->email }}</p>
                             </div>
                         </div>
                         <div>
