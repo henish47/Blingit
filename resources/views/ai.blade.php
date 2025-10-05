@@ -448,7 +448,6 @@
             }
         });
 
-        // Focus input on load
         window.addEventListener('load', () => {
             userInput.focus();
         });

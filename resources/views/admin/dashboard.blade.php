@@ -13,12 +13,8 @@
             <!-- Total Revenue Card -->
             <div
                 class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 flex items-center gap-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                <div class="bg-green-100 p-4 rounded-full">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01M12 6v-1m0-1V4m0 2.01v.01M12 18v-1m0-1v-1m0-1v-1m0-1v-1m0 0V9.01M12 4.01V3">
-                        </path>
-                    </svg>
+                <div class="bg-green-100 w-16 h-16 flex items-center justify-center rounded-full">
+                    <i class="fa-solid fa-indian-rupee-sign text-3xl text-green-600"></i>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500 font-medium">Total Revenue</p>
@@ -28,12 +24,8 @@
             <!-- Total Orders Card -->
             <div
                 class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 flex items-center gap-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                <div class="bg-yellow-100 p-4 rounded-full">
-                    <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
-                        </path>
-                    </svg>
+                <div class="bg-yellow-100 w-16 h-16 flex items-center justify-center rounded-full">
+                    <i class="fa-solid fa-box-archive text-3xl text-yellow-600"></i>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500 font-medium">Total Orders</p>
@@ -43,12 +35,8 @@
             <!-- Total Customers Card -->
             <div
                 class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 flex items-center gap-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                <div class="bg-blue-100 p-4 rounded-full">
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197M15 21a6 6 0 006-6v-1a3 3 0 00-3-3H9a3 3 0 00-3 3v1a6 6 0 006 6z">
-                        </path>
-                    </svg>
+                <div class="bg-blue-100 w-16 h-16 flex items-center justify-center rounded-full">
+                    <i class="fa-solid fa-users text-3xl text-blue-600"></i>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500 font-medium">Total Customers</p>
@@ -58,11 +46,8 @@
             <!-- Pending Orders Card -->
             <div
                 class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 flex items-center gap-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                <div class="bg-orange-100 p-4 rounded-full">
-                    <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+                <div class="bg-orange-100 w-16 h-16 flex items-center justify-center rounded-full">
+                    <i class="fa-solid fa-hourglass-half text-3xl text-orange-600"></i>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500 font-medium">Pending Orders</p>
@@ -109,10 +94,11 @@
                             <td class="py-4 px-6 font-medium text-gray-800">{{ $order->user->name ?? 'N/A' }}</td>
                             <td class="py-4 px-6 text-gray-600">{{ $order->created_at->format('M d, Y') }}</td>
                             <td class="py-4 px-6 font-semibold text-gray-800">₹{{ number_format($order->total, 2) }}</td>
-                            <td class="py-4 px-6">
-                                <span class="px-3 py-1 rounded-full text-xs font-bold @switch($order->status) @case('Completed') bg-green-100 text-green-700 @break @case('Pending') bg-yellow-100 text-yellow-700 @break @case('Cancelled') bg-red-100 text-red-700 @break @default bg-gray-100 text-gray-700 @endswitch">{{ $order->status }}</span>
+                            <td class="py-4 px-6"><span
+                                    class="px-3 py-1 rounded-full text-xs font-bold @switch($order->status) @case('Completed') bg-green-100 text-green-700 @break @case('Pending') bg-yellow-100 text-yellow-700 @break @case('Cancelled') bg-red-100 text-red-700 @break @default bg-gray-100 text-gray-700 @endswitch">{{ $order->status }}</span>
                             </td>
-                            <td class="py-4 px-6"><a href="{{ route('admin.orders.index', ['search' => $order->id]) }}" class="text-green-600 hover:underline font-semibold">View</a></td>
+                            <td class="py-4 px-6"><a href="{{ route('admin.orders.index', ['search' => $order->id]) }}" class="text-green-600 hover:underline font-semibold">View</a>
+                            </td>
                         </tr>
                         @empty
                         <tr>
