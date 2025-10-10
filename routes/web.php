@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 // Controller Imports
 use App\Http\Controllers\Auth\LoginController;
@@ -197,3 +198,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'is.admi
     Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
     Route::delete('/reviews/{id}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
+
+// Storage file serving route (fallback for when symlink doesn't work)
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path('app/public/' . $path);
+    
+    if (file_exists($filePath)) {
+        return response()->file($filePath);
+    }
+    
+    abort(404);
+})->where('path', '.*');

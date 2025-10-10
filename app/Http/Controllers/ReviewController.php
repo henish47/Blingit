@@ -35,6 +35,7 @@ class ReviewController extends Controller
         $alreadyReviewed = Review::where('order_id', $validated['order_id'])
                                  ->where('user_id', Auth::id())
                                  ->exists();
+
         if ($alreadyReviewed) {
             return response()->json([
                 'message' => 'You have already submitted a review for this order.'
@@ -60,7 +61,9 @@ class ReviewController extends Controller
      */
     public function index()
     {
+        // Eager load user relation for each review
         $reviews = Review::with('user')->latest()->get();
+
         return view('admin.review', compact('reviews'));
     }
 
